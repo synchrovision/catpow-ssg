@@ -8,8 +8,7 @@ define('CP_DIR',APP_DIR.'/controlpanel');
 define('CP_URL',APP_URL.'/controlpanel');
 if(php_sapi_name()==='cli'){
 	chdir(APP_DIR);
-	passthru('git submodule init');
-	passthru('git submodule update');
+	passthru('git submodule update --init --recursive');
 	chdir(ABSPATH);
 	passthru('php -S localhost:8000 '.APP_NAME.'/server.php & open '.CP_URL.'/');
 	return;
