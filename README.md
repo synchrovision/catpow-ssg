@@ -6,10 +6,19 @@ Catpow SSG
 PHPのビルドインサーバーを利用したシンプルな静的サイト生成ツール。  
 軽量で、サイト内の特設ページやデータ納品のLPの作成などに手軽に導入できます。
 
- 
+サイトのディレクトリに移動し
+
  ```command
 git clone https://github.com/synchrovision/catpow-ssg.git _compiler
  ```
+
+でインストール
+
+ ```command
+php _compiler/server.php
+ ```
+ 
+でサーバーを起動します。
 
 概要
 --
