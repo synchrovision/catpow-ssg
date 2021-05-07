@@ -1,8 +1,8 @@
 <?php
 namespace Catpow;
 
-function picture($name,$alt){
-	printf('<picture><source media="(max-width: 767px)" srcset="images/%1$s_sp.png"><img src="images/%1$s.png" alt="%2$s"/></picture>',$name,$alt);
+function picture($name,$alt,$ext='png'){
+	printf('<picture><source media="(max-width: 767px)" srcset="%1$s_sp.%3$s"><img src="%1$s.%3$s" alt="%2$s"/></picture>',$name,$alt,$ext);
 }
 function simple_md($text,$param=[]){
 	$param=array_merge(
