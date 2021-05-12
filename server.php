@@ -49,6 +49,7 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 	case 'woff2':
 	case 'ttf':
 	case 'otf':
+	case 'pdf':
 		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file))){
 			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
 				if(!is_dir(dirname($file))){
