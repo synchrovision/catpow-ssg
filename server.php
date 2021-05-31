@@ -39,11 +39,13 @@ else{
 define('PAGE_DIR',dirname($file));
 define('PAGE_TMPL_DIR',str_replace(ABSPATH,TMPL_DIR,PAGE_DIR));
 switch(substr($fname,strrpos($fname,'.')+1)){
+	case 'js':
+		init();
+		Catpow\Jsx::compile_for_file($file);
 	case 'png':
 	case 'jpg':
 	case 'jpeg':
 	case 'gif':
-	case 'js':
 	case 'eot':
 	case 'woff':
 	case 'woff2':

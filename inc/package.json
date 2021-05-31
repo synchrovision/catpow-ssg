@@ -1,0 +1,14 @@
+{
+	"name": "catpow-jsx-compiler",
+	"version": "1.0.0",
+	"scripts": {
+		"watch": "php compiler.php"
+	},
+	"devDependencies": {
+		"@babel/cli": "*",
+		"@babel/core": "*",
+		"@babel/plugin-proposal-object-rest-spread": "*",
+		"@babel/plugin-transform-react-jsx": "*",
+		"@babel/preset-env": "*"
+	}
+}
