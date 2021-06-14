@@ -10,5 +10,10 @@
 		"@babel/plugin-proposal-object-rest-spread": "*",
 		"@babel/plugin-transform-react-jsx": "*",
 		"@babel/preset-env": "*"
+	},
+	"dependencies": {
+		"babel-loader": "^8.2.2",
+		"webpack": "^5.38.1",
+		"webpack-cli": "^4.7.2"
 	}
 }
