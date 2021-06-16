@@ -27,7 +27,9 @@ class Jsx{
 		self::init();
 		if(!file_exists($jsx_file)){return;}
 		if(!file_exists($js_file) or filemtime($js_file) < filemtime($jsx_file)){
+			ob_start();
 			passthru('babel '.$jsx_file.' -o '.$js_file);
+			error_log(ob_get_clean());
 		}
 	}
 	public static function get_entry_jsx_file_for_file($file){
@@ -46,7 +48,9 @@ class Jsx{
 			$latest_filetime=max($latest_filetime,filemtime($bundle_file));
 		}
 		if(!file_exists($bundle_js_file) or filemtime($bundle_js_file) < $latest_filetime){
-			passthru('npx webpack build --entry '.$entry_jsx_file.' -o '.dirname($bundle_js_file).' --output-filename '.basename($bundle_js_file));
+			ob_start();
+			passthru('npx webpack build --mode production --entry '.$entry_jsx_file.' -o '.dirname($bundle_js_file).' --output-filename '.basename($bundle_js_file));
+			error_log(ob_get_clean());
 		}
 	}
 }
