@@ -4,12 +4,12 @@
   padding: 0;
   background: transparent;
   text-decoration: none;
-  font-style: normal; }
-
+  font-style: normal;
+}
 img {
   vertical-align: bottom;
-  border: none; }
-
+  border: none;
+}
 html {
   font-size: 62.5%;
   color: #444;
@@ -22,11 +22,13 @@ html {
   background-image: -o-linear-gradient(bottom, #f8f8f8, #eee);
   background-image: linear-gradient(180deg, #f8f8f8, #eee);
   background-size: 100% 100%;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+}
 @media (max-width:959px) {
   html {
-    font-size: 2.5vw; } }
-
+    font-size: 2.5vw;
+  }
+}
 .siteLayout {
   height: 100vh;
   display: -webkit-box;
@@ -40,25 +42,28 @@ html {
   -webkit-flex-direction: column;
   flex-direction: column;
   -webkit-align-items: stretch;
-  align-items: stretch; }
-  .siteLayout .siteHeader {
-    -webkit-box-flex: 0;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
-    width: 100%; }
-  .siteLayout .siteMain {
-    -webkit-box-flex: 1;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto; }
-  .siteLayout .siteFooter {
-    -webkit-box-flex: 0;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
-    width: 100%; }
-
+  align-items: stretch;
+}
+.siteLayout .siteHeader {
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  width: 100%;
+}
+.siteLayout .siteMain {
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+.siteLayout .siteFooter {
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  width: 100%;
+}
 .siteHeader {
   padding: 1rem;
   box-sizing: border-box;
@@ -66,14 +71,15 @@ html {
   background-image: -moz-linear-gradient(bottom, #3396c8, #007cba);
   background-image: -ms-linear-gradient(bottom, #3396c8, #007cba);
   background-image: -o-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: linear-gradient(180deg, #3396c8, #007cba); }
-  .siteHeader__title {
-    text-align: center;
-    font-size: 2rem;
-    font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
-    color: #fff;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3); }
-
+  background-image: linear-gradient(180deg, #3396c8, #007cba);
+}
+.siteHeader__title {
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
 .siteFooter {
   padding: 1rem;
   box-sizing: border-box;
@@ -81,31 +87,34 @@ html {
   background-image: -moz-linear-gradient(bottom, #3396c8, #007cba);
   background-image: -ms-linear-gradient(bottom, #3396c8, #007cba);
   background-image: -o-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: linear-gradient(180deg, #3396c8, #007cba); }
-  .siteFooter__text {
-    text-align: center;
-    font-size: 1.5rem;
-    font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
-    color: #fff; }
-
+  background-image: linear-gradient(180deg, #3396c8, #007cba);
+}
+.siteFooter__text {
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
+  color: #fff;
+}
 .siteMain {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-box-lines: multiple;
   -webkit-flex-wrap: wrap;
-  flex-wrap: wrap; }
-  .siteMain__sidebar {
-    -webkit-box-flex: 0;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 30rem; }
-  .siteMain__contents {
-    -webkit-box-flex: 1;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 30rem; }
-
+  flex-wrap: wrap;
+}
+.siteMain__sidebar {
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 30rem;
+}
+.siteMain__contents {
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 30rem;
+}
 .pane {
   display: block;
   position: relative;
@@ -113,17 +122,19 @@ html {
   padding: 1rem;
   overflow: hidden;
   border-radius: 1rem;
-  box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.8) inset, -3px -3px 3px rgba(0, 0, 0, 0.1), -3px -3px 3px rgba(0, 0, 0, 0.1) inset, 3px 3px 3px rgba(255, 255, 255, 0.8); }
-  .pane__header {
-    padding: 0.2rem;
-    text-align: center;
-    font-size: 1.5rem;
-    font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3); }
-  .pane__contents {
-    padding: 2rem;
-    font-size: 2rem; }
-
+  box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.8) inset, -3px -3px 3px rgba(0, 0, 0, 0.1), -3px -3px 3px rgba(0, 0, 0, 0.1) inset, 3px 3px 3px rgba(255, 255, 255, 0.8);
+}
+.pane__header {
+  padding: 0.2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+.pane__contents {
+  padding: 2rem;
+  font-size: 2rem;
+}
 .button {
   display: block;
   position: relative;
@@ -134,29 +145,34 @@ html {
   font-weight: 700;
   box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8) inset, -3px -3px 3px rgba(255, 255, 255, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.1) inset, 3px 3px 3px rgba(0, 0, 0, 0.1);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  cursor: pointer; }
-  .button_l {
-    font-size: 3rem; }
-  .button_m {
-    font-size: 2rem; }
-  .button_s {
-    font-size: 1.5rem; }
-  .button::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin: 0.3em;
-    border-style: solid;
-    border-width: 0.1em;
-    border-color: #007cba;
-    border-radius: 1.5em; }
-  .button:active {
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset, -3px -3px 3px rgba(0, 0, 0, 0.1), -1px -1px 1px rgba(255, 255, 255, 0.8) inset, 3px 3px 3px rgba(255, 255, 255, 0.8); }
-
+  cursor: pointer;
+}
+.button_l {
+  font-size: 3rem;
+}
+.button_m {
+  font-size: 2rem;
+}
+.button_s {
+  font-size: 1.5rem;
+}
+.button::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: 0.3em;
+  border-style: solid;
+  border-width: 0.1em;
+  border-color: #007cba;
+  border-radius: 1.5em;
+}
+.button:active {
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset, -3px -3px 3px rgba(0, 0, 0, 0.1), -1px -1px 1px rgba(255, 255, 255, 0.8) inset, 3px 3px 3px rgba(255, 255, 255, 0.8);
+}
 .previews {
   height: 100%;
   background-color: #fff;
@@ -165,39 +181,45 @@ html {
   display: flex;
   -webkit-box-lines: single;
   -webkit-flex-wrap: nowrap;
-  flex-wrap: nowrap; }
-
+  flex-wrap: nowrap;
+}
 .preview {
   position: relative;
-  height: 100%; }
-  .preview_sp {
-    -webkit-box-flex: 0;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 225px; }
-  .preview_pc {
-    -webkit-box-flex: 1;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 600px; }
-  .preview__contents {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 160%;
-    height: 160%;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    transform: -webkit- scale(0.625);
-    transform: scale(0.625); }
-
+  height: 100%;
+}
+.preview_sp {
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 225px;
+}
+.preview_pc {
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 600px;
+}
+.preview__contents {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 160%;
+  height: 160%;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  transform: -webkit- scale(0.625);
+  transform: scale(0.625);
+}
 .index {
-  padding: 1rem; }
-  .index__item {
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    color: #444;
-    cursor: pointer; }
-    .index__item.active {
-      color: #007cba; }
+  padding: 1rem;
+}
+.index__item {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  color: #444;
+  cursor: pointer;
+}
+.index__item.active {
+  color: #007cba;
+}
 /*# sourceMappingURL=./style.css.map */
