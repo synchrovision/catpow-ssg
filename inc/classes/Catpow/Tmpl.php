@@ -4,6 +4,7 @@ class Tmpl{
 	public static function compile_for_file($file){
 		if($tmpl_file=self::get_tmpl_file_for_file($file)){
 			ob_start();
+			$uri=preg_replace('/(index)?\.(html?|php)$/','',str_replace(ABSPATH,'',$file));
 			try{
 				include $tmpl_file;
 				if(!is_dir(dirname($file))){
