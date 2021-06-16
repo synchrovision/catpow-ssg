@@ -73,6 +73,8 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 		init();
 		Catpow\Tmpl::compile_for_file($file);
 		return false;
+	default:
+		return false;
 }
 
 function init(){
