@@ -12,7 +12,10 @@
 		"@babel/preset-env": "*"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.4.0",
 		"babel-loader": "^8.2.2",
+		"classnames": "^2.3.1",
+		"emotion": "^11.0.0",
 		"webpack": "^5.38.1",
 		"webpack-cli": "^4.7.2"
 	}
