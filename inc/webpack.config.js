@@ -1,4 +1,5 @@
-/* globals module */
+/* globals module require*/
+const path=require('path');
 module.exports=()=>{
 	return {
 		module: {
@@ -15,6 +16,13 @@ module.exports=()=>{
 						}
 					]
 				}
+			]
+		},
+		resolve: {
+			modules: [
+				path.resolve('../../_components'),
+				path.resolve('./components'),
+				path.resolve('./node_modules')
 			]
 		}
 	};
