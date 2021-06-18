@@ -15,6 +15,31 @@ module.exports=()=>{
 							}
 						}
 					]
+				},
+				{
+					test: /\.scss$/i,
+					use: [
+						'style-loader',
+						{
+							loader:'css-loader',
+							options:{
+								url:false
+							}
+						},
+						{
+							loader:'sass-loader',
+							options:{
+								sassOptions:{
+									includePaths:[
+										path.resolve('../../'),
+										path.resolve('../../_config'),
+										path.resolve('../../_scss'),
+										path.resolve('./scss')
+									]
+								}
+							}
+						}
+					]
 				}
 			]
 		},

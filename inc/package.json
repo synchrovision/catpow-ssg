@@ -9,7 +9,11 @@
 		"@babel/core": "*",
 		"@babel/plugin-proposal-object-rest-spread": "*",
 		"@babel/plugin-transform-react-jsx": "*",
-		"@babel/preset-env": "*"
+		"@babel/preset-env": "*",
+		"css-loader": "^5.2.6",
+		"sass": "^1.35.1",
+		"sass-loader": "^12.1.0",
+		"style-loader": "^2.0.0"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.4.0",
