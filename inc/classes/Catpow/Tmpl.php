@@ -3,8 +3,10 @@ namespace Catpow;
 class Tmpl{
 	public static function compile_for_file($file){
 		if($tmpl_file=self::get_tmpl_file_for_file($file)){
+			global $page;
 			ob_start();
 			$uri=preg_replace('/(index)?\.(html?|php)$/','',str_replace(ABSPATH,'',$file));
+			Page::init($uri);
 			try{
 				include $tmpl_file;
 				if(!is_dir(dirname($file))){
