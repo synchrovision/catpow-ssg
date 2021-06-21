@@ -36,3 +36,9 @@ function get_sidebar($slug=null){
 function get_footer($slug=null){
 	get_template_part('footer',$slug);
 }
+
+function block($block,$props=[],$children=[]){
+	$block_obj=new Block($block,$props,$children);
+	$block_obj->init();
+	return $block_obj->get_html();
+}
