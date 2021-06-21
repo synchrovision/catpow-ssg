@@ -1,0 +1,1 @@
+export {CP} from './component.jsx';
