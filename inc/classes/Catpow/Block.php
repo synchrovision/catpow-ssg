@@ -6,7 +6,7 @@ class Block{
 		$this->block=$block;
 		$this->props=$props;
 		$this->children=$children;
-		$this->dir=ABSPATH.'blocks/'.$block;
+		$this->dir=ABSPATH.'/blocks/'.$block;
 	}
 	public function init(){
 		if(!is_dir($this->dir)){mkdir($this->dir,0755,1);}
