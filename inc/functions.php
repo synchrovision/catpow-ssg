@@ -4,6 +4,10 @@ namespace Catpow;
 function picture($name,$alt,$ext='png'){
 	printf('<picture><source media="(max-width: 767px)" srcset="%1$s_sp.%3$s"><img src="%1$s.%3$s" alt="%2$s"/></picture>',$name,$alt,$ext);
 }
+function md($text){
+	if(is_null($text)){return '';}
+	return \Michelf\MarkdownExtra::defaultTransform(ShortCode::do_shortcode($text));
+}
 function simple_md($text,$param=[]){
 	$param=array_merge(
 		['link_class'=>'link','image_class'=>'image'],
@@ -19,6 +23,24 @@ function do_shortcode($str){
 function add_shortcode($name,$function){
 	return ShortCode::add_shortcode($name,$function);
 }
+
+function csv($csv){
+	if(substr($csv,-4)!=='.csv'){$csv='/csv/'.$csv.'.csv';}
+	if(file_exists($f=ABSPATH.$csv) || file_exists($f=TMPL_DIR.$csv)|| file_exists($f=INC_DIR.$csv)){
+		return new CSV($f);
+	}
+	return false;
+}
+
+function enqueue_style($handler,$src=null,$deps=[]){
+	global $page;
+	$page->styles->enqueue($handler,$src,$deps);
+}
+function enqueue_script($handler,$src=null,$deps=[]){
+	global $page;
+	$page->scripts->enqueue($handler,$src,$deps);
+}
+
 function get_template_part($name,$slug=null){
 	if(!empty($slug)){
 		if(file_exists($f=TMPL_DIR.'/'.$name.'-'.$slug.'.php')){
