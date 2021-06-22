@@ -17,7 +17,8 @@ class Deps{
 				]
 			],
 			'axios'=>['src'=>'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'],
-			'jquery'=>['src'=>'https:////ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js']
+			'jquery'=>['src'=>'https:////ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'],
+			'catpow-animate'=>['src'=>'/js/catpow_animate.js','deps'=>['jquery']]
 		],
 		'css'=>[
 			
@@ -30,25 +31,34 @@ class Deps{
 	public function enqueue($handler,$src=null,$deps=[]){
 		if(isset($this->enqueued[$handler])){return;}
 		if(isset(self::$regsitered[$this->type][$handler])){
+			$deps=self::$regsitered[$this->type][$handler]['deps']??null;
+			if(!empty($deps)){
+				foreach((array)$deps as $dep){$this->enqueue($dep);}
+			}
 			$this->enqueued[$handler]=self::$regsitered[$this->type][$handler];
 			return;
 		}
 		if(!isset($src)){$src=$handler;}
+		if(!empty($deps)){
+			foreach((array)$deps as $dep){$this->enqueue($dep);}
+		}
 		$this->enqueued[$handler]=compact('src','deps');
 	}
 	public function register($handler,$src,$deps=[]){
 		self::$regsitered[$this->type][$handler]=compact('src','deps');
 	}
 	public function render($handlers=null){
-		if(empty($handlers)){
-			$handlers=array_filter(array_keys($this->enqueued),function($handler){return empty($this->rendered[$handler]);});
-			usort($handlers,function($a,$b){
-				if(empty($this->enqueued[$a]['deps']) && empty($this->enqueued[$b]['deps'])){return 0;}
-				if(in_array($a,$this->enqueued[$b]['deps'],1)){return -1;}
-				if(in_array($b,$this->enqueued[$a]['deps'],1)){return 1;}
-				return 0;
-			});
+		if(isset($handlers)){
+			foreach((array)$handlers as $handler){$this->enqueue($handler);}
 		}
+		$handlers=array_keys($this->enqueued);
+		$handlers=array_filter($handlers,function($handler){return empty($this->rendered[$handler]);});
+		usort($handlers,function($a,$b){
+			if(empty($this->enqueued[$a]['deps']) && empty($this->enqueued[$b]['deps'])){return 0;}
+			if(in_array($a,$this->enqueued[$b]['deps'],1)){return -1;}
+			if(in_array($b,$this->enqueued[$a]['deps'],1)){return 1;}
+			return 0;
+		});
 		foreach($handlers as $handler){$this->render_tag($handler);}
 	}
 	public function render_tag($handler){
