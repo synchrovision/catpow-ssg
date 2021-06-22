@@ -90,7 +90,7 @@ html{
 	@include flx((w:n));
 }
 .preview{
-	@include bnd((p:r,h:f));
+	@include bnd((p:r,h:98%,mg:5));
 	&_sp{
 		@include bnd((f:0 0 225));
 	}
@@ -98,8 +98,12 @@ html{
 		@include bnd((f:1 1 600));
 	}
 	&__contents{
-		@include bnd((p:a,l:0,t:0,w:160%,h:160%));
+		@include bnd((p:a,l:0,t:0,w:160%,h:160%,bs:b));
 		@include trn((s:.625,to:0 0));
+		@include bdr((s:s,w:10,c:#222,r:10));
+		@include bdr((p:b,w:40));
+		@include bdr((p:t l,c:#444));
+		@include shd((b:5));
 	}
 }
 .index{
