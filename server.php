@@ -71,6 +71,10 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 	case 'rdf':
 	case 'xml':
 		init();
+		if(file_exists($f=CONF_DIR.'/site_config.php')){
+			global $sitemap;
+			include($f);
+		}
 		Catpow\Tmpl::compile_for_file($file);
 		return false;
 	default:
