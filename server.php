@@ -84,8 +84,8 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 function init(){
 	spl_autoload_register(function($class){
 		if(file_exists($f=CONF_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);return;}
-		if(file_exists($f=APP_DIR.'/inc/classes/'.str_replace('\\','/',$class).'.php')){include($f);}
-	});
-	foreach(glob(CONF_DIR.'/inc/*.php') as $inc_file){include $inc_file;}
-	if(file_exists($f=APP_DIR.'/inc/functions.php')){include($f);}
+		if(file_exists($f=INC_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);}
+	});}
+	if(file_exists($f=CONF_DIR.'/functions.php')){include($f);}
+	if(file_exists($f=INC_DIR.'/functions.php')){include($f);}
 }
