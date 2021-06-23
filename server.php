@@ -85,7 +85,7 @@ function init(){
 	spl_autoload_register(function($class){
 		if(file_exists($f=CONF_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);return;}
 		if(file_exists($f=INC_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);}
-	});}
+	});
 	if(file_exists($f=CONF_DIR.'/functions.php')){include($f);}
 	if(file_exists($f=INC_DIR.'/functions.php')){include($f);}
 }
