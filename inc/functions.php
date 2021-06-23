@@ -1,6 +1,10 @@
 <?php
 namespace Catpow;
 
+function _d($data){
+	Debug::dump($data);
+}
+
 function picture($name,$alt,$ext='png'){
 	printf('<picture><source media="(max-width: 767px)" srcset="%1$s_sp.%3$s"><img src="%1$s.%3$s" alt="%2$s"/></picture>',$name,$alt,$ext);
 }
