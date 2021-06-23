@@ -14,17 +14,6 @@ class Block{
 			$conf=json_decode(file_get_contents($f));
 		}
 		if(empty($conf)){$conf=[];}
-		global $page;
-		if($f=self::get_block_file($this->block,'style.scss')){
-			if(!file_exists($this->dir.'/style.scss')){
-				copy($f,$this->dir.'/style.scss');
-			}
-		}
-		if($f=self::get_block_file($this->block,'script.js')){
-			if(!file_exists($this->dir.'/script.js')){
-				copy($f,$this->dir.'/script.js');
-			}
-		}
 	}
 	public function get_html(){
 		global $page;
