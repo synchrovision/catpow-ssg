@@ -10,6 +10,10 @@ function picture($name,$alt,$ext='png'){
 }
 function md($text){
 	if(is_null($text)){return '';}
+	if(substr($text,-3)==='.md'){
+		global $page;
+		$text=file_get_contents($page->get_the_file($text));
+	}
 	return \Michelf\MarkdownExtra::defaultTransform(ShortCode::do_shortcode($text));
 }
 function simple_md($text,$param=[]){
