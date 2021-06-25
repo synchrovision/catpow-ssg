@@ -9,7 +9,26 @@ class Block{
 		$this->dir=ABSPATH.'/blocks/'.$block;
 	}
 	public function init(){
-		if(!is_dir($this->dir)){mkdir($this->dir,0755,1);}
+		if(!is_dir($this->dir)){
+			if(!is_dir(TMPL_DIR.'/blocks/'.$block) && is_dir(INC_DIR.'/blocks/'.$block)){
+				$files=new \RecursiveIteratorIterator(
+					new \RecursiveDirectoryIterator(
+						INC_DIR.'/blocks/'.$block,
+						\RecursiveDirectoryIterator::SKIP_DOTS
+					),
+					\RecursiveIteratorIterator::SELF_FIRST
+				);
+				foreach($files as $file){
+					if($file->is_dir()){
+						mkdir(TMPL_DIR.'/blocks/'.$block.'/'.$files->getSubPathName(),0755);
+					}
+					else{
+						copy($file,TMPL_DIR.'/blocks/'.$block.'/'.$files->getSubPathName());
+					}
+				}
+			}
+			mkdir($this->dir,0755,1);
+		}
 		if($f=self::get_block_file($this->block,'block.json')){
 			$conf=json_decode(file_get_contents($f));
 		}
@@ -21,7 +40,7 @@ class Block{
 		extract($this->props);
 		if(!empty($page)){$page->use_block($this->block);}
 		$className='block-'.$this->block.(empty($className)?'':' '.$className);
-		$children=is_array($this->children)?implode("\n",$this->children):$this->children;
+		$children=is_array($this->children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->children)),false)):$this->children;
 		include self::get_block_file($this->block,'block.php');
 		return ob_get_clean();
 	}
