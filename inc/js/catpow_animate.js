@@ -21,25 +21,28 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			var s=$window.scrollTop(),ts=0,ty=0,winh;
 			$control.init=function(){
 				if($parent.css('position')==='static'){$parent.css({"position":"relative"});}
+				$control.css({"box-sizing":'border-box'});
 				$control.update();
 			}
 			$control.update=function(){
 				winh=window.innerHeight;
+				winw=window.innerWidth;
 				ts=$window.scrollTop()-s;
 				s=$window.scrollTop();
 				$control.each(function(){
 					var bnd1=this.getBoundingClientRect();
 					var bnd2=this.parentNode.getBoundingClientRect();
 					if(bnd2.top>$.catpow.pageTopOffset){
-						$(this).css({transform:'translate3d(0,0,0)',position:'absolute',top:0,bottom:'auto'});
+						$(this).css({transform:'translate3d(0,0,0)',position:'absolute',top:0,bottom:'auto',left:0,right:0});
 					}
 					else if(bnd2.top+bnd2.height<$.catpow.pageTopOffset+bnd1.height){
-						$(this).css({transform:'translate3d(0,0,0)',position:'absolute',top:'auto',bottom:0});
+						$(this).css({transform:'translate3d(0,0,0)',position:'absolute',top:'auto',bottom:0,left:0,right:0});
 					}
 					else{
 						ty-=ts;
 						ty=Math.min(0,Math.max(winh-bnd1.height-$.catpow.pageTopOffset,ty));
-						$(this).css({transform:'translate3d(0,'+ty+'px,0)',position:'absolute',top:($.catpow.pageTopOffset - bnd2.top) + 'px',bottom:'auto'});
+						$(this).css({transform:'translate3d(0,'+ty+'px,0)',position:'fixed',top:$.catpow.pageTopOffset + 'px',bottom:'auto',left:bnd2.left,right:winw-bnd2.right});
+
 					}
 				});
 			};
