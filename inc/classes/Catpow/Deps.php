@@ -9,15 +9,9 @@ class Deps{
 					['src'=>'https://unpkg.com/react-dom@17/umd/react-dom.development.js','attr'=>'crossorigin']
 				]
 			],
-			'alpine'=>[
-				'set'=>[
-					['src'=>'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js','attr'=>'type="module"'],
-					['src'=>'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js','attr'=>'nomodule defer'],
-					['src'=>'ttps://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.0/dist/alpine-ie11.js','attr'=>'defer'],
-				]
-			],
+			'alpine'=>['src'=>'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js','attr'=>'defer'],
 			'axios'=>['src'=>'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'],
-			'jquery'=>['src'=>'https:////ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'],
+			'jquery'=>['src'=>'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'],
 			'catpow-animate'=>['src'=>'/js/catpow_animate.js','deps'=>['jquery']]
 		],
 		'css'=>[
@@ -55,8 +49,8 @@ class Deps{
 		$handlers=array_filter($handlers,function($handler){return empty($this->rendered[$handler]);});
 		usort($handlers,function($a,$b){
 			if(empty($this->enqueued[$a]['deps']) && empty($this->enqueued[$b]['deps'])){return 0;}
-			if(in_array($a,$this->enqueued[$b]['deps'],1)){return -1;}
-			if(in_array($b,$this->enqueued[$a]['deps'],1)){return 1;}
+			if(in_array($a,$this->enqueued[$b]['deps']??[],1)){return -1;}
+			if(in_array($b,$this->enqueued[$a]['deps']??[],1)){return 1;}
 			return 0;
 		});
 		foreach($handlers as $handler){$this->render_tag($handler);}
