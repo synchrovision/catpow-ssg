@@ -16,6 +16,11 @@ class Page{
 	public static function init($uri,$info=null){
 		return $GLOBALS['page']=static::$instance=new static($uri,$info);
 	}
+	public function get_the_page_file($file){
+		if(file_exists($f=ABSPATH.$this->dir.$file)){return $f;}
+		if(file_exists($f=TMPL_DIR.$this->dir.$file)){return $f;}
+		return false;
+	}
 	public function get_the_file($file){
 		if(file_exists($f=ABSPATH.$this->dir.$file)){return $f;}
 		if(file_exists($f=TMPL_DIR.$this->dir.$file)){return $f;}
