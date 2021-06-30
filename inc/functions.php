@@ -33,7 +33,11 @@ function add_shortcode($name,$function){
 }
 
 function csv($csv){
+	global $page;
 	if(substr($csv,-4)!=='.csv'){$csv='/csv/'.$csv.'.csv';}
+	if(!empty($page)){
+		return new CSV($page->get_the_file($csv));
+	}
 	if(file_exists($f=ABSPATH.$csv) || file_exists($f=TMPL_DIR.$csv)|| file_exists($f=INC_DIR.$csv)){
 		return new CSV($f);
 	}
