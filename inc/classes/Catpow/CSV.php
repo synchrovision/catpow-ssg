@@ -299,7 +299,7 @@ class CSV{
 		}
 		if(is_numeric($cond)){$cond=strval($cond);}
 		if(is_string($cond)){
-			if($cond[0]==='/'){
+			if(substr($cond,0,1)==='/'){
 				if(!preg_match($cond,$val)){return false;}
 			}
 			elseif($val!==$cond){return false;}
