@@ -76,11 +76,11 @@ function block($block,$props=[],$children=[]){
 	$block_obj->init();
 	return $block_obj->get_html();
 }
-function snippet($snippet,$vars=[],$children=[]){
+function contents($contents,$vars=[],$children=[]){
 	global $page;
 	extract($vars);
 	$children=is_array($children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($children)),false)):$children;
 	ob_start();
-	include $page->get_the_file('snippet/'.$snippet.'.php');
+	include $page->get_the_file('contents/'.$contents.'.php');
 	return ob_get_clean();
 }
