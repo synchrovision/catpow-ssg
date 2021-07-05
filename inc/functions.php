@@ -8,6 +8,25 @@ function _d($data){
 function picture($name,$alt,$ext='png'){
 	printf('<picture><source media="(max-width: 767px)" srcset="%1$s_sp.%3$s"><img src="%1$s.%3$s" alt="%2$s"/></picture>',$name,$alt,$ext);
 }
+function texts($file){
+	global $page;
+	static $cache=[];
+	$file.='.txt';
+	if(!empty($page)){
+		$file=$page->get_the_file($file);
+	}
+	elseif(file_exists($f=ABSPATH.$file) || file_exists($f=TMPL_DIR.$file)|| file_exists($f=INC_DIR.$file)){
+		$file=$f;
+	}
+	if(isset($cache[$file])){return $cach[$file];}
+	if(!file_exists($file)){return $cache[$file]=[];}
+	$data=[];
+	$entries=array_chunk(preg_split('/\n*^\[(.+?)\]\n/m',file_get_contents($file),-1,PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE),2);
+	foreach($entries as list($key,$value)){
+		$data[$key]=$value;
+	}_d($data);
+	return $cach[$file]=$data;
+}
 function md($text){
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
