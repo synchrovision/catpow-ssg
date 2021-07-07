@@ -5,8 +5,19 @@ function _d($data){
 	Debug::dump($data);
 }
 
-function picture($name,$alt,$ext='png'){
-	printf('<picture><source media="(max-width: 767px)" srcset="%1$s_sp.%3$s"><img src="%1$s.%3$s" alt="%2$s"/></picture>',$name,$alt,$ext);
+function picture($name,$alt,$bp=null){
+	if(empty($bp)){$bp=['sp'=>-767];}
+	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
+	$rtn='<picture>';
+	foreach($bp as $slug=>$mq){
+		if(is_numeric($mq)){
+			$mq=($mq>0)?('min-width:'.$mq):('max-width:'.abs($mq));
+		}
+		$rtn.=sprintf('<source media="(max-width: 767px)" srcset="%1$s_sp%3$s">',$matches['name'],$alt,$matches['ext']);
+	}
+	$rtn.=sprintf('<img src="%s" alt="%s"/></picture>',$name,$alt);
+	return $rtn;
+
 }
 function texts($file='texts'){
 	global $page;
