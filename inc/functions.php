@@ -24,7 +24,7 @@ function texts($file='texts'){
 	$entries=array_chunk(preg_split('/\n*^\[(.+?)\]\n/m',file_get_contents($file),-1,PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE),2);
 	foreach($entries as list($key,$value)){
 		$data[$key]=$value;
-	}_d($data);
+	}
 	return $cach[$file]=$data;
 }
 function md($text){
