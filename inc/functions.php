@@ -9,11 +9,11 @@ function picture($name,$alt,$bp=null){
 	if(empty($bp)){$bp=['sp'=>-767];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
 	$rtn='<picture>';
-	foreach($bp as $slug=>$mq){
+	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
 			$mq=($mq>0)?('min-width:'.$mq):('max-width:'.abs($mq));
 		}
-		$rtn.=sprintf('<source media="(max-width: 767px)" srcset="%1$s_sp%3$s">',$matches['name'],$alt,$matches['ext']);
+		$rtn.=sprintf('<source media="(max-width: 767px)" srcset="%s_%s%s">',$matches['name'],$media,$matches['ext']);
 	}
 	$rtn.=sprintf('<img src="%s" alt="%s"/></picture>',$name,$alt);
 	return $rtn;
