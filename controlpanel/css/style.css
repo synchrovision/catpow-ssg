@@ -34,9 +34,9 @@ html {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  -webkit-box-lines: multiple;
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
+  -webkit-box-lines: single;
+  -webkit-flex-wrap: nowrap;
+  flex-wrap: nowrap;
   -webkit-box-direction: normal;
   -webkit-box-orient: vertical;
   -webkit-flex-direction: column;
@@ -99,15 +99,18 @@ html {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  -webkit-box-lines: multiple;
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
+  -webkit-box-lines: single;
+  -webkit-flex-wrap: nowrap;
+  flex-wrap: nowrap;
 }
 .siteMain__sidebar {
   -webkit-box-flex: 0;
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 30rem;
+  overflow-y: auto;
+  max-height: 90vh;
+  height: auto;
 }
 .siteMain__contents {
   -webkit-box-flex: 1;

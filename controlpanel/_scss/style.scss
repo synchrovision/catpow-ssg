@@ -11,7 +11,7 @@ html{
 }
 .siteLayout{
 	@include bnd((h:100vh));
-	@include flx((w:w,d:c,a:f));
+	@include flx((w:n,d:c,a:f));
 	.siteHeader{
 		@include bnd((f:0 0 a,w:f));
 	}
@@ -38,9 +38,9 @@ html{
 	}
 }
 .siteMain{
-	@include flx((w:w));
+	@include flx((w:n));
 	&__sidebar{
-		@include bnd((f:0 0 30rem));
+		@include bnd((f:0 0 30rem,oy:a,h:a 90vh));
 	}
 	&__contents{
 		@include bnd((f:1 1 30rem));
