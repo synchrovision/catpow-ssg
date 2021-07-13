@@ -52,6 +52,7 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 	case 'ttf':
 	case 'otf':
 	case 'pdf':
+	case 'json':
 		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
 			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
 				if(!is_dir(dirname($file))){
