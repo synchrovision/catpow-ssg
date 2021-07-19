@@ -224,8 +224,8 @@ class CSV implements \Iterator,\ArrayAccess{
 		if(is_numeric($collect_by)){$collect_by=range(0,$collect_by);}
 		elseif(is_string($collect_by)){$collect_by=[array_search($collect_by,$this->data[0])];}
 		elseif(is_array($collect_by)){
-			foreach($collect_by as &$key){
-				if(!is_numeric($key)){$key=array_search($key,$this->data[0]);}
+			foreach($collect_by as $i=>$key){
+				if(!is_numeric($key)){$collect_by[$i]=array_search($key,$this->data[0]);}
 			}
 		}
 		$current_keys=[];
