@@ -1,10 +1,39 @@
 <?php
 namespace Catpow;
 
-class CSV{
-	
-	public $data=array(),$file;
+class CSV implements \Iterator,\ArrayAccess{
+	public $data=array(),$file,$current_index=1;
 	private $hash,$tree,$depth;
+	
+	public function rewind(){
+		$this->current_index=1;
+	}
+	public function current(){
+		return array_combine($this->data[0],$this->data[$this->current_index]);
+	}
+	public function key(){
+		return $this->current_index;
+	}
+	public function next(){
+		$this->current_index++;
+	}
+	public function valid(){
+		return isset($this->data[$this->current_index]);
+	}
+	
+	public function offsetSet($offset,$value){
+		$this->data[$offset]=array_values($value);
+	}
+	public function offsetExists($offset){
+		isset($this->data[$offset]);
+	}
+	public function offsetUnset($offset){
+		unset($this->data[$offset]);
+	}
+	public function offsetGet($offset){
+		return $this->data[$offset]??null;
+	}
+	
 	public function __construct($csv,$fill_column=false){
 		if(is_array($csv)){
 			$this->data=array_map(function($row){
