@@ -60,7 +60,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			window.addEventListener('load',function(){
 				if($tgt.css('position')==='static'){$tgt.css('position','relative');}
 			});
-			$tgt.update=function(){
+			$tgt.tick=function(){
 				var winh=window.innerHeight;
 				$tgt.each(function(){
 					var bnd=this.getBoundingClientRect();
@@ -78,6 +78,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 						}
 					});
 				});
+				window.requestAnimationFrame($tgt.tick);
 			};
 			$tgt.each(function(){
 				$(this).children().each(function(){
@@ -86,8 +87,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 					else{this.orgTransform+=' ';}
 				});
 			});
-			$(window).scroll(function(){$tgt.update();});
-			$tgt.update();
+			$tgt.tick();
 			return $tgt;
 		},
 		cp_scrollspy:function(thr){
