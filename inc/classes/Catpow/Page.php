@@ -8,10 +8,7 @@ class Page{
 		$this->dir=(substr($uri,-1)==='/')?$uri:dirname($uri).'/';
 		$this->scripts=new Deps('js');
 		$this->styles=new Deps('css');
-		if(empty($info)){
-			
-		}
-		$this->info=$info;
+		$this->info=$info??$GLOBALS['sitemap'][$uri]??null;
 	}
 	public static function init($uri,$info=null){
 		return $GLOBALS['page']=static::$instance=new static($uri,$info);
@@ -42,5 +39,8 @@ class Page{
 	public function render_deps(){
 		$this->scripts->render();
 		$this->styles->render();
+	}
+	public function __get($name){
+		if(isset($this->info[$name])){return $this->info[$name];}
 	}
 }
