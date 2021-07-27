@@ -25,7 +25,9 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			var $parent=$(this).parent(),$control=$(this),$window=$(window);
 			var s=$window.scrollTop(),ts=0,ty=0,winh,winw;
 			$control.init=function(){
-				if($parent.css('position')==='static'){$parent.css({"position":"relative"});}
+				window.addEventListener('load',function(){
+					if($parent.css('position')==='static'){$parent.css({"position":"relative"});}
+				});
 				$control.update();
 			}
 			$control.update=function(){
