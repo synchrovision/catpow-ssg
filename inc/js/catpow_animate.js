@@ -144,7 +144,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			return this;
 		},
 		cp_class_control:function($tgt,prm){
-			var conf,$thumb,$control,$images,$dots,crr;
+			var conf,$thumb,$control,$images,$contents,$dots,crr;
 			if(prm===undefined){prm={};}
 			if(!$tgt){
 				if($(this).length>1){
@@ -175,12 +175,13 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			crr=-1;
 			if($(this).is('.tab')){$thumb=$(this);}
 			else{$thumb=$(this).find('.thumb,.thumbnail');}
-			$images=$tgt.find('.images,.contents').first();
+			$images=$tgt.find('.images').first();
+			$contents=$tgt.find('.contents').first();
 			if($thumb.length===0){$thumb=$images;}
 			$dots=$(this).find('.dots');
 			if($dots.length){
 				if($dots.children().length===0){$dots.append('<span class="dot"> </span>');}
-				while($images.children().length > $dots.children().length){
+				while(($images.children().length || $contents.children().length) > $dots.children().length){
 					$dots.append($dots.children(':eq(0)').clone());
 				}
 				$dots.children().on('click',function(){$control.goto($dots.children().index(this));});
@@ -204,6 +205,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			if(prm.loopItems){
 				$thumb.append($thumb.children().clone());
 				if($thumb!==$images){$images.append($images.children().clone());}
+				if($contents.length){$contents.append($contents.children().clone());}
 				len=$thumb.children().length;
 			}
 			if(!$thumb.children('.active').length && $close.length===0){$thumb.children().eq(0).addClass('active');}
@@ -260,6 +262,9 @@ jQuery.catpow.set_page_top_offset=function(offset){
 					$(this).removeClass('thumb'+prev_n+' before after active').addClass(cls+' thumb'+n);
 					if($images.length){
 						$images.children(':eq('+i+')').removeClass('image'+prev_n+' before after active').addClass(cls+' image'+n);
+					}
+					if($contents.length){
+						$contents.children(':eq('+i+')').removeClass('content'+prev_n+' before after active').addClass(cls+' content'+n);
 					}
 				});
 				if($dots.length){
@@ -348,11 +353,12 @@ jQuery.catpow.set_page_top_offset=function(offset){
 		cp_hashscroll:function(){
 			var $hash_links=[];
 			var s,prev_s;
-
-			$(this).find("a[href^='#']").each(function(){
-				var $hash_link=$(this);
-				$hash_link.tgt=$(this.hash);
-				$hash_link.click(function(){
+			
+			var cb=function(el){
+				var $hash_link=$(el);
+				$hash_link.tgt=$(el.hash);
+				$hash_link.off('.hashscroll');
+				$hash_link.on('click.hashscroll',function(){
 					if($hash_link.tgt.length){
 						$hash_link.tgt.trigger('expect');
 						$('body,html').animate({scrollTop:$hash_link.tgt.offset().top - $.catpow.pageTopOffset},500);
@@ -363,6 +369,19 @@ jQuery.catpow.set_page_top_offset=function(offset){
 					return false;
 				});
 				$hash_links.push($hash_link);
+			};
+			var o=new MutationObserver(function(mutations){
+				mutations.map(function(mutation){
+					mutation.addedNodes.forEach(function(node){
+						if(node.nodeType===1){
+							node.querySelectorAll("a[href^='#']").forEach(cb);
+						}
+					});
+				});
+			});
+			o.observe(this.get(0),{childList:true,subtree:true});
+			$(this).each(function(){
+				this.querySelectorAll("a[href^='#']").forEach(cb);
 			});
 			setInterval(function(){
 				s=$(window).scrollTop();
@@ -427,7 +446,6 @@ jQuery.catpow.set_page_top_offset=function(offset){
 })(jQuery);
 
 jQuery(function($){
-	$.catpow.set_page_top_offset('#SiteHeader');
 	$('.scrollfix').cp_scrollfix();
 	$('.parallax').cp_parallax();
 	$('.scrollspy').cp_scrollspy();
