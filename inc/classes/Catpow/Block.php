@@ -1,12 +1,12 @@
 <?php
 namespace Catpow;
 class Block{
-	public $block,$props,$children,$dir;
+	public $block,$part='',$props,$children,$dir;
 	public function __construct($block,$props=[],$children=[]){
-		$this->block=$block;
+		list($this->block,$this->part)=explode('/',$block.'/');
 		$this->props=$props;
 		$this->children=$children;
-		$this->dir=ABSPATH.'/blocks/'.$block;
+		$this->dir=ABSPATH.'/blocks/'.$this->block;
 	}
 	public function init(){
 		if(!is_dir($this->dir)){
@@ -39,9 +39,15 @@ class Block{
 		ob_start();
 		extract($this->props);
 		if(!empty($page)){$page->use_block($this->block);}
-		$className='block-'.$this->block.(empty($className)?'':' '.$className);
+		$className=(empty($className)?'':$className.' ').'block-'.$this->block;
 		$children=is_array($this->children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->children)),false)):$this->children;
-		include self::get_block_file($this->block,'block.php');
+		if(empty($this->part)){
+			include self::get_block_file($this->block,'block.php');
+		}
+		else{
+			$className.='-'.$this->part;
+			include self::get_block_file($this->block,'block-'.$this->part.'.php');
+		}
 		return ob_get_clean();
 	}
 	public static function get_block_file($block,$file){
