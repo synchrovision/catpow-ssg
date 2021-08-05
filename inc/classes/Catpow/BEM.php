@@ -131,4 +131,58 @@ class BEM{
 	public function __toString(){
 		return implode(' ',$this->get_classes());
 	}
+	
+	public function apply($html){
+		$doc=new \DOMDocument();
+		$doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR);
+		foreach($doc->childNodes??[] as $el){
+			$this->_apply($el);
+		}
+		return mb_convert_encoding($doc->saveHTML(),'UTF-8','HTML-ENTITIES');
+	}
+	private function _apply($el){
+		if(!is_a($el,\DOMElement::class)){return;}
+		$classes=explode(' ',$el->getAttribute('class')??'');
+		$_s=$_b=$_e=false;
+		foreach($classes as $i=>$class){
+			if(substr($class,-1)==='-'){
+				$this->s[]=substr($class,0,-1);
+				$this->b=false;$this->e=$this->m=$this->bm=[];
+				$_s=true;
+			}
+			if(substr($class,-1)==='_'){
+				$m=array_filter(explode('_',mb_substr($class,0,-1)));
+				$b=array_shift($m);
+				if(strpos('-',$b)!==false){
+					$s=array_merge((array)$this->s,explode('-',$b));
+					$b=array_pop($s);
+				}
+				else{$s=$this->s;}
+				$this->b_stuck[]=[$this->s,$this->b,$this->e,$this->m,$this->bm];
+				list($this->s,$this->b,$this->e,$this->m,$this->bm)=[$s,$b,[],$m,$m];
+				$this->add_selector();
+				$_b=true;
+			}
+			if(substr($class,0,1)==='_'){
+				$m=array_filter(explode('_',substr($class,1)));
+				$e=array_shift($m);
+				$this->m_stuck[]=$this->m;
+				$this->e[]=$e;
+				$this->m=$m;
+				$this->add_selector();
+				$_e=true;
+			}
+			if($_s||$_b||$_e){
+				$classes[$i]=$this.'';
+				$el->setAttribute('class',implode(' ',$classes));
+				break;
+			}
+		}
+		foreach($el->childNodes??[] as $child_el){
+			$this->_apply($child_el);
+		}
+		if($_s){array_pop($this->s);$this->b=false;$this->e=$this->m=$this->bm=[];}
+		if($_b){list($this->s,$this->b,$this->e,$this->m,$this->bm)=array_pop($this->b_stuck);}
+		if($_e){array_pop($this->e);$this->m=array_pop($this->m_stuck);}
+	}
 }
