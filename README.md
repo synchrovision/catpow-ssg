@@ -105,32 +105,41 @@ BEM
 
 CatpowSSGはBEMによるコーディングを補助するためのクラスを備えています。
 
-
+-で終わるクラスをセクション
+_で終わるクラスをブロック  
+_で始まるクラスをエレメント  
+_を区切りとしてモディファイア  
+としてクラスを置き換えます
 
 各クラス名を出力したBEMインスタンスからは``export_selectors_file``メソッドでセレクタをまとめたSCSSファイルを書き出すことができます。
 
 ``_tmpl/sample.html.php``を以下のように記述した場合
 
 ```php
-<?php namespace Catpow;$s=BEM::section('myLP');?>
-<section class="<?=$s->§sec1?>">
-	<div class="<?=$s->«myBlock_color1?>">
-		<ul class="<?=$s->list_?>">
-			<li class="<?=$s->item_?>">
-				<div class="<?=$s->title?>">title1</div>
-				<div class="<?=$s->text?>">text1</div>
-			</li<?=$s->_?>>
-			<li class="<?=$s->item_?>">
-				<div class="<?=$s->title?>">title2</div>
-				<div class="<?=$s->text?>">text2</div>
-			</li<?=$s->_?>>
-			<li class="<?=$s->item_?>">
-				<div class="<?=$s->title?>">title3</div>
-				<div class="<?=$s->text?>">text3</div>
-			</li<?=$s->_?>>
-		</ul<?=$s->_?>>
-	</div<?=$s->»?>>
-</section<?=$s->§?>>
+<?php
+namespace Catpow;
+$s=BEM::section('myLP');
+ob_start();
+?>
+<section class="sec1-">
+	<div class="myBlock_color1_">
+		<ul class="_list">
+			<li class="_item">
+				<div class="_title">title1</div>
+				<div class="_text">text1</div>
+			</li>
+			<li class="_item">
+				<div class="_title">title2</div>
+				<div class="_text">text2</div>
+			</li>
+			<li class="_item">
+				<div class="_title">title3</div>
+				<div class="_text">text3</div>
+			</li>
+		</ul>
+	</div>
+</section>
+<?=$s->apply(ob_get_clean())?>
 <?php $s->export_selectors_file(); ?>
 ```
 
