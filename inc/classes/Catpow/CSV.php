@@ -22,16 +22,17 @@ class CSV implements \Iterator,\ArrayAccess{
 	}
 	
 	public function offsetSet($offset,$value){
-		$this->data[$offset]=array_values($value);
+		$this->data[$offset+1]=array_values($value);
 	}
 	public function offsetExists($offset){
-		isset($this->data[$offset]);
+		isset($this->data[$offset+1]);
 	}
 	public function offsetUnset($offset){
-		unset($this->data[$offset]);
+		unset($this->data[$offset+1]);
 	}
 	public function offsetGet($offset){
-		return $this->data[$offset]??null;
+		if(empty($this->data[$offset+1])){return null;}
+		return array_combine($this->data[0],$this->data[$offset+1]);
 	}
 	
 	public function __construct($csv,$fill_column=false){
