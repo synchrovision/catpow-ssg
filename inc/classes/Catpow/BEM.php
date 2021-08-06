@@ -82,7 +82,6 @@ class BEM{
 		file_put_contents($file,self::get_selectors_code($this->selectors));
 	}
 	public static function get_selectors_code($selectors,$indent=0){
-		ksort($selectors);
 		$code='';
 		foreach($selectors as $sel=>$children){
 			$code.=str_repeat("\t",$indent)."{$sel}{\n";
