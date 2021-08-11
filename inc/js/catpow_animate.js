@@ -46,7 +46,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 					}
 					else{
 						ty-=ts;
-						ty=Math.min(0,Math.max(winh-bnd1.height,ty));
+						ty=Math.min(0,Math.max(winh-bnd1.height-$.catpow.pageTopOffset,ty));
 						$(this).css({transform:'translate3d(0,'+ty+'px,0)',position:'fixed',top:$.catpow.pageTopOffset + 'px',bottom:'auto',left:bnd2.left,right:winw-bnd2.right});
 
 					}
