@@ -110,6 +110,11 @@ function contents($contents,$vars=[],$children=[]){
 	global $page;
 	extract($vars);
 	$children=is_array($children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($children)),false)):$children;
+	if(is_a($children,\Closure::class)){
+		ob_start();
+		$children($vars);
+		$children=ob_get_clean();
+	}
 	ob_start();
 	include $page->get_the_file('contents/'.$contents.'.php');
 	return ob_get_clean();
