@@ -41,6 +41,11 @@ class Block{
 		if(!empty($page)){$page->use_block($this->block);}
 		$className=(empty($className)?'':$className.' ').'block-'.$this->block;
 		$children=is_array($this->children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->children)),false)):$this->children;
+		if(is_a($children,\Closure::class)){
+			ob_start();
+			$children($this->props);
+			$children=ob_get_clean();
+		}
 		if(empty($this->part)){
 			include self::get_block_file($this->block,'block.php');
 		}
