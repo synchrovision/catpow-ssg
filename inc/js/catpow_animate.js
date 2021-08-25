@@ -58,6 +58,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 		},
 		cp_parallax:function(){
 			var $tgt=$(this);
+			$tgt.css({position:'fixed',overflow:'hidden'})
 			$tgt.css({overflow:'hidden'}).children().css({position:'absolute'});
 			window.addEventListener('load',function(){
 				if($tgt.css('position')==='static'){$tgt.css('position','relative');}
@@ -65,6 +66,11 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			$tgt.tick=function(){
 				var winh=document.documentElement.clientHeight;
 				$tgt.each(function(){
+					var pbnd=this.parentNode.getBoundingClientRect();
+					this.style.top=pbnd.top+'px';
+					this.style.left=pbnd.left+'px';
+					this.style.width=pbnd.width+'px';
+					this.style.height=pbnd.height+'px';
 					var bnd=this.getBoundingClientRect();
 					var tgth=bnd.height;
 					if(bnd.top > winh || bnd.top + tgth < 0){return;}
@@ -273,7 +279,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 				if(prm.scrollable && by_scroll===false){
 					$('body,html').animate({scrollTop:($(document).height()-$(window).innerHeight())/len*(to+0.5)},500);
 				}
-				$('image0 img[data-src]',$images).each(function(){
+				$('.image0 img[data-src]',$images).each(function(){
 					$(this).attr('src',$(this).attr('data-src'));
 				});
 				setTimeout(function(){in_interval=false;},prm.interval);
