@@ -2,6 +2,11 @@
 const path=require('path');
 module.exports=()=>{
 	return {
+		output: {
+			environment: {
+				arrowFunction: false
+			},
+		},
 		module: {
 			rules: [
 				{
