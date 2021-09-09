@@ -18,7 +18,50 @@ class Tmpl{
 				ob_end_clean();
 				error_log($e->getMessage());
 			}
-		} 
+			return false;
+		}
+		if($router_file=self::get_router_file_for_uri($uri)){
+			$router_uri=str_replace(ABSPATH,'',dirname($router_file)).'/*';
+			if(!file_exists($f=dirname($router_file).'/.htaccess')){
+				file_put_contents($f,"RewriteEngine on\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".basename($router_file)." [L]");
+			}
+			if(($tmpl_file=self::get_tmpl_file_for_file($router_file)) || ($tmpl_file=self::get_tmpl_file_for_uri($router_uri))){
+				ob_start();
+				Page::init($router_uri);
+				try{
+					global $sitemap,$page;
+					include $tmpl_file;
+					if(!is_dir(dirname($router_file))){
+						mkdir(dirname($router_file),0755,true);
+					}
+					file_put_contents($router_file,ob_get_clean());
+				}
+				catch(\Error $e){
+					ob_end_clean();
+					error_log($e->getMessage());
+				}
+			}
+			include $router_file;
+			return true;
+		}
+	}
+	public static function get_router_file_for_uri($uri){
+		global $sitemap;
+		if(substr($uri,0,1)!=='/'){return false;}
+		$dir=dirname($uri);
+		while($dir!=='/'){
+			if(isset($sitemap[$dir.'/*'])){
+				foreach(['router.php','router.html','index.php','index.html'] as $file_name){
+					if(
+						file_exists(ABSPATH.$dir.'/'.$file_name) ||
+						file_exists(ABSPATH.$dir.'/'.$file_name.'.tmpl.php') ||
+						file_exists(TMPL_DIR.$dir.'/'.$file_name.'.php')
+					){return ABSPATH.$dir.'/'.$file_name;}
+				}
+			}
+			$dir=dirname($dir);
+		}
+		return false;
 	}
 	public static function get_tmpl_file_for_file($file){
 		global $sitemap;

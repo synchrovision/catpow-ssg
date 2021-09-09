@@ -76,8 +76,7 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 			global $sitemap;
 			include($f);
 		}
-		Catpow\Tmpl::compile_for_file($file);
-		return false;
+		return Catpow\Tmpl::compile_for_file($file);
 	default:
 		return false;
 }
