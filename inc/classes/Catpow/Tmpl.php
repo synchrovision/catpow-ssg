@@ -44,6 +44,7 @@ class Tmpl{
 			include $router_file;
 			return true;
 		}
+		return false;
 	}
 	public static function get_router_file_for_uri($uri){
 		global $sitemap;
