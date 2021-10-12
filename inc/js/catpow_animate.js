@@ -3,10 +3,12 @@ jQuery.catpow.set_page_top_offset=function(offset){
 	$(window).off('.set_page_top_offset');
 	if(window.location.hash){
 		window.addEventListener('load',function(){
-			window.scrollBy({top:-$.catpow.pageTopOffset});
+			setTimeout(function(){
+				window.scrollBy({top:-$.catpow.pageTopOffset});
+			},10);
 		});
 	}
-	if(Number.isInteger(offset)){
+	if(typeof offset === 'number'){
 		return $.catpow.pageTopOffset=offset;	
 	}
 	if(typeof offset === 'string'){offset=jQuery(offset);}
@@ -64,7 +66,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 				if($tgt.css('position')==='static'){$tgt.css('position','relative');}
 			});
 			$tgt.tick=function(){
-				var winh=document.documentElement.clientHeight;
+				var winh=window.innerHeight;
 				$tgt.each(function(){
 					var pbnd=this.parentNode.getBoundingClientRect();
 					this.style.top=pbnd.top+'px';
@@ -345,7 +347,7 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			if(prm.initialSlide){$control.goto(prm.initialSlide);}
 			else{$control.goto($thumb.children().index($thumb.children('.active')));}
 			if(closable){$control.close();}
-			setTimeout(function(){$tgt.removeClass('init');},1);
+			setTimeout(function(){$tgt.removeClass('init');},50);
 			return $control;
 		},
 		cp_scrollcallback:function(fnc){
@@ -378,16 +380,16 @@ jQuery.catpow.set_page_top_offset=function(offset){
 			};
 			var o=new MutationObserver(function(mutations){
 				mutations.map(function(mutation){
-					mutation.addedNodes.forEach(function(node){
+					Array.prototype.forEach.call(mutation.addedNodes,function(node){
 						if(node.nodeType===1){
-							node.querySelectorAll("a[href^='#']").forEach(cb);
+							Array.prototype.forEach.call(node.querySelectorAll("a[href^='#']"),cb);
 						}
 					});
 				});
 			});
 			o.observe(this.get(0),{childList:true,subtree:true});
 			$(this).each(function(){
-				this.querySelectorAll("a[href^='#']").forEach(cb);
+				Array.prototype.forEach.call(this.querySelectorAll("a[href^='#']"),cb);
 			});
 			setInterval(function(){
 				s=$(window).scrollTop();
