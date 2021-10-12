@@ -11,6 +11,10 @@ img {
   border: none;
 }
 html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+html {
   font-size: 62.5%;
   color: #444;
   font-family: 'Helvetica Neue', "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
