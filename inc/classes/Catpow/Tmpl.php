@@ -44,10 +44,17 @@ class Tmpl{
 			include $router_file;
 			return true;
 		}
+		return false;
 	}
 	public static function get_router_file_for_uri($uri){
 		global $sitemap;
 		if(substr($uri,0,1)!=='/'){return false;}
+		if(
+			substr($uri,-1)!=='/' &&
+			file_exists(ABSPATH.$uri) ||
+			file_exists(ABSPATH.$uri.'.tmpl.php') ||
+			file_exists(TMPL_DIR.$uri.'.php')
+		){return false;}
 		$dir=dirname($uri);
 		while($dir!=='/'){
 			if(isset($sitemap[$dir.'/*'])){
