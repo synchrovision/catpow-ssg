@@ -3,10 +3,16 @@ namespace Catpow;
 class Deps{
 	public static $regsitered=[
 		'js'=>[
-			'react'=>[
+			'react-dev'=>[
 				'set'=>[
 					['src'=>'https://unpkg.com/react@17/umd/react.development.js','attr'=>'crossorigin'],
 					['src'=>'https://unpkg.com/react-dom@17/umd/react-dom.development.js','attr'=>'crossorigin']
+				]
+			],
+			'react'=>[
+				'set'=>[
+					['src'=>'https://unpkg.com/react@17/umd/react.production.min.js','attr'=>'crossorigin'],
+					['src'=>'https://unpkg.com/react-dom@17/umd/react-dom.production.min.js','attr'=>'crossorigin']
 				]
 			],
 			'alpine'=>['src'=>'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js','attr'=>'defer'],
@@ -17,11 +23,19 @@ class Deps{
 				]
 			],
 			'axios'=>['src'=>'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'],
+			'cookie'=>['src'=>'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js'],
 			'jquery'=>['src'=>'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'],
-			'catpow-animate'=>['src'=>'/js/catpow_animate.js','deps'=>['jquery']]
+			'catpow-animate'=>['src'=>'/js/catpow_animate.js','deps'=>['jquery']],
+			'bootstrap'=>[
+				'src'=>'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js',
+				'attr'=>'integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"'
+			]
 		],
 		'css'=>[
-			
+			'bootstrap'=>[
+				'src'=>'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
+				'attr'=>'integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"'
+			]
 		]
 	];
 	public $enqueued=[],$rendered=[];
