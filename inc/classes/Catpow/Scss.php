@@ -10,8 +10,10 @@ class Scss{
 		$scss_file=substr($file,0,-3).'scss';
 		if(file_exists($scss_file)){return $scss_file;}
 		if(file_exists($f=str_replace('/css/','/_scss/',$scss_file))){return $f;}
+		if(file_exists($f=str_replace('/css/','/scss/',$scss_file))){return $f;}
 		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$scss_file))){return $f;}
 		if(file_exists($f=str_replace([ABSPATH,'/css/'],[TMPL_DIR,'/_scss/'],$scss_file))){return $f;}
+		if(file_exists($f=str_replace([ABSPATH,'/css/'],[TMPL_DIR,'/scss/'],$scss_file))){return $f;}
 		return false;
 	}
 	public static function compile($scss_file,$css_file){
