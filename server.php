@@ -1,4 +1,5 @@
 <?php
+ini_set("error_log","php://stdout");
 define('ABSPATH',dirname(__DIR__));
 define('BASE_URL','http://localhost:8000');
 define('APP_DIR',__DIR__);
