@@ -11,9 +11,9 @@ function picture($name,$alt,$bp=null){
 	$rtn='<picture>';
 	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
-			$mq=($mq>0)?('min-width:'.$mq):('max-width:'.abs($mq));
+			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
 		}
-		$rtn.=sprintf('<source media="(max-width: 767px)" srcset="%s_%s%s">',$matches['name'],$media,$matches['ext']);
+		$rtn.=sprintf('<source media="(%s)" srcset="%s_%s%s">',$mq,$matches['name'],$media,$matches['ext']);
 	}
 	$rtn.=sprintf('<img src="%s" alt="%s"/></picture>',$name,$alt);
 	return $rtn;
