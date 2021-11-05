@@ -78,6 +78,7 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 		if(file_exists($f=CONF_DIR.'/site_config.php')){
 			global $sitemap;
 			include($f);
+			Catpow\Site::init($site??null);
 		}
 		return Catpow\Tmpl::compile_for_file($file);
 	default:
