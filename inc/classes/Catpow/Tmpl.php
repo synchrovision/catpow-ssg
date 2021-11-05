@@ -7,7 +7,7 @@ class Tmpl{
 			ob_start();
 			Page::init($uri);
 			try{
-				global $sitemap,$page;
+				global $sitemap,$site,$page;
 				include $tmpl_file;
 				if(!is_dir(dirname($file))){
 					mkdir(dirname($file),0755,true);
@@ -29,7 +29,7 @@ class Tmpl{
 				ob_start();
 				Page::init($router_uri);
 				try{
-					global $sitemap,$page;
+					global $sitemap,$site,$page;
 					include $tmpl_file;
 					if(!is_dir(dirname($router_file))){
 						mkdir(dirname($router_file),0755,true);
