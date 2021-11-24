@@ -19,6 +19,83 @@ function picture($name,$alt,$bp=null){
 	return $rtn;
 
 }
+function table($data,$props=null){
+	$rtn=sprintf('<table class="%s">',$props['classes']['table']??$props['classe']??'table_');
+	$hr=$props['hr']??1;
+	$hc=$props['hc']??0;
+	$atts=$props['atts']??[];
+	if(!empty($props['caption'])){
+		$rtn.=sprintf('<caption class="%s">%s</caption>',$props['classes']['caption']??'_caption',$props['caption']);
+	}
+	if(!empty($props['colgroup'])){
+		$rtn.=sprintf('<colgroup class="%s">',$props['classes']['colgroup']??'_colgroup');
+		foreach($props['colgroup'] as $col){
+			$rtn.=sprintf('<col%s/>',HTML::get_attr_code($col));
+		}
+		$rtn.='</colgroup>';
+	}
+	foreach($data as $r=>$row){
+		foreach($row as $c=>$cell){
+			if(is_null($cell)){continue;}
+			$tag=($r<$hr || $c<$hc)?'th':'td';
+			$attr=['tag'=>$tag,'class'=>"_{$tag}"];
+			if(($data[$r][$c+1]??'')==='<'){
+				$s=1;
+				while(($data[$r][$c+$s]??'')==='<'){$data[$r][$c+$s]=null;$s++;}
+				$attr['colspan']=$s;
+			}
+			if(($data[$r+1][$c]??'')==='^'){
+				$s=1;
+				while(($data[$r+$s][$c]??'')==='^'){$data[$r+$s][$c]=null;$s++;}
+				$attr['rowspan']=$s;
+				if(!empty($attr['colspan'])){
+					for($rs=$attr['rowspan']-1;$rs<0;$rs--){
+						for($cs=$attr['colspan']-1;$cs<0;$cs--){
+							$data[$r+$rs][$c+$cs]=null;
+						}
+					}
+				}
+			}
+			if(substr($cell,0,2)==='$ '){
+				if(strpos($cell,"\n")){
+					$tag_data=strstr($cell,"\n",true);
+					$data[$r][$c]=substr(strstr($cell,"\n"),1);
+				}
+				else{
+					$tag_data=$cell;
+					$data[$r][$c]='';
+				}
+				$attr=array_merge($attr,HTML::parse_tag_data(substr($tag_data,2)));
+			}
+			$atts[$r][$c]=array_merge($attr,$atts[$r][$c]??[]);
+		}
+	}
+	$cb=$props['cb']??function($str){return $str;};
+	$r=0;
+	if(!empty($hr)){
+		$rtn.=sprintf('<thead class="%s">',$props['classes']['thead']??'_thead');
+		for(;$r<$hr;$r++){
+			$rtn.=sprintf('<tr class="%s">',$props['classes']['tr']??'_tr');
+			foreach($data[$r] as $c=>$cell){
+				if(is_null($cell)){continue;}
+				$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell));
+			}
+			$rtn.='</tr>';
+		}
+		$rtn.='</thead>';
+	}
+	$rtn.=sprintf('<tbody class="%s">',$props['classes']['tbody']??'_tbody');
+	for($l=count($data);$r<$l;$r++){
+		$rtn.=sprintf('<tr class="%s">',$props['classes']['tr']??'_tr');
+		foreach($data[$r] as $c=>$cell){
+			if(is_null($cell)){continue;}
+			$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell));
+		}
+		$rtn.='</tr>';
+	}
+	$rtn.='</tbody></table>';
+	return $rtn;
+}
 function texts($file='texts'){
 	global $page;
 	static $cache=[];
