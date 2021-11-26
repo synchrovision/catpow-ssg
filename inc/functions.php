@@ -20,7 +20,7 @@ function picture($name,$alt,$bp=null){
 
 }
 function table($data,$props=null){
-	$rtn=sprintf('<table class="%s">',$props['classes']['table']??$props['classe']??'table_');
+	$rtn=sprintf('<table class="%s">',$props['classes']['table']??$props['class']??'table_');
 	$hr=$props['hr']??1;
 	$hc=$props['hc']??0;
 	$atts=$props['atts']??[];
