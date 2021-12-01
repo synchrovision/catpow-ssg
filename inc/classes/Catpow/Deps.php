@@ -24,6 +24,7 @@ class Deps{
 			],
 			'axios'=>['src'=>'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'],
 			'cookie'=>['src'=>'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js'],
+			'urljs'=>['src'=>'https://cdnjs.cloudflare.com/ajax/libs/urljs/2.6.2/url.min.js'],
 			'jquery'=>['src'=>'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'],
 			'catpow-animate'=>['src'=>'/js/catpow_animate.js','deps'=>['jquery']],
 			'bootstrap'=>[
