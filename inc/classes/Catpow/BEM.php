@@ -77,7 +77,7 @@ class BEM{
 		}
 	}
 	public function export_selectors_file($file=null){
-		if(empty($file)){$file=PAGE_TMPL_DIR.'/_scss/selectors.scss';}
+		if(empty($file)){$file=PAGE_TMPL_DIR.'/_scss/selectors/'.($this->s[0]??'style').'.scss';}
 		$dir=dirname($file);
 		if(!is_dir($dir)){mkdir($dir,0755,true);}
 		file_put_contents($file,self::get_selectors_code($this->selectors));
