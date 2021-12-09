@@ -2,7 +2,7 @@
 namespace Catpow;
 class BEM{
 	public $s,$b,$e,$m,$bm,$parent,$b_stuck=[],$m_stuck=[],$selectors=[];
-	private function __construct($s,$b=null,$e=null,$m=null,$bm=null,$parent=null){
+	private function __construct($s=null,$b=null,$e=null,$m=null,$bm=null,$parent=null){
 		$this->s=(array)$s;
 		$this->b=$b;
 		$this->e=(array)$e;
@@ -10,7 +10,8 @@ class BEM{
 		$this->bm=(array)$bm;
 		$this->parent=$parent;
 	}
-	public static function section($name){
+	public static function section($name=null){
+		if(empty($name)){return new self();}
 		return new self(explode('-',$name));
 	}
 	public static function block($name){
