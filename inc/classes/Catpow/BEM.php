@@ -138,7 +138,10 @@ class BEM{
 		foreach($doc->childNodes??[] as $el){
 			$this->_apply($el);
 		}
-		return mb_convert_encoding($doc->saveHTML(),'UTF-8','HTML-ENTITIES');
+		$html=mb_convert_encoding($doc->saveHTML(),'UTF-8','HTML-ENTITIES');
+		$html=str_replace('<br>','<br/>',$html);
+		$html=preg_replace('/><\/(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)>/','/>',$html);
+		return $html;
 	}
 	private function _apply($el){
 		if(!is_a($el,\DOMElement::class)){return;}

@@ -13,7 +13,7 @@ function picture($name,$alt,$bp=null){
 		if(is_numeric($mq)){
 			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
 		}
-		$rtn.=sprintf('<source media="(%s)" srcset="%s_%s%s">',$mq,$matches['name'],$media,$matches['ext']);
+		$rtn.=sprintf('<source media="(%s)" srcset="%s_%s%s"/>',$mq,$matches['name'],$media,$matches['ext']);
 	}
 	$rtn.=sprintf('<img src="%s" alt="%s"/></picture>',$name,$alt);
 	return $rtn;
