@@ -13,6 +13,7 @@ class Tmpl{
 					mkdir(dirname($file),0755,true);
 				}
 				file_put_contents($file,ob_get_clean());
+				static::lint_file($file);
 			}
 			catch(\Error $e){
 				ob_end_clean();
@@ -35,6 +36,7 @@ class Tmpl{
 						mkdir(dirname($router_file),0755,true);
 					}
 					file_put_contents($router_file,ob_get_clean());
+					static::lint_file($file);
 				}
 				catch(\Error $e){
 					ob_end_clean();
@@ -45,6 +47,16 @@ class Tmpl{
 			return true;
 		}
 		return false;
+	}
+	public static function lint_file($file){
+		switch(strrchr($file,'.')){
+			case '.html':{
+				if(file_exists($tidy_conf_file=CONF_DIR.'/tidy.conf')){
+					passthru("tidy -im -config {$tidy_conf_file} {$file}");
+				}
+				break;
+			}
+		}
 	}
 	public static function get_router_file_for_uri($uri){
 		global $sitemap;
