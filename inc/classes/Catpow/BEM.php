@@ -133,6 +133,7 @@ class BEM{
 	}
 	
 	public function apply($html){
+		$html=preg_replace('/ @([\w\.\-:]+=)/',' x-on:$1',$html);
 		$doc=new \DOMDocument();
 		$doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR);
 		foreach($doc->childNodes??[] as $el){
@@ -141,6 +142,7 @@ class BEM{
 		$html=mb_convert_encoding($doc->saveHTML(),'UTF-8','HTML-ENTITIES');
 		$html=str_replace('<br>','<br/>',$html);
 		$html=preg_replace('/><\/(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)>/','/>',$html);
+		$html=preg_replace('/ x\-on:([\w\.\-:]+=)/',' @$1',$html);
 		return $html;
 	}
 	private function _apply($el){
