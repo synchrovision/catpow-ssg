@@ -5,32 +5,32 @@ class CSV implements \Iterator,\ArrayAccess{
 	public $data=array(),$file,$current_index=1;
 	private $hash,$tree,$depth;
 	
-	public function rewind(){
+	public function rewind():void{
 		$this->current_index=1;
 	}
-	public function current(){
+	public function current():mixed{
 		return array_combine($this->data[0],$this->data[$this->current_index]);
 	}
-	public function key(){
+	public function key():mixed{
 		return $this->current_index;
 	}
-	public function next(){
+	public function next():void{
 		$this->current_index++;
 	}
-	public function valid(){
+	public function valid():bool{
 		return isset($this->data[$this->current_index]);
 	}
 	
-	public function offsetSet($offset,$value){
+	public function offsetSet($offset,$value):void{
 		$this->data[$offset+1]=array_values($value);
 	}
-	public function offsetExists($offset){
+	public function offsetExists($offset):bool{
 		isset($this->data[$offset+1]);
 	}
-	public function offsetUnset($offset){
+	public function offsetUnset($offset):void{
 		unset($this->data[$offset+1]);
 	}
-	public function offsetGet($offset){
+	public function offsetGet($offset):mixed{
 		if(empty($this->data[$offset+1])){return null;}
 		return array_combine($this->data[0],$this->data[$offset+1]);
 	}
