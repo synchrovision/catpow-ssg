@@ -1,7 +1,7 @@
 Catpow SSG
 ===
 
-<img src="https://img.shields.io/badge/PHP-7.2-45A?logo=php"> 
+<img src="https://img.shields.io/badge/PHP-8.0-45A?logo=php"> 
 
 PHPのビルドインサーバーを利用したシンプルな静的サイト生成ツール。  
 軽量で、サイト内の特設ページやデータ納品のLPの作成などに手軽に導入できます。
@@ -80,7 +80,7 @@ catpow-scssの各mixin、functionを利用するには``$colors,$fonts,$breakpoi
 CSV
 ---
 
-CatpowSSGはCSVファイルを読み込んで利用するためのクラスを備えています。
+CatpowSSGはCSVファイルを読み込んで利用するためのクラスと関数を備えています。
 
 読み込んだCSVは一行目の値をキー値として二行目以降を連想配列とすることを基本にします。
 
@@ -102,7 +102,22 @@ A,B,C
 ```
 
 
-CatpowのCSVクラスは単純に指定したCSVファイルを読み込んで一行ずつ処理する他に、任意のフォルダ内のcsvファイルをまとめて読み込んで配列に読み込む、条件に一致する行のみを抽出する、任意の列をキー値としてツリー構造のデータを得るといったことができます。
+CatpowのCSVクラスは単純に指定したCSVファイルを読み込んで一行ずつ処理する他に、任意のフォルダ内のcsvファイルをまとめて読み込んで配列に読み込む、条件に一致する行のみを抽出する、任意の列をキー値としてツリー構造のデータを得るといったことができます。 
+
+関数csvにcsvフォルダ内のcsvのファイル名（拡張子省略）を引数として渡すことで、当該ファイルのCSVクラスのインスタンスを得ることができます。
+
+CSVクラスはArrayAccessおよびIteratorを実装しており、配列のように扱うこともできます。
+
+```php
+<ul class="items">
+<?php foreach(csv('items') as $row): ?>
+	<li class="item">
+		<h3 class="title"><?=$row['title']?></h3>
+		<p class="text"><?=$row['text']?></p>
+	</li>
+<?php endforeach; ?>
+</ul>
+```
 
 
 BEM
