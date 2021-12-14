@@ -46,26 +46,28 @@ php -v
 
 #### 1. [Homebrew](https://brew.sh/index_ja)をインストール
 
-パッケージ管理ツールをインストールします。このインストールには10分程度を要します。すでにインストールされている場合は不要です。
+パッケージ管理ツールをインストールします。[^1]このインストールには10分程度を要します。すでにインストールされている場合は不要です。
 ```command
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 #### 2. phpをインストール
 
-HomebrewからPHPをインストールします。
+HomebrewからPHPをインストールします。[^1]
 
 ```command
 brew install php
 ```
 
-#### 3. phpをインストール
+インストールが完了したら
 
 ```command
 php -v
 ```
 
 でPHPバージョンを確認し、8.0以上のPHPがインストールされたことを確認します。
+
+[^1]: アクセス権限などの問題でインストールに失敗する場合があります。インストール実行後のメッセージを確認して適宜対応してください。
 
 テンプレート
 ---
