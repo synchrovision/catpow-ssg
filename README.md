@@ -30,6 +30,43 @@ php _compiler/server.php
 
 CLIでserver.phpを実行することで親ディレクトリをルートディレクトリ、server.phpをルーターとするPHPのビルドインサーバーが実行され、cssがリクエストされた場合は対応するscssが存在する場合はそれをコンパイルし、xml,htmlがリクエストされた場合は対応するテンプレートがあればその出力でファイルを上書きしてからファイルを出力します。その他、画像やjsファイルがリクエストされ、そのファイルが存在しない場合は、テンプレートディレクトリ内に同名のファイルがあればそれをコピーします。
 
+
+環境
+--
+
+CLIでphp8が実行できる環境が必要です。
+
+### Macの場合
+
+```command
+php -v
+```
+
+でPHPバージョンを確認し、8.0未満の場合、あるいはインストールされていない場合は以下の手順でPHPをインストールしてください。
+
+#### 1. [Homebrew](https://brew.sh/index_ja)をインストール
+
+パッケージ管理ツールをインストールします。このインストールには10分程度を要します。すでにインストールされている場合は不要です。
+```command
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+ル
+#### 2. phpをインストール
+
+HomebrewからPHPをインストールします。
+
+```command
+brew install php
+```
+
+#### 3. phpをインストール
+
+```command
+php -v
+```
+
+でPHPバージョンを確認し、8.0以上のPHPがインストールされたことを確認します。
+
 テンプレート
 ---
 
