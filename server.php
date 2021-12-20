@@ -86,6 +86,7 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 }
 
 function init(){
+	require_once INC_DIR.'/vendor/autoload.php';
 	spl_autoload_register(function($class){
 		if(file_exists($f=CONF_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);return;}
 		if(file_exists($f=INC_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);}
