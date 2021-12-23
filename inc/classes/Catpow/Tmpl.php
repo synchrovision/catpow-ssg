@@ -2,7 +2,7 @@
 namespace Catpow;
 class Tmpl{
 	public static function compile_for_file($file){
-		$uri=preg_replace('/index\.(html?|php)$/','',str_replace(ABSPATH,'',$file));
+		$uri=preg_replace('/\/index\.(html?|php)$/','/',str_replace(ABSPATH,'',$file));
 		if(($tmpl_file=self::get_tmpl_file_for_file($file)) || ($tmpl_file=self::get_tmpl_file_for_uri($uri))){
 			ob_start();
 			Page::init($uri);
