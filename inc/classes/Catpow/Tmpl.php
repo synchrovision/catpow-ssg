@@ -14,6 +14,7 @@ class Tmpl{
 				}
 				file_put_contents($file,ob_get_clean());
 				static::lint_file($file);
+				usleep(1000);
 			}
 			catch(\Error $e){
 				ob_end_clean();
@@ -37,6 +38,7 @@ class Tmpl{
 					}
 					file_put_contents($router_file,ob_get_clean());
 					static::lint_file($file);
+					usleep(1000);
 				}
 				catch(\Error $e){
 					ob_end_clean();
