@@ -58,6 +58,7 @@ class Scss{
 				echo $e->getMessage();
 			}
 			file_put_contents($css_file,$css);
+			usleep(1000);
 		}
 	}
 }
