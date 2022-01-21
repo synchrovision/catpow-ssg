@@ -167,10 +167,10 @@ html {
   content: '';
   display: block;
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  top: 0rem;
+  bottom: 0rem;
+  left: 0rem;
+  right: 0rem;
   margin: 0.3em;
   border-style: solid;
   border-width: 0.1em;
@@ -193,24 +193,24 @@ html {
 .preview {
   position: relative;
   height: 98%;
-  margin: 5px;
+  margin: 0.3125rem;
 }
 .preview_sp {
   -webkit-box-flex: 0;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 225px;
+  flex-basis: 14.0625rem;
 }
 .preview_pc {
   -webkit-box-flex: 1;
   flex-grow: 1;
   flex-shrink: 1;
-  flex-basis: 600px;
+  flex-basis: 37.5rem;
 }
 .preview__contents {
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0rem;
+  top: 0rem;
   width: 160%;
   height: 160%;
   box-sizing: border-box;
@@ -219,10 +219,10 @@ html {
   transform: -webkit- scale(0.625);
   transform: scale(0.625);
   border-style: solid;
-  border-width: 10px;
+  border-width: 0.625rem;
   border-color: #222;
-  border-radius: 10px;
-  border-bottom-width: 40px;
+  border-radius: 0.625rem;
+  border-bottom-width: 2.5rem;
   border-top-color: #444;
   border-left-color: #444;
   box-shadow: 0 5px 11px rgba(0, 0, 0, 0.3);
