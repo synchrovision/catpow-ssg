@@ -8,7 +8,7 @@ function _d($data){
 function picture($name,$alt,$bp=null){
 	if(empty($bp)){$bp=['sp'=>-767];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
-	$rtn='<picture>';
+	$rtn='<picture class="_picture">';
 	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
 			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
