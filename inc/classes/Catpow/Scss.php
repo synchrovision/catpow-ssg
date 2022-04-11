@@ -56,6 +56,30 @@ class Scss{
 				return Compiler::$emptyList;
 			}
 		});
+		$scssc->registerFunction('list_csv',function($args)use($scssc){
+			if(empty($args[0][2][0])){return Compiler::$emptyList;}
+			try{
+				$file=self::get_source_file($args[0][2][0]);
+				$csv=new CSV($file);
+				$rows=[];
+				if(!empty($rows=$csv->select())){
+					foreach($rows as $i=>$row){
+						$keys=[];
+						$vals=[];
+						foreach($row as $key=>$val){
+							$val=(string)$val;
+							$keys[]=[TYPE::T_KEYWORD,$key];
+							$vals[]=is_numeric($val)?new Number($val,''):[TYPE::T_KEYWORD,$val];
+						}
+						$rows[$i]=[TYPE::T_MAP,$keys,$vals];
+					}
+				}
+				return [TYPE::T_LIST,',',$rows];
+			}
+			catch(CompilerException $e){
+				return Compiler::$emptyList;
+			}
+		});
 		return static::$scssc=$scssc;
 	}
 	public static function compile($scss_file,$css_file){
