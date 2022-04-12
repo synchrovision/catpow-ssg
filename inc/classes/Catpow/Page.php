@@ -19,11 +19,40 @@ class Page{
 		return false;
 	}
 	public function get_the_file($file){
+		if(substr($file,0,1)==='/'){
+			if(file_exists($f=ABSPATH.$file)){return $f;}
+			if(file_exists($f=TMPL_DIR.$file)){return $f;}
+			if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
+			return null;
+		}
 		if(file_exists($f=ABSPATH.$this->dir.$file)){return $f;}
 		if(file_exists($f=TMPL_DIR.$this->dir.$file)){return $f;}
 		if(file_exists($f=ABSPATH.'/'.$file)){return $f;}
 		if(file_exists($f=TMPL_DIR.'/'.$file)){return $f;}
 		if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
+	}
+	public function get_file_path_for_uri($uri){
+		if(substr($uri,0,1)==='/'){return ABSPATH.$uri;}
+		return ABSPATH.$this->dir.$uri;
+	}
+	public function generate_webp_for_image($image){
+		$file=$this->get_the_file($image);
+		if(empty($file)){return false;}
+		switch(strrchr($image,'.')){
+			case '.jpg':
+			case '.jpeg':
+				$im=imagecreatefromjpeg($file);break;
+			case '.png':
+				$im=imagecreatefrompng($file);break;
+			case '.gif':
+				$im=imagecreatefromgif($file);break;
+			default:
+				return false;
+		}
+		$dest_dir=dirname($this->get_file_path_for_uri($image));
+		if(!is_dir($dest_dir)){mkdir($dest_dir,0755,true);}
+		imagewebp($im,preg_replace('/\.\w+$/','.webp',$file));
+		return preg_replace('/\.\w+$/','.webp',$image);
 	}
 	public function use_block($block){
 		if(Block::get_block_file($block,'app/index.jsx')){
