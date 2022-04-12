@@ -7,21 +7,23 @@ function _d($data){
 
 function picture($name,$alt,$bp=null){
 	global $page;
-	if(empty($bp)){$bp=['sp'=>-767];}
+	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1920];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
-	
 	$rtn='<picture class="_picture">';
 	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
 			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
 		}
-		if(strpos($name,'_pc_')===false || empty($page->get_file_path_for_uri($src=str_replace('_pc_',"_{$media}_",$name)))){
-			$src=sprintf('%s_%s%s',$matches['name'],$media,$matches['ext']);
+		if(
+			(strpos($name,'_pc_')!==false && $file=$page->get_the_file($src=str_replace('_pc_',"_{$media}_",$name))) ||
+			(strpos($name,'_pc.')!==false && $file=$page->get_the_file($src=str_replace('_pc.',"_{$media}.",$name))) ||
+			$file=$page->get_the_file($src=sprintf('%s_%s%s',$matches['name'],$media,$matches['ext']))
+		){
+			if(!empty($webp=$page->generate_webp_for_image($src))){
+				$rtn.=sprintf('<source media="(%s)" srcset="%s" type="image/webp"/>',$mq,$webp);
+			}
+			$rtn.=sprintf('<source media="(%s)" srcset="%s"/>',$mq,$src,mime_content_type($file));
 		}
-		if(!empty($webp=$page->generate_webp_for_image($src))){
-			$rtn.=sprintf('<source media="(%s)" srcset="%s" type="image/webp"/>',$mq,$webp);
-		}
-		$rtn.=sprintf('<source media="(%s)" srcset="%s"/>',$mq,$src);
 	}
 	if(!empty($webp=$page->generate_webp_for_image($name))){
 		$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
