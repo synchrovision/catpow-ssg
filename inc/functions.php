@@ -23,6 +23,20 @@ function picture($name,$alt,$bp=null){
 				$rtn.=sprintf('<source media="(%s)" srcset="%s" type="image/webp"/>',$mq,$webp);
 			}
 			$rtn.=sprintf('<source media="(%s)" srcset="%s"/>',$mq,$src,mime_content_type($file));
+			$has_alt_image=true;
+		}
+	}
+	if(empty($has_alt_image) && $file=$page->get_the_file($name)){
+		$im=$page->get_gd($name);
+		$w=getimagesize($file)[0];
+		$mime=mime_content_type($file);
+		foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
+			if($w>$u*4){
+				$src=sprintf('%s_%s.webp',$matches['name'],$s);
+				$dest_file=$page->get_file_path_for_uri($src);
+				imagewebp(imagescale($im,$u*3),$dest_file);
+				$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s" type="image/webp"/>',$u*2,$src);
+			}
 		}
 	}
 	if(!empty($webp=$page->generate_webp_for_image($name))){
