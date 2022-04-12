@@ -49,9 +49,13 @@ class Page{
 			default:
 				return false;
 		}
-		$dest_dir=dirname($this->get_file_path_for_uri($image));
+		$dest_file=$this->get_file_path_for_uri($image);
+		$dest_dir=dirname($dest_file);
 		if(!is_dir($dest_dir)){mkdir($dest_dir,0755,true);}
-		imagewebp($im,preg_replace('/\.\w+$/','.webp',$file));
+		imagewebp($im,preg_replace('/\.\w+$/','.webp',$dest_file));
+		if(!file_exists($dest_file) || ($file!==$dest_file && filemtime($file)>filemtime($dest_file))){
+			rename($file,$dest_file);
+		}
 		return preg_replace('/\.\w+$/','.webp',$image);
 	}
 	public function use_block($block){
