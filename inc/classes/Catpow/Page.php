@@ -36,19 +36,9 @@ class Page{
 		return ABSPATH.$this->dir.$uri;
 	}
 	public function generate_webp_for_image($image){
+		$im=$this->get_gd($image);
+		if(empty($im)){return false;}
 		$file=$this->get_the_file($image);
-		if(empty($file)){return false;}
-		switch(strrchr($image,'.')){
-			case '.jpg':
-			case '.jpeg':
-				$im=imagecreatefromjpeg($file);break;
-			case '.png':
-				$im=imagecreatefrompng($file);break;
-			case '.gif':
-				$im=imagecreatefromgif($file);break;
-			default:
-				return false;
-		}
 		$dest_file=$this->get_file_path_for_uri($image);
 		$dest_dir=dirname($dest_file);
 		if(!is_dir($dest_dir)){mkdir($dest_dir,0755,true);}
@@ -57,6 +47,20 @@ class Page{
 			rename($file,$dest_file);
 		}
 		return preg_replace('/\.\w+$/','.webp',$image);
+	}
+	public function get_gd($image){
+		$file=$this->get_the_file($image);
+		if(empty($file)){return false;}
+		switch(strrchr($image,'.')){
+			case '.jpg':
+			case '.jpeg':
+				return imagecreatefromjpeg($file);
+			case '.png':
+				return imagecreatefrompng($file);
+			case '.gif':
+				return imagecreatefromgif($file);
+		}
+		return false;
 	}
 	public function use_block($block){
 		if(Block::get_block_file($block,'app/index.jsx')){
