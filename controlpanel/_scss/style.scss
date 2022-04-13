@@ -4,7 +4,7 @@
 html{
 	@include txt((p:62.5%,c:t,f:t));
 	@include bnd((h:100vh a));
-	@include bg((g:v b #eee,s:f,r:n));
+	@include bg((g:v #fff #eee,s:f,r:n));
 	@include bp(-2){
 		@include txt((p:2.5vw));
 	}
