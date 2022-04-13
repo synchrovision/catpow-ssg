@@ -26,15 +26,17 @@ function picture($name,$alt,$bp=null){
 			$has_alt_image=true;
 		}
 	}
-	if(empty($has_alt_image) && $file=$page->get_the_file($name)){
-		$im=$page->get_gd($name);
-		$w=getimagesize($file)[0];
+	$file=$page->get_the_file($name);
+	$size=getimagesize($file);
+	if(empty($has_alt_image)){
 		$mime=mime_content_type($file);
 		foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
-			if($w>$u*4){
+			if($size[0]>$u*4){
 				$src=sprintf('%s_%s.webp',$matches['name'],$s);
 				$dest_file=$page->get_file_path_for_uri($src);
-				imagewebp(imagescale($im,$u*3),$dest_file);
+				if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
+					imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
+				}
 				$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s" type="image/webp"/>',$u*2,$src);
 			}
 		}
@@ -42,7 +44,7 @@ function picture($name,$alt,$bp=null){
 	if(!empty($webp=$page->generate_webp_for_image($name))){
 		$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
 	}
-	$rtn.=sprintf('<img src="%s" alt="%s"/></picture>',$name,$alt);
+	$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/></picture>',$name,$alt,$size[0],$size[1]);
 	return $rtn;
 
 }
