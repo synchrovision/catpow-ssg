@@ -27,9 +27,9 @@ function picture($name,$alt,$bp=null){
 		}
 	}
 	$file=$page->get_the_file($name);
-	$size=getimagesize($file);
+	$size=$file?getimagesize($file):[100,100];
 	if(empty($has_alt_image)){
-		$mime=mime_content_type($file);
+		$mime=$file?mime_content_type($file):'image/jpg';
 		foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
 			if($size[0]>$u*4){
 				$src=sprintf('%s_%s.webp',$matches['name'],$s);
