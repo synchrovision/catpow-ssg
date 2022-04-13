@@ -128,6 +128,9 @@ class BEM extends CssRule{
 	}
 	private function _apply($el){
 		if(!is_a($el,\DOMElement::class)){return;}
+		if(empty($el->getAttribute('class'))){
+			$el->setAttribute('class','_'.$el->tagName);
+		}
 		$classes=explode(' ',$el->getAttribute('class')??'');
 		$_s=$_b=$_e=false;
 		foreach($classes as $i=>$class){
