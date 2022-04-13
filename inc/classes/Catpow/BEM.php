@@ -1,6 +1,6 @@
 <?php
 namespace Catpow;
-class BEM{
+class BEM extends CssRule{
 	public $s,$b,$e,$m,$bm,$parent,$b_stuck=[],$m_stuck=[],$selectors=[];
 	private function __construct($s=null,$b=null,$e=null,$m=null,$bm=null,$parent=null){
 		$this->s=(array)$s;
@@ -9,10 +9,6 @@ class BEM{
 		$this->m=(array)$m;
 		$this->bm=(array)$bm;
 		$this->parent=$parent;
-	}
-	public static function section($name=null){
-		if(empty($name)){return new self();}
-		return new self(explode('-',$name));
 	}
 	public static function block($name){
 		if(strpos('-',$name)!==false){
@@ -76,21 +72,6 @@ class BEM{
 			}
 		}
 	}
-	public function export_selectors_file($file=null){
-		if(empty($file)){$file=PAGE_TMPL_DIR.'/_scss/selectors/'.($this->s[0]??'style').'.scss';}
-		$dir=dirname($file);
-		if(!is_dir($dir)){mkdir($dir,0755,true);}
-		file_put_contents($file,self::get_selectors_code($this->selectors));
-	}
-	public static function get_selectors_code($selectors,$indent=0){
-		$code='';
-		foreach($selectors as $sel=>$children){
-			$code.=str_repeat("\t",$indent)."{$sel}{\n";
-			$code.=self::get_selectors_code($children,$indent+1);
-			$code.=str_repeat("\t",$indent)."}\n";
-		}
-		return $code;
-	}
 	public function __get($name){
 		if($name==='§'){array_pop($this->s);$this->b=false;$this->e=$this->m=$this->bm=[];return;}
 		if($name==='»'){list($this->s,$this->b,$this->e,$this->m,$this->bm)=array_pop($this->b_stuck);return;}
@@ -132,7 +113,7 @@ class BEM{
 		return implode(' ',$this->get_classes());
 	}
 	
-	public function apply($html){
+	public function apply($html):string{
 		$html=preg_replace('/ @([\w\.\-:]+=)/',' x-on:$1',$html);
 		$doc=new \DOMDocument();
 		$doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR);
