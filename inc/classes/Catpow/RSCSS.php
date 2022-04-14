@@ -2,6 +2,7 @@
 namespace Catpow;
 class RSCSS extends CssRule{
 	public $s=['sec'],$b=[],$e=[],$selectors=[];
+	protected $org_s;
 	public function add_selector($sel=null){
 		$bsel='$this->selectors[".'.implode('"]["&-',$this->s).'"]';
 		if(!empty($this->b)){$bsel.='["&-'.implode('"]["&-',$this->b).'"]';}
@@ -11,6 +12,7 @@ class RSCSS extends CssRule{
 	}
 	
 	public function apply($html):string{
+		$this->org_s=$this->s;
 		$html=preg_replace('/ @([\w\.\-:]+=)/',' x-on:$1',$html);
 		$doc=new \DOMDocument();
 		$doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR);
@@ -44,6 +46,15 @@ class RSCSS extends CssRule{
 			elseif(empty($_e) && preg_match('/^[a-zA-Z]+$/',$class)){
 				$_e=$class;
 			}
+			elseif(empty($_b) && preg_match('/^([a-zA-Z]+)((-[a-zA-Z]+)+)$/',$class,$matches)){
+				$_s=$matches[1];
+				$_b=substr($matches[2],1);
+				$_bi=$i;
+			}
+		}
+		if(!empty($_s)){
+			$prev_s=$this->s;
+			$this->s=[$_s];
 		}
 		if(empty($_b)){
 			if(empty($_e)){
@@ -61,6 +72,10 @@ class RSCSS extends CssRule{
 				$this->b[]=substr($_b,1);
 			}
 			else{
+				if(empty($_s)){
+					$prev_s=$this->s;
+					$this->s=$this->org_s;
+				}
 				$this->b=explode('-',$_b);
 			}
 			$classes[$_bi]=implode('-',$this->s).'-'.implode('-',$this->b);
@@ -75,6 +90,7 @@ class RSCSS extends CssRule{
 		foreach($el->childNodes??[] as $child_el){
 			$this->_apply($child_el);
 		}
+		if(isset($prev_s)){$this->s=$prev_s;}
 		if(isset($prev_b)){$this->b=$prev_b;}
 		if(isset($prev_e)){$this->e=$prev_e;}
 	}
