@@ -19,6 +19,7 @@ class HTML{
 		$rtn='';
 		foreach($attr as $key=>$val){
 			if($key==='tag'){continue;}
+			if(empty($val) && $val!=0){continue;}
 			$rtn.=sprintf(' %s="%s"',$key,$val);
 		}
 		return $rtn;
