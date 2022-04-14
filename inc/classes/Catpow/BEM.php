@@ -2,7 +2,7 @@
 namespace Catpow;
 class BEM extends CssRule{
 	public $s,$b,$e,$m,$bm,$parent,$b_stuck=[],$m_stuck=[],$selectors=[];
-	private function __construct($s=null,$b=null,$e=null,$m=null,$bm=null,$parent=null){
+	protected function __construct($s=null,$b=null,$e=null,$m=null,$bm=null,$parent=null){
 		$this->s=(array)$s;
 		$this->b=$b;
 		$this->e=(array)$e;
