@@ -5,11 +5,11 @@ function _d($data){
 	Debug::dump($data);
 }
 
-function picture($name,$alt,$bp=null){
+function picture($name,$alt,$className=null,$bp=null){
 	global $page;
 	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1920];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
-	$rtn='<picture class="_picture">';
+	$rtn=sprintf('<picture%s>',HTML::get_attr_code(['class'=>$className]));
 	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
 			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
@@ -49,15 +49,17 @@ function picture($name,$alt,$bp=null){
 
 }
 function table($data,$props=null){
-	$rtn=sprintf('<table class="%s">',$props['classes']['table']??$props['class']??'table_');
+	if(empty($props)){$props=[];}
+	if(is_string($props)){$props=['class'=>$props];}
+	$rtn=sprintf('<table%s>',HTML::get_attr_code(['class'=>$props['classes']['table']??$props['class']??null]));
 	$hr=$props['hr']??1;
 	$hc=$props['hc']??0;
 	$atts=$props['atts']??[];
 	if(!empty($props['caption'])){
-		$rtn.=sprintf('<caption class="%s">%s</caption>',$props['classes']['caption']??'_caption',$props['caption']);
+		$rtn.=sprintf('<caption%s>%s</caption>',HTML::get_attr_code(['class'=>$props['classes']['caption']??null],$props['caption']));
 	}
 	if(!empty($props['colgroup'])){
-		$rtn.=sprintf('<colgroup class="%s">',$props['classes']['colgroup']??'_colgroup');
+		$rtn.=sprintf('<colgroup%s>',HTML::get_attr_code(['class'=>$props['classes']['colgroup']??'']));
 		foreach($props['colgroup'] as $col){
 			$rtn.=sprintf('<col%s/>',HTML::get_attr_code($col));
 		}
@@ -67,7 +69,7 @@ function table($data,$props=null){
 		foreach($row as $c=>$cell){
 			if(is_null($cell)){continue;}
 			$tag=($r<$hr || $c<$hc)?'th':'td';
-			$attr=['tag'=>$tag,'class'=>"_{$tag}"];
+			$attr=['tag'=>$tag];
 			if(($data[$r][$c+1]??'')==='<'){
 				$s=1;
 				while(($data[$r][$c+$s]??'')==='<'){$data[$r][$c+$s]=null;$s++;}
@@ -102,9 +104,9 @@ function table($data,$props=null){
 	$cb=$props['cb']??function($str){return $str;};
 	$r=0;
 	if(!empty($hr)){
-		$rtn.=sprintf('<thead class="%s">',$props['classes']['thead']??'_thead');
+		$rtn.=sprintf('<thead%s>',HTML::get_attr_code(['class'=>$props['classes']['thead']??'']));
 		for(;$r<$hr;$r++){
-			$rtn.=sprintf('<tr class="%s">',$props['classes']['tr']??'_tr');
+			$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??'']));
 			foreach($data[$r] as $c=>$cell){
 				if(is_null($cell)){continue;}
 				$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell));
@@ -113,9 +115,9 @@ function table($data,$props=null){
 		}
 		$rtn.='</thead>';
 	}
-	$rtn.=sprintf('<tbody class="%s">',$props['classes']['tbody']??'_tbody');
+	$rtn.=sprintf('<tbody%s>',HTML::get_attr_code(['class'=>$props['classes']['tbody']??'']));
 	for($l=count($data);$r<$l;$r++){
-		$rtn.=sprintf('<tr class="%s">',$props['classes']['tr']??'_tr');
+		$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??'']));
 		foreach($data[$r] as $c=>$cell){
 			if(is_null($cell)){continue;}
 			$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell));
