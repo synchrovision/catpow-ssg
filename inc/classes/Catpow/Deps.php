@@ -29,6 +29,7 @@ class Deps{
 			'urljs'=>['src'=>'https://cdnjs.cloudflare.com/ajax/libs/urljs/2.6.2/url.min.js'],
 			'jquery'=>['src'=>'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'],
 			'catpow-animate'=>['src'=>'/js/catpow_animate.js','deps'=>['jquery']],
+			'slick'=>['src'=>'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js','deps'=>['jquery']],
 			'bootstrap'=>[
 				'src'=>'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js',
 				'attr'=>'integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"'
@@ -36,6 +37,12 @@ class Deps{
 		],
 		'css'=>[
 			'materialicons'=>['src'=>'https://fonts.googleapis.com/icon?family=Material+Icons'],
+			'slick'=>[
+				'set'=>[
+					['src'=>'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'],
+					['src'=>'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css'],
+				]
+			],
 			'bootstrap'=>[
 				'src'=>'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
 				'attr'=>'integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"'
@@ -92,7 +99,12 @@ class Deps{
 				}
 				break;
 			case 'css':
-				printf('<link rel="stylesheet" type="text/css" href="%s" %s/>',$source['src'],$source['attr']??'');
+				if(!empty($source['src'])){printf('<link rel="stylesheet" type="text/css" href="%s" %s/>',$source['src'],$source['attr']??'');}
+				if(!empty($source['set'])){
+					foreach($source['set'] as $item){
+						printf('<link rel="stylesheet" type="text/css" href="%s" %s/>',$item['src'],$item['attr']??'');
+					}
+				}
 				break;
 		}
 		$this->rendered[$handler]=true;
