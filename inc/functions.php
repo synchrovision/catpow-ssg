@@ -186,7 +186,7 @@ function add_shortcode($name,$function){
 
 function csv($csv){
 	global $page;
-	if(substr($csv,-4)!=='.csv'){$csv='/csv/'.$csv.'.csv';}
+	if(substr($csv,-4)!=='.csv'){$csv='csv/'.$csv.'.csv';}
 	if(!empty($page)){
 		return new CSV($page->get_the_file($csv));
 	}
