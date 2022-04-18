@@ -56,7 +56,7 @@ function table($data,$props=null){
 	$hc=$props['hc']??0;
 	$atts=$props['atts']??[];
 	if(!empty($props['caption'])){
-		$rtn.=sprintf('<caption%s>%s</caption>',HTML::get_attr_code(['class'=>$props['classes']['caption']??null],$props['caption']));
+		$rtn.=sprintf('<caption%s>%s</caption>',HTML::get_attr_code(['class'=>$props['classes']['caption']??null]),$props['caption']);
 	}
 	if(!empty($props['colgroup'])){
 		$rtn.=sprintf('<colgroup%s>',HTML::get_attr_code(['class'=>$props['classes']['colgroup']??'']));
