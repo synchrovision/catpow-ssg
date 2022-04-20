@@ -5,14 +5,14 @@ class Deps{
 		'js'=>[
 			'react-dev'=>[
 				'set'=>[
-					['src'=>'https://unpkg.com/react@17/umd/react.development.js','attr'=>'crossorigin'],
-					['src'=>'https://unpkg.com/react-dom@17/umd/react-dom.development.js','attr'=>'crossorigin']
+					['src'=>'https://unpkg.com/react@18/umd/react.development.js','attr'=>'crossorigin'],
+					['src'=>'https://unpkg.com/react-dom@18/umd/react-dom.development.js','attr'=>'crossorigin']
 				]
 			],
 			'react'=>[
 				'set'=>[
-					['src'=>'https://unpkg.com/react@17/umd/react.production.min.js','attr'=>'crossorigin'],
-					['src'=>'https://unpkg.com/react-dom@17/umd/react-dom.production.min.js','attr'=>'crossorigin']
+					['src'=>'https://unpkg.com/react@18/umd/react.production.min.js','attr'=>'crossorigin'],
+					['src'=>'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js','attr'=>'crossorigin']
 				]
 			],
 			'alpine'=>['src'=>'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js','attr'=>'defer'],
