@@ -36,6 +36,7 @@ class CSV implements \Iterator,\ArrayAccess{
 	}
 	
 	public function __construct($csv,$fill_column=false){
+		if(empty($csv)){return;}
 		if(is_array($csv)){
 			$this->data=array_map(function($row){
 				return array_values($row);

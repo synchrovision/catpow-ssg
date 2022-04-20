@@ -27,24 +27,35 @@ function picture($name,$alt,$className=null,$bp=null){
 		}
 	}
 	$file=$page->get_the_file($name);
-	$size=$file?getimagesize($file):[100,100];
-	if(empty($has_alt_image)){
-		$mime=$file?mime_content_type($file):'image/jpg';
-		foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
-			if($size[0]>$u*4){
-				$src=sprintf('%s_%s.webp',$matches['name'],$s);
-				$dest_file=$page->get_file_path_for_uri($src);
-				if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
-					imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
+	if(empty($file)){
+		$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/>',$name,$alt,100,100);
+	}
+	else{
+		$mime=mime_content_type($file);
+		$size=getimagesize($file);
+		if($size){
+			if(empty($has_alt_image)){
+				foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
+					if($size[0]>$u*4){
+						$src=sprintf('%s_%s.webp',$matches['name'],$s);
+						$dest_file=$page->get_file_path_for_uri($src);
+						if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
+							imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
+						}
+						$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s" type="image/webp"/>',$u*2,$src);
+					}
 				}
-				$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s" type="image/webp"/>',$u*2,$src);
 			}
+			if(!empty($webp=$page->generate_webp_for_image($name))){
+				$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
+			}
+			$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/>',$name,$alt,$size[0],$size[1]);
+		}
+		else{
+			$rtn.=sprintf('<img src="%s" alt="%s"/>',$name,$alt);
 		}
 	}
-	if(!empty($webp=$page->generate_webp_for_image($name))){
-		$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
-	}
-	$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/></picture>',$name,$alt,$size[0],$size[1]);
+	$rtn.='</picture>';
 	return $rtn;
 
 }
@@ -56,7 +67,7 @@ function table($data,$props=null){
 	$hc=$props['hc']??0;
 	$atts=$props['atts']??[];
 	if(!empty($props['caption'])){
-		$rtn.=sprintf('<caption%s>%s</caption>',HTML::get_attr_code(['class'=>$props['classes']['caption']??null],$props['caption']));
+		$rtn.=sprintf('<caption%s>%s</caption>',HTML::get_attr_code(['class'=>$props['classes']['caption']??null]),$props['caption']);
 	}
 	if(!empty($props['colgroup'])){
 		$rtn.=sprintf('<colgroup%s>',HTML::get_attr_code(['class'=>$props['classes']['colgroup']??'']));
@@ -186,11 +197,11 @@ function add_shortcode($name,$function){
 
 function csv($csv){
 	global $page;
-	if(substr($csv,-4)!=='.csv'){$csv='/csv/'.$csv.'.csv';}
+	if(substr($csv,-4)!=='.csv'){$csv='csv/'.$csv.'.csv';}
 	if(!empty($page)){
 		return new CSV($page->get_the_file($csv));
 	}
-	if(file_exists($f=ABSPATH.$csv) || file_exists($f=TMPL_DIR.$csv)|| file_exists($f=INC_DIR.$csv)){
+	if(file_exists($f=ABSPATH.'/'.$csv) || file_exists($f=TMPL_DIR.'/'.$csv)|| file_exists($f=INC_DIR.'/'.$csv)){
 		return new CSV($f);
 	}
 	return false;
