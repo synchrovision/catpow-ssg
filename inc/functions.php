@@ -5,11 +5,11 @@ function _d($data){
 	Debug::dump($data);
 }
 
-function picture($name,$alt,$className=null,$bp=null){
+function picture($name,$alt,$className=null,$attr=null,$bp=null){
 	global $page;
 	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1920];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
-	$rtn=sprintf('<picture%s>',HTML::get_attr_code(['class'=>$className]));
+	$rtn=sprintf('<picture%s>',HTML::get_attr_code(array_merge(['class'=>$className],(array)$attr)));
 	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
 			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
