@@ -21,6 +21,10 @@ export const CP={
 	extractPropsFromElement:(el)=>{
 		return {...el.dataset};
 	},
+	scrollTo:(tgt)=>{
+		const s=parseInt(window.scrollY),d=tgt-s;
+		CP.animate((p)=>window.scrollTo(0,s+d*p));
+	},
 	animate:(cb,dur=500,ease=null)=>{
 		var s=parseInt(performance.now()),c=1/dur,p=0;
 		if(ease===null){ease=CP.ease;}
