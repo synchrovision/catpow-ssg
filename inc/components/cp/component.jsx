@@ -20,6 +20,17 @@ export const CP={
 	},
 	extractPropsFromElement:(el)=>{
 		return {...el.dataset};
-	}
+	},
+	animate:(cb,dur=500)=>{
+		var s=parseInt(performance.now()),c=1/dur,p=0;
+		const tick=(t)=>{
+			p=(t-s)*c;
+			if(p>1){return cb(1);}
+			window.requestAnimationFrame(tick);
+			return cb(CP.ease(p));
+		}
+		window.requestAnimationFrame(tick);
+	},
+	ease:(p)=>(p<0.5)?(p*p*2):(1-Math.pow(1-p,2)*2)
 };
 window.CP=CP;
