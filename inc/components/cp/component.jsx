@@ -21,9 +21,20 @@ export const CP={
 	extractPropsFromElement:(el)=>{
 		return {...el.dataset};
 	},
-	scrollTo:(tgt)=>{
-		const s=parseInt(window.scrollY),d=tgt-s;
-		CP.animate((p)=>window.scrollTo(0,s+d*p));
+	scrollTo:(tgt,dur=500,ease=null)=>{
+		const s=parseInt(window.scrollY);
+		var d;
+		if(isNaN(tgt)){
+			if(!(tgt instanceof HTMLElement)){
+				tgt=document.querySelector(tgt);
+				if(!tgt){return;}
+			}
+			d=tgt.getBoundingClientRect().top;
+		}
+		else{
+			d=tgt-s;
+		}
+		CP.animate((p)=>{window.scrollTo(0,s+d*p);},dur,ease);
 	},
 	animate:(cb,dur=500,ease=null)=>{
 		var s=parseInt(performance.now()),c=1/dur,p=0;
