@@ -22,4 +22,3 @@ export const CP={
 		return {...el.dataset};
 	}
 };
-window.CP=CP;
