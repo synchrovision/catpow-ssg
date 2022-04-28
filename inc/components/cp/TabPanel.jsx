@@ -1,6 +1,6 @@
 ﻿export const TabPanel=(props)=>{
 	const {useState,useCallback,useEffect,useRef,useReducer}=React;
-	const {className="tabpanel",children}=props;
+	const {className="cp-tabpanel",children}=props;
 	const [current,setCurrent]=useState(props.initialOpen || 0);
 	
 	return (

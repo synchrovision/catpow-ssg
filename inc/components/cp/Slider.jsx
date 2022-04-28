@@ -1,6 +1,6 @@
 ﻿export const Slider=(props)=>{
 	const {useState,useCallback,useEffect,useRef,useReducer}=React;
-	const {className="slider",children,loop=false,dots=true,arrow=true,onSwipeLeft,onSwipeRight}=props;
+	const {className="cp-slider",children,loop=false,dots=true,arrow=true,onSwipeLeft,onSwipeRight}=props;
 	const [isHold,setIsHold]=useState(false);
 	const ref=useRef();
 	const tmp=useRef({org:{x:0,w:0,c:0,t:0},crr:{x:0,t:0},diff:{x:0,p:0,t:0},delta:{x:0,t:0}});

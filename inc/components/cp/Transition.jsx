@@ -1,6 +1,6 @@
 ﻿export const Transition=(props)=>{
 	const {useState,useCallback,useEffect,useRef}=React;
-	const {className='transition',children,fitHeight=false}=props;
+	const {className='cp-transition',children,fitHeight=false}=props;
 	const [contents,setContents]=useState(children);
 	const [ready,setReady]=useState(false);
 	
