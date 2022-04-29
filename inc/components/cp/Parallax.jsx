@@ -6,6 +6,9 @@
 	useEffect(()=>{
 		if(!ref.current){return;}
 		var coef=1/(window.innerHeight-ref.current.clientHeight);
+		window.addEventListener('resize',()=>{
+			coef=1/(window.innerHeight-ref.current.clientHeight);
+		});
 		const tick=(t)=>{
 			ref.current.style.setProperty('--parallax-p',ref.current.getBoundingClientRect().top*coef);
 			window.requestAnimationFrame(tick);
