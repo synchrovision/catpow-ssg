@@ -1,20 +1,29 @@
 ﻿export const Parallax=(props)=>{
 	const {useState,useCallback,useEffect,useRef}=React;
-	const {className='cp-parallax'}=props;
+	const {className='cp-parallax',minRatio=0.5}=props;
 	const ref=useRef();
 	
 	useEffect(()=>{
 		if(!ref.current){return;}
-		var coef=1/(window.innerHeight-ref.current.clientHeight);
-		window.addEventListener('resize',()=>{
-			coef=1/(window.innerHeight-ref.current.clientHeight);
-		});
+		var c,dc;
+		const updateCoef=()=>{
+			var wh=window.innerHeight,ch=ref.current.clientHeight,r=Math.abs(ch-wh)/wh;
+			if(r<minRatio){
+				if(wh>ch){ch=wh*(1-minRatio);}
+				else{ch=wh*(1+minRatio);}
+			}
+			c=1/ch;
+			dc=1/(wh-ch);
+		};
+		window.addEventListener('resize',updateCoef);
+		updateCoef();
 		const tick=(t)=>{
-			ref.current.style.setProperty('--parallax-p',ref.current.getBoundingClientRect().top*coef);
+			ref.current.style.setProperty('--parallax-p',ref.current.getBoundingClientRect().top*c);
+			ref.current.style.setProperty('--parallax-dp',ref.current.getBoundingClientRect().top*dc);
 			window.requestAnimationFrame(tick);
 		}
 		window.requestAnimationFrame(tick);
-	},[ref.current]);
+	},[ref.current,minRatio]);
 	
 	return (
 		<div className={className} ref={ref}>
