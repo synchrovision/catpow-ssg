@@ -22,6 +22,10 @@ module.exports=()=>{
 					]
 				},
 				{
+					test: /\.tsx?$/,
+					loader: "ts-loader"
+				},
+				{
 					test: /\.scss$/i,
 					use: [
 						'style-loader',
@@ -49,10 +53,12 @@ module.exports=()=>{
 			]
 		},
 		resolve: {
+			extensions: ["",".ts",".tsx",".js",".jsx"],
 			modules: [
 				path.resolve('../../_components'),
 				path.resolve('./components'),
-				path.resolve('./node_modules')
+				path.resolve('./node_modules'),
+				path.resolve('../../node_modules')
 			]
 		}
 	};

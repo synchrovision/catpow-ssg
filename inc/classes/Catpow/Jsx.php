@@ -5,8 +5,8 @@ class Jsx{
 		if($jsx_file=self::get_jsx_file_for_file($file)){
 			return self::compile($jsx_file,$file);
 		}
-		if($entry_jsx_file=self::get_entry_jsx_file_for_file($file)){
-			return self::bundle($entry_jsx_file,$file);
+		if(($entry_file=self::get_entry_jsx_file_for_file($file)) || ($entry_file=self::get_entry_tsx_file_for_file($file))){
+			return self::bundle($entry_file,$file);
 		}
 	}
 	public static function init(){
@@ -40,16 +40,24 @@ class Jsx{
 		if(file_exists($f=str_replace([ABSPATH,'/js/'],[TMPL_DIR,'/_jsx/'],$entry_jsx_file))){return $f;}
 		return false;
 	}
-	public static function bundle($entry_jsx_file,$bundle_js_file){
+	public static function get_entry_tsx_file_for_file($file){
+		$entry_tsx_file=substr($file,0,-3).'/index.tsx';
+		if(file_exists($entry_tsx_file)){return $entry_tsx_file;}
+		if(file_exists($f=str_replace('/js/','/_tsx/',$entry_tsx_file))){return $f;}
+		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$entry_tsx_file))){return $f;}
+		if(file_exists($f=str_replace([ABSPATH,'/js/'],[TMPL_DIR,'/_tsx/'],$entry_tsx_file))){return $f;}
+		return false;
+	}
+	public static function bundle($entry_file,$bundle_js_file){
 		self::init();
-		if(!file_exists($entry_jsx_file)){return;}
-		$latest_filetime=filemtime($entry_jsx_file);
-		foreach(glob(dirname($entry_jsx_file).'/*') as $bundle_file){
+		if(!file_exists($entry_file)){return;}
+		$latest_filetime=filemtime($entry_file);
+		foreach(glob(dirname($entry_file).'/*') as $bundle_file){
 			$latest_filetime=max($latest_filetime,filemtime($bundle_file));
 		}
 		if(!file_exists($bundle_js_file) or filemtime($bundle_js_file) < $latest_filetime){
 			ob_start();
-			passthru('npx webpack build --mode production --entry '.$entry_jsx_file.' -o '.dirname($bundle_js_file).' --output-filename '.basename($bundle_js_file));
+			passthru('npx webpack build --mode production --entry '.$entry_file.' -o '.dirname($bundle_js_file).' --output-filename '.basename($bundle_js_file));
 			error_log(ob_get_clean());
 		}
 	}
