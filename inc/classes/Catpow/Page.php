@@ -44,7 +44,7 @@ class Page{
 		if(!is_dir($dest_dir)){mkdir($dest_dir,0755,true);}
 		imagewebp($im,preg_replace('/\.\w+$/','.webp',$dest_file));
 		if(!file_exists($dest_file) || ($file!==$dest_file && filemtime($file)>filemtime($dest_file))){
-			rename($file,$dest_file);
+			copy($file,$dest_file);
 		}
 		return preg_replace('/\.\w+$/','.webp',$image);
 	}
