@@ -22,6 +22,7 @@
 		window.addEventListener('resize',updateCoef);
 		updateCoef();
 		const tick=(t)=>{
+			if(!ref.current){return;}
 			ref.current.style.setProperty('--parallax-p',ref.current.getBoundingClientRect().top*c);
 			ref.current.style.setProperty('--parallax-dp',ref.current.getBoundingClientRect().top*dc);
 			window.requestAnimationFrame(tick);
