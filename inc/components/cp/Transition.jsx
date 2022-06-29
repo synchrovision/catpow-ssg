@@ -58,8 +58,8 @@
 	
 	return (
 		<div className={className+' -'+type} ref={refContainer}>
-			<div className={"contents -prev -"+(ready?"from":"to")} ref={refPrev}></div>
-			<div className={"contents -current -"+(ready?"from":"to")} ref={refCurrent}>{contents}</div>
+			<div className={"contents -prev -"+(ready?"from":"to")}><div className="body" ref={refPrev}></div></div>
+			<div className={"contents -current -"+(ready?"from":"to")}><div className="body" ref={refCurrent}>{contents}</div></div>
 		</div>
 	);
 }
