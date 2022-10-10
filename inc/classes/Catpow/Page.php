@@ -8,16 +8,18 @@ class Page{
 		$this->dir=(substr($uri,-1)==='/')?$uri:dirname($uri).'/';
 		$this->scripts=new Deps('js');
 		$this->styles=new Deps('css');
-		if(empty($info) && empty($info=$GLOBALS['sitemap'][$uri])){
+		
+		if(empty($info) && empty($info=$GLOBALS['sitemap'][$uri]??null)){
 			$dir=(substr($uri,-1)==='/')?rtrim($uri,'/'):dirname($uri);
 			do{
-				if(!empty($info=$GLOBALS['sitemap'][$router_uri=$dir.'/*'])){
+				if(!empty($info=$GLOBALS['sitemap'][$router_uri=$dir.'/*']??null)){
 					$this->router_uri=$router_uri;
 					break;
 				}
+				error_log(var_export($dir,1).__FILE__.':'.__LINE__);
 				$dir=dirname($dir);
 			}
-			while($dir!=='.');
+			while(!empty($dir) && $dir!=='.');
 		}
 		$this->info=$info;
 	}
