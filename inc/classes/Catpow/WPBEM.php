@@ -45,12 +45,14 @@ class WPBEM extends CssRule{
 				$this->b_stuck[]=[$this->b,$this->e];
 				$this->b=[substr($class,0,-1)];
 				$this->e=[];
+				$this->add_selector();
 				$_b=true;
 			}
 			if(substr($class,0,1)==='-'){
 				$this->b_stuck[]=[$this->b,$this->e];
 				$this->b[]=substr($class,1);
 				$this->e=[];
+				$this->add_selector();
 				$_b=true;
 			}
 			else if(substr($class,0,1)==='_'){
