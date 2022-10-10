@@ -1,14 +1,25 @@
 <?php
 namespace Catpow;
 class Page{
-	public $uri,$dir_uri,$info,$scripts,$styles;
+	public $uri,$dir_uri,$router_uri,$info,$scripts,$styles;
 	private static $instance;
 	private function __construct($uri,$info){
 		$this->uri=$uri;
 		$this->dir=(substr($uri,-1)==='/')?$uri:dirname($uri).'/';
 		$this->scripts=new Deps('js');
 		$this->styles=new Deps('css');
-		$this->info=$info??$GLOBALS['sitemap'][$uri]??null;
+		if(empty($info) && empty($info=$GLOBALS['sitemap'][$uri])){
+			$dir=(substr($uri,-1)==='/')?rtrim($uri,'/'):dirname($uri);
+			do{
+				if(!empty($info=$GLOBALS['sitemap'][$router_uri=$dir.'/*'])){
+					$this->router_uri=$router_uri;
+					break;
+				}
+				$dir=dirname($dir);
+			}
+			while($dir!=='.');
+		}
+		$this->info=$info;
 	}
 	public static function init($uri,$info=null){
 		return $GLOBALS['page']=static::$instance=new static($uri,$info);
