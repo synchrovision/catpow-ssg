@@ -19,7 +19,7 @@ class Page{
 				error_log(var_export($dir,1).__FILE__.':'.__LINE__);
 				$dir=dirname($dir);
 			}
-			while(!empty($dir) && $dir!=='.');
+			while(!empty($dir) && $dir!=='.' && $dir!=='/');
 		}
 		$this->info=$info;
 	}
