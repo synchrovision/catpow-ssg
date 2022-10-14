@@ -7,7 +7,7 @@ function _d($data){
 
 function picture($name,$alt,$className=null,$attr=null,$bp=null){
 	global $page;
-	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1920];}
+	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1600];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
 	$rtn=sprintf('<picture%s>',HTML::get_attr_code(array_merge(['class'=>$className],(array)$attr)));
 	foreach($bp as $media=>$mq){
