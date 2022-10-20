@@ -1,9 +1,9 @@
 ﻿export const Slider=(props)=>{
 	const {useState,useCallback,useEffect,useRef,useReducer}=React;
-	const {className="cp-slider",children,loop=false,dots=true,arrow=true,onSwipeLeft,onSwipeRight}=props;
+	const {className="cp-slider",children,loop=false,dots=true,arrow=true,timer=false,interval=5000,onSwipeLeft,onSwipeRight}=props;
 	const [isHold,setIsHold]=useState(false);
 	const ref=useRef();
-	const tmp=useRef({org:{x:0,w:0,c:0,t:0},crr:{x:0,t:0},diff:{x:0,p:0,t:0},delta:{x:0,t:0}});
+	const tmp=useRef({org:{x:0,w:0,c:0,t:0},crr:{x:0,t:0},diff:{x:0,p:0,t:0},delta:{x:0,t:0},time:{s:0,c:0,p:0}});
 	
 	const reducer=useCallback((state,action)=>{
 		switch(action.type){
@@ -15,7 +15,7 @@
 				else{state.current=action.index;}
 				if(loop){
 					while(state.current<0){state.current+=children.length;}
-					state.current%=children;
+					state.current%=children.length;
 				}
 				else{
 					state.current=Math.max(0,Math.min(state.current,children.length-1));
@@ -31,42 +31,48 @@
 	
 	const getSlideClasses=useCallback((pos)=>{
 		if(loop){}
-		const classes=['slide','-slide'+pos];
-		if(pos===0){classes.push('-current');}
+		const classes=[className+'__slides-slide','is-slide-'+pos];
+		if(pos===0){classes.push('is-current');}
 		else if(pos<0){
-			classes.push('-before');
-			if(pos===-1){classes.push('-prev');}
+			classes.push('is-before');
+			if(pos===-1){classes.push('is-prev');}
 		}
 		else if(pos>0){
-			classes.push('-after');
-			if(pos===1){classes.push('-next');}
+			classes.push('is-after');
+			if(pos===1){classes.push('is-next');}
 		}
 		return classes.join(' ');
-	},[loop]);
+	},[className,loop]);
 	const Control=useCallback((props)=>{
-		const {current}=props;
+		const {className,current}=props;
 		const isFirst=!loop && current < 1;
 		const isLast=!loop && current >= children.length-1;
 		return (
-			<div className="controls">
+			<div className={className}>
 				{arrow && (
-					<div className="arrows">
-						<div className={"arrow -left"+(isFirst?' -disabled':'')} onClick={()=>!isFirst && dispatch({type:'PREV'})}></div>
-						<div className={"arrow -right"+(isLast?' -disabled':'')} onClick={()=>!isLast && dispatch({type:'NEXT'})}></div>
+					<div className={className+"-arrows"}>
+						<div className={className+"-arrows-arrow is-left"+(isFirst?' is-disabled':'')} onClick={()=>!isFirst && dispatch({type:'PREV'})}></div>
+						<div className={className+"-arrows-arrow is-right"+(isLast?' is-disabled':'')} onClick={()=>!isLast && dispatch({type:'NEXT'})}></div>
 					</div>
 				)}
 				{dots && (
-					<div className="dots">
+					<div className={className+"-dots"}>
 						{[...Array(children.length).keys()].map((index)=>(
-							<div className={"dot"+(index===current?' -active':'')} onClick={()=>dispatch({type:'GOTO',index})}></div>
+							<div className={className+"-dots-dot"+(index===current?' is-active':'')} onClick={()=>dispatch({type:'GOTO',index})}></div>
 						))}
+					</div>
+				)}
+				{timer && (
+					<div className={className+"-timer"}>
+						<div className={className+"-timer-bar"}></div>
 					</div>
 				)}
 			</div>
 		);
-	},[arrow,dots,loop]);
+	},[arrow,dots,loop,timer]);
 	useEffect(()=>{
-		const {org,crr,diff,delta}=tmp.current;
+		var requestID;
+		const {org,crr,diff,delta,time}=tmp.current;
 		const updateValue=(obj,e)=>{
 			obj.x=e.targetTouches[0].clientX;
 			obj.t=Date.now();
@@ -75,7 +81,7 @@
 			updateValue(org,e);
 			org.w=ref.current.offsetWidth;
 			org.c=1/org.w;
-			delta.x=delta.t=diff.p=diff.t=0;
+			delta.x=delta.t=diff.x=diff.p=diff.t=0;
 			ref.current.style.setProperty('--slide-tx',0);
 			ref.current.style.setProperty('--slide-p',0);
 			ref.current.style.setProperty('--slide-abs-p',0);
@@ -122,25 +128,36 @@
 			const d=delta.x/delta.t;
 			if(diff.p>0.5 || d>1){dispatch({type:'PREV'});}
 			else if(diff.p<-0.5 || d<-1){dispatch({type:'NEXT'});}
+			delta.x=delta.t=diff.x=diff.p=diff.t=0;
 			setIsHold(false);
 		};
 		ref.current.addEventListener('touchstart',handleTouchStart);
 		ref.current.addEventListener('touchmove',handleTouchMove);
 		ref.current.addEventListener('touchend',handleTouchEnd);
+		time.c=1/interval;
+		const tick=(timestamp)=>{
+			if(time.s===0 || diff.x){time.s=timestamp;}
+			if(time.p===1){time.s=timestamp;dispatch({type:'NEXT'});}
+			time.p=Math.min(1,(timestamp-time.s)*time.c);
+			ref.current.style.setProperty('--slide-timer-p',time.p);
+			requestID=requestAnimationFrame(tick);
+		};
+		if(timer){requestAnimationFrame(tick);}
 		return ()=>{
+			if(timer){cancelAnimationFrame(requestID);}
 			if(!ref.current){return;}
 			ref.current.removeEventListener('touchstart',handleTouchStart);
 			ref.current.removeEventListener('touchmove',handleTouchMove);
 			ref.current.removeEventListener('touchend',handleTouchEnd);
 		};
-	},[ref.current,tmp.current,setIsHold]);
+	},[ref.current,tmp.current,setIsHold,timer,interval]);
 	
 	return (
-		<div className={className + (isHold?' -hold':'')} ref={ref}>
-			<div class="slides">
+		<div className={className + (isHold?' is-hold':'')} ref={ref}>
+			<div class={className + "__slides"}>
 				{children.map((child,index)=><div className={getSlideClasses(index-state.current)} key={index}>{child}</div>)}
 			</div>
-			<Control current={state.current}/>
+			<Control className={className+'__controls'} current={state.current}/>
 		</div>
 	);
 }
