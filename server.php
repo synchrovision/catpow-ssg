@@ -80,7 +80,20 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 			include($f);
 			Catpow\Site::init($site??null);
 		}
-		return Catpow\Tmpl::compile_for_file($file);
+		$should_output=Catpow\Tmpl::compile_for_file($file);
+		if(substr($file,-5)==='.html'){
+			$contents=file_get_contents($file);
+			if(strpos($contents,'<!--#include ')){
+				echo preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)" \-\->/',function($matches){
+					switch($matches[1]){
+						case 'virtual':return file_get_contents(ABSPATH.$matches[2]);
+						case 'file':return file_get_contents(PAGE_DIR.'/'.$matches[2]);
+					}
+				},$contents);
+				$should_output=true;
+			}
+		}
+		return $should_output;
 	default:
 		return false;
 }
