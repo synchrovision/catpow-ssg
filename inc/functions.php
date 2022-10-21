@@ -201,7 +201,7 @@ function csv($csv){
 	if(!empty($page)){
 		return new CSV($page->get_the_file($csv));
 	}
-	if(file_exists($f=ABSPATH.'/'.$csv) || file_exists($f=TMPL_DIR.'/'.$csv)|| file_exists($f=INC_DIR.'/'.$csv)){
+	if(file_exists($f=ABSPATH.'/'.$csv) || file_exists($f=TMPL_DIR.'/'.$csv) || file_exists($f=CONF_DIR.'/'.$csv) || file_exists($f=INC_DIR.'/'.$csv)){
 		return new CSV($f);
 	}
 	return false;
