@@ -1,6 +1,7 @@
 <?php
 namespace Catpow;
 class Tmpl{
+	const SHOULD_OUTPUT=1,UPDATED_FILE=2,USE_ROUTER=4;
 	public static function compile_for_file($file){
 		$uri=preg_replace('/\/index\.(html?|php)$/','/',str_replace(ABSPATH,'',$file));
 		if(($tmpl_file=self::get_tmpl_file_for_file($file)) || ($tmpl_file=self::get_tmpl_file_for_uri($uri))){
@@ -20,7 +21,7 @@ class Tmpl{
 				ob_end_clean();
 				error_log($e->getMessage());
 			}
-			return false;
+			return self::UPDATED_FILE;
 		}
 		if($router_file=self::get_router_file_for_uri($uri)){
 			$router_uri=str_replace(ABSPATH,'',dirname($router_file)).'/*';
@@ -37,8 +38,10 @@ class Tmpl{
 						mkdir(dirname($router_file),0755,true);
 					}
 					file_put_contents($router_file,ob_get_clean());
-					static::lint_file($file);
+					static::lint_file($router_file);
 					usleep(1000);
+					include $router_file;
+					return self::SHOULD_OUTPUT|self::UPDATED_FILE|self::USE_ROUTER;
 				}
 				catch(\Error $e){
 					ob_end_clean();
@@ -46,9 +49,9 @@ class Tmpl{
 				}
 			}
 			include $router_file;
-			return true;
+			return self::SHOULD_OUTPUT|self::USE_ROUTER;
 		}
-		return false;
+		return 0;
 	}
 	public static function lint_file($file){
 		switch(strrchr($file,'.')){
