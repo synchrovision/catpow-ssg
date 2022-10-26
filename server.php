@@ -80,9 +80,10 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 			include($f);
 			Catpow\Site::init($site??null);
 		}
-		$should_output=Catpow\Tmpl::compile_for_file($file);
+		$result=Catpow\Tmpl::compile_for_file($file);
+		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
 		if(substr($file,-5)==='.html'){
-			$contents=file_get_contents($file);
+			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ')){
 				echo preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)" \-\->/',function($matches){
 					switch($matches[1]){
