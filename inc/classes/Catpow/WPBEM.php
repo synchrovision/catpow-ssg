@@ -11,10 +11,11 @@ class WPBEM extends CssRule{
 	}
 	public function add_selector($bem=null){
 		if(empty($bem)){$bem=$this;}
+		if(empty($bem->b)){return;}
 		$sel='$this->selectors';
 		$sel.="['.".implode("']['&-",$bem->s)."']['&-".implode("']['&-",$bem->b)."']";
 		if(!empty($bem->e)){
-			$sel.="['&__".implode("']['&-",$this->e)."']";
+			$sel.="['&__".implode("']['&-",$bem->e)."']";
 		}
 		if(eval("return empty({$sel});")){eval($sel."=[];");}
 	}
@@ -36,20 +37,33 @@ class WPBEM extends CssRule{
 		if(!is_a($el,\DOMElement::class)){return;}
 		if(empty($el->getAttribute('class'))){
 			if(in_array($el->tagName,['br','link','script','source'],true)){return;}
-			$el->setAttribute('class','_'.$el->tagName);
+			if(!in_array($el->tagName,['template'],true)){
+				$el->setAttribute('class','_'.$el->tagName);
+			}
 		}
 		$classes=explode(' ',$el->getAttribute('class')??'');
 		$_s=$_b=$_e=false;
 		foreach($classes as $i=>$class){
 			if(substr($class,-1)==='-'){
-				$this->b_stuck[]=[$this->b,$this->e];
-				$this->b=[substr($class,0,-1)];
-				$this->e=[];
-				$this->add_selector();
-				$_b=true;
+				if(strrpos($class,'-',-2)){
+					$this->b_stuck[]=[$this->s,$this->b,$this->e];
+					$this->b=explode('-',substr($class,0,-1));
+					$this->s=[array_shift($this->b)];
+					$this->e=[];
+					$this->add_selector();
+					$_s=$_b=true;
+				}
+				else{
+					$this->b_stuck[]=[$this->s,$this->b,$this->e];
+					$this->s=$this->b_stuck[0][0];
+					$this->b=[substr($class,0,-1)];
+					$this->e=[];
+					$this->add_selector();
+					$_b=true;
+				}
 			}
-			if(substr($class,0,1)==='-'){
-				$this->b_stuck[]=[$this->b,$this->e];
+			else if(substr($class,0,1)==='-'){
+				$this->b_stuck[]=[$this->s,$this->b,$this->e];
 				$this->b[]=substr($class,1);
 				$this->e=[];
 				$this->add_selector();
@@ -69,8 +83,7 @@ class WPBEM extends CssRule{
 		foreach($el->childNodes??[] as $child_el){
 			$this->_apply($child_el);
 		}
-		if($_s){array_pop($this->s);$this->b=[];$this->e=[];}
-		if($_b){list($this->b,$this->e)=array_pop($this->b_stuck);}
+		if($_b){list($this->s,$this->b,$this->e)=array_pop($this->b_stuck);}
 		if($_e){array_pop($this->e);}
 	}
 }
