@@ -1,10 +1,11 @@
 <?php
 namespace Catpow;
 class Page{
-	public $uri,$dir_uri,$router_uri,$info,$scripts,$styles;
+	public $uri,$filename,$dir_uri,$router_uri,$info,$scripts,$styles;
 	private static $instance;
 	private function __construct($uri,$info){
 		$this->uri=$uri;
+		$this->filename=(substr($uri,-1)==='/')?'index':pathinfo($uri)['filename'];
 		$this->dir=(substr($uri,-1)==='/')?$uri:dirname($uri).'/';
 		$this->scripts=new Deps('js');
 		$this->styles=new Deps('css');
