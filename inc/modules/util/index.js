@@ -7,4 +7,5 @@ export * from './dom.jsx';
 
 export * from './colors.jsx';
 export * from './bez.jsx';
+export * from './fib.jsx';
 export * from './wave.jsx';
