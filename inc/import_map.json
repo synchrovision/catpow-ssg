@@ -1,0 +1,6 @@
+{
+	"imports": {
+		"catpow/component":"./modules/component/index.js",
+		"catpow/util":"./modules/util/index.js"
+	}
+}
