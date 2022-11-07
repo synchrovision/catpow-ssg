@@ -1,6 +1,4 @@
-import {bez} from 'cp/calc'; 
-import {easeInOutQuad} from './ease.jsx';
-export * from './ease.jsx';
+import {bez,easeInOutQuad} from 'catpow/util';
 
 export const scrollTo=(tgt,dur=500,ease=null)=>{
 	const s=parseInt(window.scrollY);
@@ -33,3 +31,7 @@ export const animate=(cb,dur=500,ease=null)=>{
 	}
 	window.requestAnimationFrame(tick);
 };
+export const preserveAnimationValues=(cb,step=1000,ease=null)=>{
+	if(ease===null){ease=easeInOutQuad;}
+	return [...Array(step).keys()].map((n)=>cb(ease(n/(step-1))))
+}
