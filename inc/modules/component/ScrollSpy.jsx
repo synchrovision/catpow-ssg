@@ -1,4 +1,4 @@
-﻿import {flagsToWords} from 'catpow/util';
+﻿import {flagsToWords} from 'util';
 
 export const ScrollSpy=(props)=>{
 	const {useState,useCallback,useEffect,useRef,useReducer}=React;

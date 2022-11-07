@@ -13,6 +13,15 @@
 	const [width,setWidth]=useState(0);
 	const [height,setHeight]=useState(0);
 	
+	const {Perspective,Touches,Frames,Screen}=useMemo(()=>{
+		['Perspective','Touches','Frames','Screen'].forEach((contextName)=>{
+			if(undefined===Animation[contextName]){
+				Animation[contextName]=React.createContext({});
+			}
+		});
+		return Animation;
+	},[]);
+	
 	useEffect(()=>{
 		var touch={clientX:0,clientY:0},isPressed=false;
 		const tick=(t)=>{
@@ -63,8 +72,3 @@
 		</Animation.Perspective.Provider>
 	);
 }
-
-Animation.Perspective=React.createContext({});
-Animation.Touches=React.createContext({});
-Animation.Frames=React.createContext({});
-Animation.Screen=React.createContext({});

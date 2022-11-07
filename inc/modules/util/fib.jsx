@@ -1,5 +1,5 @@
 export const fib=(n)=>{
 	if(undefined!==fib.cache[n]){return fib.cache[n];}
-	return fib.cache[n]=fib(n-2)+fib(n-1);
+	return fib.cache[n-2]+fib.cache[n-1];
 };
-fib.cache=[0,1];
+fib.cache=[0,1,1];

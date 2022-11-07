@@ -1,5 +1,5 @@
-import {Animation} from 'catpow/component';
-import {preserveAnimationValues} from 'catpow/util';
+import {Animation} from 'component';
+import {preserveAnimationValues} from 'util';
 
 export const Particle=(props)=>{
 	const {className='cp-particle',dur=200,speed=100,gravity=1,amount=20,children}=props;

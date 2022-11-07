@@ -1,4 +1,4 @@
-import {bez,easeInOutQuad} from 'catpow/util';
+import {bez,easeInOutQuad} from 'util';
 
 export const scrollTo=(tgt,dur=500,ease=null)=>{
 	const s=parseInt(window.scrollY);
