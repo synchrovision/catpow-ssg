@@ -36,7 +36,7 @@ class WPBEM extends CssRule{
 	private function _apply($el){
 		if(!is_a($el,\DOMElement::class)){return;}
 		if(empty($el->getAttribute('class'))){
-			if(in_array($el->tagName,['br','link','script','source'],true)){return;}
+			if(in_array($el->tagName,['br','link','script','source'],true) || empty($this->b)){return;}
 			if(!in_array($el->tagName,['template'],true)){
 				$el->setAttribute('class','_'.$el->tagName);
 			}
