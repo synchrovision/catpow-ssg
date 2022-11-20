@@ -6,16 +6,6 @@ export const rgbToHex=(rgb)=>{
 	const f=(n)=>n.toString(16).padStart(2,'0');
 	return '#'+f(rgb.r)+f(rgb.g)+f(rgb.b);
 };
-export const hslToHex=(hsl)=>{
-	var l=Math.min(100,hsl.l)/100;
-	var a=Math.min(100,hsl.s)*Math.min(l,1-l)/100;
-	var f=function(n){
-		var k=(n+hsl.h/30)%12;
-		var c=l-a*Math.max(Math.min(k-3,9-k,1),-1);
-		return Math.round(255*c).toString(16).padStart(2,'0');
-	};
-	return '#'+f(0)+f(8)+f(4);
-};
 export const hexToHsl=(hex)=>{
 	var h=0,s=0;
 	var rgb=hex.match(/#?(\w{2})(\w{2})(\w{2})/).slice(1).map(function(c){return parseInt(c,16)/0xff;});
@@ -41,6 +31,16 @@ export const hexToHsl=(hex)=>{
 		s=d/(1-Math.abs(l*2-1));
 	}
 	return {h:Math.round(h),s:Math.round(s*100),l:Math.round(l*100)};
+};
+export const hslToHex=(hsl)=>{
+	var l=Math.min(100,hsl.l)/100;
+	var a=Math.min(100,hsl.s)*Math.min(l,1-l)/100;
+	var f=function(n){
+		var k=(n+hsl.h/30)%12;
+		var c=l-a*Math.max(Math.min(k-3,9-k,1),-1);
+		return Math.round(255*c).toString(16).padStart(2,'0');
+	};
+	return '#'+f(0)+f(8)+f(4);
 };
 export const hexToHsb=(hex)=>{
 	var h=0,s=0;
@@ -74,3 +74,14 @@ export const hexToHsb=(hex)=>{
 	}
 	return {h:Math.round(h*360),s:Math.round(s*100),b:Math.round(b*100)};
 };
+export const hsbToHex=(hsb)=>{
+	const {h,s,b}=hsb;
+	const hs=h/60;
+	const d=b*s/10000;
+	const min=(b/100)-d;
+	const f=function(n){
+		var c=min+d*Math.min(1,Math.max(0,Math.abs((hs+n)%6-3)-1));
+		return Math.round(255*c).toString(16).padStart(2,'0');
+	};
+	return '#'+f(0)+f(4)+f(2);
+}
