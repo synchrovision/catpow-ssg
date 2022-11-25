@@ -75,10 +75,17 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 	case 'rdf':
 	case 'xml':
 		init();
-		if(file_exists($f=CONF_DIR.'/site_config.php')){
+		if(file_exists($site_config_file=CONF_DIR.'/site_config.php')){
 			global $sitemap;
-			include($f);
+			include($site_config_file);
 			Catpow\Site::init($site??null);
+			foreach(['site','sitemap'] as $var_name){
+				if(empty($$var_name)){continue;}
+				$json_file=TMPL_DIR."/json/{$var_name}.json";
+				if(!file_exists($json_file) || filemtime($json_file)<filemtime($site_config_file)){
+					file_put_contents($json_file,str_replace(['"TRUE"','"FALSE"'],['true','false'],json_encode($$var_name,0700)));
+				} 
+			}
 		}
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
