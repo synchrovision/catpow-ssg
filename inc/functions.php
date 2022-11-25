@@ -206,6 +206,17 @@ function csv($csv){
 	}
 	return false;
 }
+function json($json){
+	global $page;
+	if(substr($json,-5)!=='.json'){$json='json/'.$json.'.json';}
+	if(!empty($page)){
+		return json_decode(file_get_contents($page->get_the_file($json)),true);
+	}
+	if(file_exists($f=ABSPATH.'/'.$json) || file_exists($f=TMPL_DIR.'/'.$json) || file_exists($f=CONF_DIR.'/'.$json) || file_exists($f=INC_DIR.'/'.$json)){
+		return json_decode(file_get_contents($f),true);
+	}
+	return false;
+}
 
 function enqueue_style($handler,$src=null,$deps=[]){
 	global $page;
