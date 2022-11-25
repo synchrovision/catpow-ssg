@@ -68,12 +68,13 @@ export const Particle=(props)=>{
 		});
 		return cache.current.parts;
 	},[frames.frame,children.length,amount]);
+	const classes=useMemo(()=>bem(className),[className]);
 	
 	
 	return (
-		<div className={className} >
+		<div className={classes()} >
 			{parts.map(({index})=>(
-				<div className={className+'__part'} style={part.css}>{children[part.index]}</div>
+				<div className={classes._part()} style={part.css}>{children[part.index]}</div>
 			)))}
 		</div>
 	);

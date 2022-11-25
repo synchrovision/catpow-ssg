@@ -1,5 +1,7 @@
-﻿export const Slider=(props)=>{
-	const {useState,useCallback,useEffect,useRef,useReducer}=React;
+﻿import {bem} from 'util';
+
+export const Slider=(props)=>{
+	const {useState,useMemo,useCallback,useEffect,useRef,useReducer}=React;
 	const {className="cp-slider",children,loop=false,dots=true,arrow=true,timer=false,interval=5000,onSwipeLeft,onSwipeRight}=props;
 	const [isHold,setIsHold]=useState(false);
 	const ref=useRef();
@@ -28,21 +30,26 @@
 	const [state,dispatch]=useReducer(reducer,{
 		current:props.defaultSlide || 0
 	});
+	const classes=useMemo(()=>bem(className),[className]);
 	
-	const getSlideClasses=useCallback((pos)=>{
-		if(loop){}
-		const classes=[className+'__slides-slide','is-slide-'+pos];
-		if(pos===0){classes.push('is-current');}
-		else if(pos<0){
-			classes.push('is-before');
-			if(pos===-1){classes.push('is-prev');}
-		}
-		else if(pos>0){
-			classes.push('is-after');
-			if(pos===1){classes.push('is-next');}
-		}
-		return classes.join(' ');
-	},[className,loop]);
+	const getSlideClasses=useMemo(()=>{
+		const l=children.length;
+		const lh=l>>1;
+		return (pos)=>{
+			if(loop){pos=(pos+l+lh)%l-lh;}
+			const classes=['is-slide-'+pos];
+			if(pos===0){classes.push('is-current');}
+			else if(pos<0){
+				classes.push('is-before');
+				if(pos===-1){classes.push('is-prev');}
+			}
+			else if(pos>0){
+				classes.push('is-after');
+				if(pos===1){classes.push('is-next');}
+			}
+			return classes;
+		};
+	},[children.length,loop]);
 	const Control=useCallback((props)=>{
 		const {className,current}=props;
 		const isFirst=!loop && current < 1;
@@ -153,11 +160,11 @@
 	},[ref.current,tmp.current,setIsHold,timer,interval]);
 	
 	return (
-		<div className={className + (isHold?' is-hold':'')} ref={ref}>
-			<div class={className + "__slides"}>
-				{children.map((child,index)=><div className={getSlideClasses(index-state.current)} key={index}>{child}</div>)}
+		<div className={classes({'is-hold':isHold})} ref={ref}>
+			<div class={classes._slides()}>
+				{children.map((child,index)=><div className={classes._slides.slide(getSlideClasses(index-state.current))} key={index}>{child}</div>)}
 			</div>
-			<Control className={className+'__controls'} current={state.current}/>
+			<Control className={classes._controls()} current={state.current}/>
 		</div>
 	);
 }

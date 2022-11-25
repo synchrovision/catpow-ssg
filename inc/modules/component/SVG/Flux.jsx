@@ -1,4 +1,4 @@
-import {bez,preserveAnimationValues,waveFromBase36} from 'util';
+import {bez,preserveAnimationValues,waveFromBase36,bem} from 'util';
 
 export const Flux=(props)=>{
 	const {className='cp-svg-flux',dur=2000,delay=10,gap=4,width=1920,height=1080,color="white",amount=20,progress=0}=props;
@@ -60,14 +60,15 @@ export const Flux=(props)=>{
 	},[orbits.length]);
 	
 	const opacities=useMemo(()=>[...Array(amount).keys()],[amount]).map((i)=>1-Math.abs(i/amount*2-1));
+	const classes=useMemo(()=>bem(className),[className]);
 	
 	
 	return (
-		<g className={className}>
+		<g className={classes()}>
 		{useMemo(()=>opacities.map((o,i)=>{
 			return (
 				<path
-					className={className + '__path'}
+					className={classes.path()}
 					d={drawer(orbits,progress+i*gap)}
 					fill="none"
 					stroke={color}

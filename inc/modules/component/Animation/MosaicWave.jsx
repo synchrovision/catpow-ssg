@@ -1,5 +1,5 @@
 import {Animation} from 'component';
-import {easeOutQuad,preserveDistances,preserveAnimationValues} from 'util';
+import {easeOutQuad,preserveDistances,preserveAnimationValues,bem} from 'util';
 
 export const MosaicWave=(props)=>{
 	const {className='cp-mosaicwave',size=40,dur=200,hue=240,saturation=80,lightness=80,amount=8}=props;
@@ -50,10 +50,11 @@ export const MosaicWave=(props)=>{
 			});
 		});
 	},[frames.frame]);
+	const classes=useMemo(()=>bem(className),[className]);
 	
 	return (
 		<div
-			className={className}
+			className={classes()}
 			style={{
 				"display":"grid",
 				"grid-template-columns":`repeat(${cols.length},1fr)`,
@@ -63,7 +64,7 @@ export const MosaicWave=(props)=>{
 			}}
 		>
 			{results.map((row)=>row.map((color)=>(
-				<div className={className+'__tile'} style={{"backgroundColor":color}}></div>
+				<div className={classes._tile()} style={{"backgroundColor":color}}></div>
 			)))}
 		</div>
 	);

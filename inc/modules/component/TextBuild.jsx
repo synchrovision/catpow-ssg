@@ -1,7 +1,9 @@
-﻿
+﻿import {bem} from 'util';
+
 export const TextBuild=(props)=>{
 	const {useState,useCallback,useMemo,useEffect}=React;
 	const {className="cp-textbuild",children,delay=5,interval=150}=props;
+	const classes=useMemo(()=>bem(className),[className]);
 	
 	const [progress,setProgress]=useState(0);
 	
@@ -31,10 +33,10 @@ export const TextBuild=(props)=>{
 	},[letters,delay,interval]);
 	
 	return (
-		<div className={className}>
+		<div className={classes()}>
 			{letters.map((letter,index)=>(
 				(typeof letter === 'string')?
-				(<span className={className+'__letter is-' + (index<progress?'show':'hide')}>{letter}</span>):letter
+				(<span className={classes._letter('is-'+(index<progress?'show':'hide'))}>{letter}</span>):letter
 			))}
 		</div>
 	);

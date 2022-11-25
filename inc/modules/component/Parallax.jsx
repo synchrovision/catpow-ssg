@@ -1,4 +1,6 @@
-﻿export const Parallax=(props)=>{
+﻿import {bem} from 'util';
+
+export const Parallax=(props)=>{
 	const {useState,useCallback,useEffect,useRef}=React;
 	const {className='cp-parallax',minRatio=0.1}=props;
 	const [aspect,setAspect]=useState('outer');
@@ -29,9 +31,10 @@
 		}
 		window.requestAnimationFrame(tick);
 	},[ref.current,minRatio]);
+	const classes=useMemo(()=>bem(className),[className]);
 	
 	return (
-		<div className={className+' -'+aspect+' -'+distant} ref={ref}>
+		<div className={classes([`is-`+aspect,'is-'+distant])} ref={ref}>
 			{props.children}
 		</div>
 	);

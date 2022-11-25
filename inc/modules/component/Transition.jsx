@@ -1,8 +1,11 @@
-﻿export const Transition=(props)=>{
-	const {useState,useCallback,useEffect,useRef}=React;
+﻿import {bem} from 'util';
+
+export const Transition=(props)=>{
+	const {useState,useMemo,useCallback,useEffect,useRef}=React;
 	const {className='cp-transition',children,fitHeight=false}=props;
 	const [contents,setContents]=useState(children);
 	const [ready,setReady]=useState(false);
+	const classes=useMemo(()=>bem(className),[className]);
 	
 	const refContainer=useRef();
 	const refPrev=useRef();
@@ -57,9 +60,9 @@
 	},[children]);
 	
 	return (
-		<div className={className+' -'+type} ref={refContainer}>
-			<div className={"contents -prev -"+(ready?"from":"to")}><div className="body" ref={refPrev}></div></div>
-			<div className={"contents -current -"+(ready?"from":"to")}><div className="body" ref={refCurrent}>{contents}</div></div>
+		<div className={classes('is-type-'+type)} ref={refContainer}>
+			<div className={classes.contents(['is-prev','is-'+(ready?"from":"to")])}><div className={classes.contents._body()} ref={refPrev}></div></div>
+			<div className={classes.contents(['is-current','is-'+(ready?"from":"to")])}><div className={classes.contents._body()} ref={refCurrent}>{contents}</div></div>
 		</div>
 	);
 }
