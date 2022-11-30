@@ -138,6 +138,7 @@ class BEM extends CssRule{
 			if(substr($class,-1)==='-'){
 				$this->s[]=substr($class,0,-1);
 				$this->b=false;$this->e=$this->m=$this->bm=[];
+				$this->add_selector();
 				$_s=true;
 			}
 			if(substr($class,-1)==='_'){
