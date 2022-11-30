@@ -182,9 +182,10 @@ function rtf($text){
 	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/u','<img class="rtf-image" src="$2" alt="$1"/>',$text);
 	$text=preg_replace('/\[tel:((\d+)\-(\d+)\-(\d+))\]/u','<a class="rtf-tel" href="tel:$2$3$4" target="_brank">$1</a>',$text);
 	$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="rtf-link" href="$2" target="_brank">$1</a>',$text);
-	$text=preg_replace('/(.{1,8}?)：(.+)/u','<dl class="rtf-dl"><dt>$1</dt><dd>$2</dd></dl>',$text);
-	$text=preg_replace('/^・ (.+(\n　.+)*)$/um','<ul class="rtf-ul"><li>$1</li></ul>',$text);
-	$text=preg_replace('/<\/(dl|ul)>\s*<\1 class="rtf\-\1">/u','',$text);
+	$text=preg_replace('/(.{1,8}?)：(.+)/u','<dl class="rtf-dl"><dt class="rtf-dl__dt">$1</dt><dd class="rtf-dl__dd">$2</dd></dl>',$text);
+	$text=preg_replace('/^・ (.+(\n　.+)*)$/um','<ul class="rtf-ul"><li class="rtf-ul__li">$1</li></ul>',$text);
+	$text=preg_replace('/^\d{1,2}\. (.+(\n　.+)*)$/um','<ol class="rtf-ol"><li class="rtf-ol__li">$1</li></ol>',$text);
+	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="rtf\-\1">/u','',$text);
 	$text=preg_replace('/(<\/\w+>)\n/','$1',$text);
 	return $text;
 }
