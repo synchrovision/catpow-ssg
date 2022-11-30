@@ -47,7 +47,13 @@ class BEM extends CssRule{
 			$bsel.="['.{$bem->b}']";
 		}
 		else{
-			$bsel.="['.".implode("']['&-",$bem->s)."']['&-{$bem->b}']";
+			$bsel.="['.".implode("']['&-",$bem->s)."']";
+			if(empty($this->b)){
+				if(eval("return empty({$bsel});")){eval($bsel."=[];");}
+				return;
+			}
+			$bsel.="['&-{$bem->b}']";
+			
 		}
 		$esel='';
 		foreach($bem->e as $e){
@@ -138,13 +144,19 @@ class BEM extends CssRule{
 			if(substr($class,-1)==='-'){
 				$this->s[]=substr($class,0,-1);
 				$this->b=false;$this->e=$this->m=$this->bm=[];
+				$this->add_selector();
 				$_s=true;
 			}
 			if(substr($class,-1)==='_'){
 				$m=array_filter(explode('_',mb_substr($class,0,-1)));
 				$b=array_shift($m);
-				if(strpos('-',$b)!==false){
-					$s=array_merge((array)$this->s,explode('-',$b));
+				if(strpos($b,'-')!==false){
+					if(substr($b,0,1)==='-'){
+						$s=array_merge((array)$this->s,explode('-',substr($b,1)));
+					}
+					else{
+						$s=explode('-',$b);
+					}
 					$b=array_pop($s);
 				}
 				else{$s=$this->s;}
