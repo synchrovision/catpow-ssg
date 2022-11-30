@@ -78,7 +78,6 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 		if(file_exists($site_config_file=CONF_DIR.'/site_config.php')){
 			global $sitemap;
 			include($site_config_file);
-			Catpow\Site::init($site??null);
 			foreach(['site','sitemap'] as $var_name){
 				if(empty($$var_name)){continue;}
 				if(!is_dir(TMPL_DIR."/json")){mkdir(TMPL_DIR."/json",0755,true);}
@@ -87,6 +86,7 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 					file_put_contents($json_file,str_replace(['"TRUE"','"FALSE"'],['true','false'],json_encode($$var_name,0700)));
 				} 
 			}
+			Catpow\Site::init($site??null);
 		}
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
