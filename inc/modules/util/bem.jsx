@@ -1,9 +1,19 @@
 export const bem=(className)=>{
 	const children={};
-	return new Proxy((flags)=>{
-		if(undefined!==flags){
-			if(typeof flags === 'string'){return className+' '+flags;}
-			const classes=Array.isArray(flags)?flags:Object.keys(flags).filter((c)=>flags[c]);
+	return new Proxy(function(){
+		if(arguments.length>0){
+			const classes=[];let i;
+			for(i=0;i<arguments.length;i++){
+				if(typeof(arguments[i])==='string'){
+					classes.push(arguments[i]);
+					continue;
+				}
+				classes.push.apply(
+					classes,
+					Array.isArray(arguments[i])?arguments[i]:
+					Object.keys(arguments[i]).filter((c)=>arguments[i][c])
+				);
+			}
 			if(classes.length>0){return className+' '+classes.join(' ');}
 		}
 		return className;
