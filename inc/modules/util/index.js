@@ -4,6 +4,7 @@ export * from './geom.jsx';
 
 export * from './string.jsx';
 export * from './dom.jsx';
+export * from './data.jsx';
 export * from './bem.jsx';
 
 export * from './colors.jsx';
