@@ -39,10 +39,11 @@ else{
 }
 define('PAGE_DIR',dirname($file));
 define('PAGE_TMPL_DIR',str_replace(ABSPATH,TMPL_DIR,PAGE_DIR));
-switch(substr($fname,strrpos($fname,'.')+1)){
+switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'js':
+	case 'json':
 		init();
-		Catpow\Jsx::compile_for_file($file);
+		['js'=>'Catpow\\Jsx','json'=>'Catpow\\Json'][$ext]::compile_for_file($file);
 	case 'png':
 	case 'jpg':
 	case 'jpeg':
@@ -55,7 +56,6 @@ switch(substr($fname,strrpos($fname,'.')+1)){
 	case 'pdf':
 	case 'mp3':
 	case 'mp4':
-	case 'json':
 		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
 			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
 				if(!is_dir(dirname($file))){
