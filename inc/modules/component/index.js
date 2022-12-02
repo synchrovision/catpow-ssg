@@ -1,6 +1,7 @@
 export * from './functions.jsx';
 
 export * from './Animation/index.js';
+export * from './Nav/index.js';
 export * from './SVG/index.js';
 
 export * from './ElasticBox.jsx';
