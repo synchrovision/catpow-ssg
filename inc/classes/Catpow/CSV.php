@@ -157,6 +157,7 @@ class CSV implements \Iterator,\ArrayAccess{
 	
 	public function __get($name){
 		if($name=='keys')return $this->data[0];
+		if($name=='items')return $this->select();
 		if($name=='tree')return $this->collect();
 	}
 	
