@@ -148,14 +148,14 @@ function texts($file='texts'){
 	elseif(file_exists($f=ABSPATH.$file) || file_exists($f=TMPL_DIR.$file)|| file_exists($f=INC_DIR.$file)){
 		$file=$f;
 	}
-	if(isset($cache[$file])){return $cach[$file];}
+	if(isset($cache[$file])){return $cache[$file];}
 	if(!file_exists($file)){return $cache[$file]=[];}
 	$data=[];
 	$entries=array_chunk(preg_split('/\n*^\[(.+?)\]\n/m',file_get_contents($file),-1,PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE),2);
 	foreach($entries as list($key,$value)){
 		$data[$key]=$value;
 	}
-	return $cach[$file]=$data;
+	return $cache[$file]=$data;
 }
 function md($text){
 	if(is_null($text)){return '';}
