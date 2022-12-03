@@ -177,6 +177,7 @@ function simple_md($text,$param=[]){
 function rtf($text){
 	$text=preg_replace('/(（.+?）)/u','<small class="rtf-small">$1</small>',$text);
 	$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="rtf-strong">$1</strong>',$text);
+	$text=preg_replace('/``(.+?)``/u','<code class="rtf-code">$1</code>',$text);
 	$text=preg_replace('/^※(.+)$/um','<span class="rtf-annotation">$1</span>',$text);
 	$text=preg_replace('/■ (.+)/u','<h4 class="rtf-title">$1</h4>',$text);
 	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/u','<img class="rtf-image" src="$2" alt="$1"/>',$text);
