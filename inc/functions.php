@@ -165,13 +165,13 @@ function md($text){
 	}
 	return \Michelf\MarkdownExtra::defaultTransform(ShortCode::do_shortcode($text));
 }
-function simple_md($text,$param=[]){
-	$param=array_merge(
-		['link_class'=>'link','image_class'=>'image'],
-		$param
+function simple_md($text,$classes=[]){
+	$classes=array_merge(
+		['a'=>'_link','img'=>'_image'],
+		$classes
 	);
-	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/','<img class="'.$param['image_class'].'" src="$2" alt="$1"/>',$text);
-	$text=preg_replace('/\[(.+?)\]\((.+?)\)/','<a class="'.$param['link_class'].'" href="$2" target="_brank">$1</a>',$text);
+	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/','<img class="'.$classes['img'].'" src="$2" alt="$1"/>',$text);
+	$text=preg_replace('/\[(.+?)\]\((.+?)\)/','<a class="'.$classes['a'].'" href="$2" target="_brank">$1</a>',$text);
 	return $text;
 }
 function rtf($text,$pref='rtf'){
