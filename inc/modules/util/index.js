@@ -1,4 +1,5 @@
 export * from './animate.jsx';
+export * from './dimension.jsx';
 export * from './ease.jsx';
 export * from './geom.jsx';
 
