@@ -4,6 +4,7 @@ export * from './Animation/index.js';
 export * from './Nav/index.js';
 export * from './SVG/index.js';
 
+export * from './Cloak.jsx';
 export * from './ElasticBox.jsx';
 export * from './Parallax.jsx';
 export * from './RawNode.jsx';
