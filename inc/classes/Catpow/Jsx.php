@@ -13,9 +13,11 @@ class Jsx{
 		putenv('PATH='.getenv('PATH').':'.INC_DIR.':'.INC_DIR.'/node_modules/.bin');
 		putenv('NODE_PATH='.getenv('NODE_PATH').':'.INC_DIR.'/node_modules');
 		chdir(INC_DIR);
-		if(!file_exists(INC_DIR.'/node_modules')){
-			passthru('npm install');
-			passthru('touch node_modules/.nosync');
+		if(!file_exists(INC_DIR.'/node_modules.nosync')){
+			if(is_link('node_modules')){unlink('node_modules');}
+			if(!file_exists('node_modules')){passthru('npm install');}
+			passthru('mv node_modules node_modules.nosync');
+			passthru('ln -s node_modules.nosync/ node_modules');
 		}
 	}
 	public static function get_jsx_file_for_file($file){
