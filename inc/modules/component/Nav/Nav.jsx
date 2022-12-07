@@ -95,7 +95,14 @@
 	const [state,dispatch]=useReducer(reducer,{},init);
 	
 	const functions=useMemo(()=>{
-		console.log('dispatch updated')
+		return {
+			activateMenu:(menu)=>dispatch({type:'activate',menu}),
+			deactivateMenu:(menu)=>dispatch({type:'deactivate',menu}),
+			activateItem:(item)=>dispatch({type:'activate',item}),
+			deactivateItem:(item)=>dispatch({type:'deactivate',item}),
+			focusItem:(item)=>dispatch({type:'activate',item,updateLevel:true}),
+			unfocusItem:(item)=>dispatch({type:'deactivate',item,updateLevel:true})
+		};
 	},[dispatch]);
 	
 	return (

@@ -7,7 +7,7 @@ function _d($data){
 
 function picture($name,$alt,$className=null,$attr=null,$bp=null){
 	global $page;
-	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1600];}
+	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1600,'fhd'=>-1920,'hd'=>-1280,'xga'=>-1024,'vga'=>-640];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
 	$rtn=sprintf('<picture%s>',HTML::get_attr_code(array_merge(['class'=>$className],(array)$attr)));
 	foreach($bp as $media=>$mq){
@@ -148,14 +148,14 @@ function texts($file='texts'){
 	elseif(file_exists($f=ABSPATH.$file) || file_exists($f=TMPL_DIR.$file)|| file_exists($f=INC_DIR.$file)){
 		$file=$f;
 	}
-	if(isset($cache[$file])){return $cach[$file];}
+	if(isset($cache[$file])){return $cache[$file];}
 	if(!file_exists($file)){return $cache[$file]=[];}
 	$data=[];
 	$entries=array_chunk(preg_split('/\n*^\[(.+?)\]\n/m',file_get_contents($file),-1,PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE),2);
 	foreach($entries as list($key,$value)){
 		$data[$key]=$value;
 	}
-	return $cach[$file]=$data;
+	return $cache[$file]=$data;
 }
 function md($text){
 	if(is_null($text)){return '';}
@@ -165,27 +165,30 @@ function md($text){
 	}
 	return \Michelf\MarkdownExtra::defaultTransform(ShortCode::do_shortcode($text));
 }
-function simple_md($text,$param=[]){
-	$param=array_merge(
-		['link_class'=>'link','image_class'=>'image'],
-		$param
+function simple_md($text,$classes=[]){
+	$classes=array_merge(
+		['a'=>'_link','img'=>'_image'],
+		$classes
 	);
-	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/','<img class="'.$param['image_class'].'" src="$2" alt="$1"/>',$text);
-	$text=preg_replace('/\[(.+?)\]\((.+?)\)/','<a class="'.$param['link_class'].'" href="$2" target="_brank">$1</a>',$text);
+	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/','<img class="'.$classes['img'].'" src="$2" alt="$1"/>',$text);
+	$text=preg_replace('/\[(.+?)\]\((.+?)\)/','<a class="'.$classes['a'].'" href="$2" target="_brank">$1</a>',$text);
 	return $text;
 }
-function rtf($text){
-	$text=preg_replace('/(（.+?）)/u','<small class="rtf-small">$1</small>',$text);
-	$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="rtf-strong">$1</strong>',$text);
-	$text=preg_replace('/^※(.+)$/um','<span class="rtf-annotation">$1</span>',$text);
-	$text=preg_replace('/■ (.+)/u','<h4 class="rtf-title">$1</h4>',$text);
-	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/u','<img class="rtf-image" src="$2" alt="$1"/>',$text);
-	$text=preg_replace('/\[tel:((\d+)\-(\d+)\-(\d+))\]/u','<a class="rtf-tel" href="tel:$2$3$4" target="_brank">$1</a>',$text);
-	$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="rtf-link" href="$2" target="_brank">$1</a>',$text);
-	$text=preg_replace('/(.{1,8}?)：(.+)/u','<dl class="rtf-dl"><dt class="rtf-dl__dt">$1</dt><dd class="rtf-dl__dd">$2</dd></dl>',$text);
-	$text=preg_replace('/^・ (.+(\n　.+)*)$/um','<ul class="rtf-ul"><li class="rtf-ul__li">$1</li></ul>',$text);
-	$text=preg_replace('/^\d{1,2}\. (.+(\n　.+)*)$/um','<ol class="rtf-ol"><li class="rtf-ol__li">$1</li></ol>',$text);
-	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="rtf\-\1">/u','',$text);
+function rtf($text,$pref='rtf'){
+	$text=preg_replace('/(（.+?）)/u','<small class="'.$pref.'-small">$1</small>',$text);
+	$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="'.$pref.'-strong">$1</strong>',$text);
+	$text=preg_replace('/``(.+?)``/u','<code class="'.$pref.'-code">$1</code>',$text);
+	$text=preg_replace('/^※(.+)$/um','<span class="'.$pref.'-annotation">$1</span>',$text);
+	$text=preg_replace('/■ (.+)/u','<h4 class="'.$pref.'-title">$1</h4>',$text);
+	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/u','<img class="'.$pref.'-image" src="$2" alt="$1"/>',$text);
+	$text=preg_replace('/\[tel:((\d+)\-(\d+)\-(\d+))\]/u','<a class="'.$pref.'-tel" href="tel:$2$3$4" target="_brank">$1</a>',$text);
+	$text=preg_replace('/\[\[(.+?)\]\]\((.+?)\)/u','<a class="'.$pref.'-button" href="$2" target="_brank"><span class="'.$pref.'-button__label">$1</span></a>',$text);
+	$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link" href="$2" target="_brank">$1</a>',$text);
+	$text=preg_replace('/(.{1,8}?)：(.+)/u','<dl class="'.$pref.'-dl"><dt class="'.$pref.'-dl__dt">$1</dt><dd class="'.$pref.'-dl__dd">$2</dd></dl>',$text);
+	$text=preg_replace('/^・ (.+(\n　.+)*)$/um','<ul class="'.$pref.'-ul"><li class="'.$pref.'-ul__li">$1</li></ul>',$text);
+	$text=preg_replace('/^\d{1,2}\. (.+(\n　.+)*)$/um','<ol class="'.$pref.'-ol"><li class="'.$pref.'-ol__li">$1</li></ol>',$text);
+	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="'.$pref.'\-\1">/u','',$text);
+	$text=str_replace("\n　",'<br/>',$text);
 	$text=preg_replace('/(<\/\w+>)\n/','$1',$text);
 	return $text;
 }
