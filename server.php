@@ -90,6 +90,14 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		}
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
+		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
+			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
+				if(!is_dir(dirname($file))){
+					mkdir(dirname($file),0755,true);
+				}
+				copy($tmpl_file,$file);
+			}
+		}
 		if(substr($file,-5)==='.html'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ')){
