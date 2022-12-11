@@ -2,6 +2,7 @@
     "require": {
         "vlucas/phpdotenv": "^5.3",
         "michelf/php-markdown": "^1.9",
-        "scssphp/scssphp": "^1.10"
+        "scssphp/scssphp": "^1.10",
+        "spatie/color": "*"
     }
 }
