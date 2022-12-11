@@ -5,6 +5,7 @@ use ScssPhp\ScssPhp\Type;
 use ScssPhp\ScssPhp\ValueConverter;
 use ScssPhp\ScssPhp\Node\Number;
 use ScssPhp\ScssPhp\Exception\CompilerException;
+use Spatie\Color\Hsl;
 
 class Scss{
 	public static $scssc,$current_scss_file;
@@ -80,6 +81,55 @@ class Scss{
 				return Compiler::$emptyList;
 			}
 		});
+		$scssc->registerFunction('translate_color',function($args){
+			$args=array_map([static::$scssc,'compileValue'],$args);
+			$color=false;
+			if(preg_match('/^([a-z]+)?([-_])?(\d+)?$/',$args[0],$matches)){
+				$key=$matches[1]?:'m';
+				$sep=$matches[2]??null;
+				$staticHue=$sep==='-';
+				$relativeHue=$sep==='_';
+				$num=$matches[3]??null;
+				$f='var(--tones-'.$key.'-%s)';
+				$rf='var(--root-tones-'.$key.'-%s)';
+				$color=sprintf(
+					'hsla(%s,%s,%s,%s)',
+					is_null($num)?
+					sprintf($f,'h'):
+					($staticHue?
+						$num:
+						(($num==='0' || $num==='6')?
+							sprintf($relativeHue?$f:$rf,'h'):
+							sprintf('calc('.($relativeHue?$f:$rf).' + var(--tones-hr) * %s + var(--tones-hs))','h',(int)$num-6)
+						)
+					),
+					sprintf($f,'s'),
+					$args[1]==='false'?sprintf($f,'l'):sprintf('calc(100%% - '.$f.' * %s)','t',$args[1]),
+					$args[2]==='false'?'var(--tones-'.$key.'-a)':'calc(var(--tones-'.$key.'-a) * '.$args[2].')'
+				);
+			}
+			if(empty($color)){return Compiler::$false;}
+			return [TYPE::T_KEYWORD,$color];
+		});
+		$scssc->registerFunction('get_color_vars',function($args){
+			$vars=[];
+			foreach(static::parse_map_data($args[0]) as $key=>$val){
+				if(preg_match('/\d/',$key)){continue;}
+				if(in_array($key,['hr','hs'])){$$key=$val;}
+				if($val==='transparent'){continue;}
+				$color=\Spatie\Color\Factory::fromString($val);
+				$hsla=$color->toHsla(method_exists($color,'alpha')?hexdec($color->alpha())/255:1);
+				foreach(['h'=>'hue','s'=>'saturation','l'=>'lightness','a'=>'alpha'] as $p=>$prop){
+					$$p=round($hsla->{$prop}(),2);
+					if($p==='h'){$vars["--root-tones-{$key}-h"]=$h;}
+					$vars["--tones-{$key}-{$p}"]=($p==='h' || $p==='a')?$$p:$$p.'%';
+				}
+				$vars["--tones-{$key}-t"]=(1-$l/100).'%';
+			}
+			$vars["--tones-hr"]=$hr??30;
+			$vars["--tones-hs"]=$hs??0;
+			return self::create_map_data($vars);
+		});
 		return static::$scssc=$scssc;
 	}
 	public static function compile($scss_file,$css_file){
@@ -119,6 +169,20 @@ class Scss{
 			file_put_contents($css_file,$css);
 			usleep(1000);
 		}
+	}
+	public static function parse_map_data($map){
+		if($map[0]!==TYPE::T_MAP){return [];}
+		return array_combine(
+			array_map([static::$scssc,'compileValue'],$map[1]),
+			array_map([static::$scssc,'compileValue'],$map[2])
+		);
+	}
+	public static function create_map_data($data){
+		return [
+			TYPE::T_MAP,
+			array_map(function($key){return [TYPE::T_KEYWORD,$key];},array_keys($data)),
+			array_map(function($val){return [TYPE::T_KEYWORD,$val];},array_values($data))
+		];
 	}
 	public static function get_source_file($file){
 		$paths=array_merge([dirname(self::$current_scss_file).'/'],self::get_scssc()->getCompileOptions()['importPaths']);
