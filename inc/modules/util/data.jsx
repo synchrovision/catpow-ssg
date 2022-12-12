@@ -26,6 +26,7 @@ export const getTreeData=(items)=>{
 		if(!item.parent){return null;}
 		return itemsDict[item.parent];
 	}:(item)=>{
+		if(item.uri[0]!=='/'){return null;}
 		const baseUri=item.uri.replace(/\/index\.(php|html)$/,'/');
 		if(baseUri==='/'){return null;}
 		const parentUri=baseUri.replace(/\/(\w+\/|[^\/]+)$/,'/');
