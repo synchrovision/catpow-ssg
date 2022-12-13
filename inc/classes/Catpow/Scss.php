@@ -130,6 +130,16 @@ class Scss{
 			$vars["--tones-hs"]=$hs??0;
 			return self::create_map_data($vars);
 		});
+		$scssc->registerFunction('get_color_classes',function($args){
+			$classes=[];
+			foreach(static::parse_map_data($args[0]) as $key=>$val){
+				if(preg_match('/\d/',$key) || in_array($key,['hr','hs']) || $val==='transparent'){continue;}
+				foreach(range(-9,9) as $n){
+					$classes['.is-color'.$n]["--tones-{$key}-h"]="calc(var(--root-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
+				}
+			}
+			return self::create_map_data($classes);
+		});
 		return static::$scssc=$scssc;
 	}
 	public static function compile($scss_file,$css_file){
