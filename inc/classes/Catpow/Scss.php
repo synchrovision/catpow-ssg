@@ -84,10 +84,10 @@ class Scss{
 		$scssc->registerFunction('translate_color',function($args){
 			$args=array_map([static::$scssc,'compileValue'],$args);
 			$color=false;
-			if(preg_match('/^([a-z]+)?([-_])?(\d+)?$/',$args[0],$matches)){
+			if(preg_match('/^([a-z]+)?(_|\-\-)?(\-?\d+)?$/',$args[0],$matches)){
 				$key=$matches[1]?:'m';
 				$sep=$matches[2]??null;
-				$staticHue=$sep==='-';
+				$staticHue=$sep==='--';
 				$relativeHue=$sep==='_';
 				$num=$matches[3]??null;
 				$f='var(--tones-'.$key.'-%s)';
@@ -98,9 +98,9 @@ class Scss{
 					sprintf($f,'h'):
 					($staticHue?
 						$num:
-						(($num==='0' || $num==='6')?
+						(($num==='0')?
 							sprintf($relativeHue?$f:$rf,'h'):
-							sprintf('calc('.($relativeHue?$f:$rf).' + var(--tones-hr) * %s + var(--tones-hs))','h',(int)$num-6)
+							sprintf('calc('.($relativeHue?$f:$rf).' + var(--tones-hr,20) * %s + var(--tones-hs,0))','h',$num)
 						)
 					),
 					sprintf($f,'s'),
@@ -126,7 +126,7 @@ class Scss{
 				}
 				$vars["--tones-{$key}-t"]=(1-$l/100).'%';
 			}
-			$vars["--tones-hr"]=$hr??30;
+			$vars["--tones-hr"]=$hr??20;
 			$vars["--tones-hs"]=$hs??0;
 			return self::create_map_data($vars);
 		});
