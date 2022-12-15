@@ -257,9 +257,32 @@ class CSV implements \Iterator,\ArrayAccess{
 		}
 		return $rtn;
 	}
-	public function dict($key=null,$where=[]){
-		if(is_null($key)){$key=$this->data[0][0];}
-		return array_column($this->select($where),null,$key);
+	public function dict($keys=null,$where=[]){
+		if(is_null($keys)){$keys=$this->data[0][0];}
+		if(!is_array($keys)){
+			return array_column($this->select($where),null,$keys);
+		}
+		$rtn=[];
+		$current_keys=[];
+		$collect_by=[];
+		foreach($keys as $key){
+			$collect_by[]=!is_numeric($key)?array_search($key,$this->data[0]):$key;
+		}
+		for($r=1,$l=count($this->data);$r<$l;$r++){
+			$sel='';
+			foreach($collect_by as $i=>$c){
+				if(!empty($this->data[$r][$c])){$current_keys[$i]=$this->data[$r][$c];}
+				$sel.="['{$current_keys[$i]}']";
+			}
+			foreach($where as $key=>$cond){
+				$c=array_search($key,$this->data[0]);
+				if($c===false){continue 2;}
+				if($this->test_value($this->data[$r][$c],$cond)===false){continue 2;}
+			}
+			$row=array_combine($this->data[0],$this->data[$r]);
+			eval('$rtn'.$sel.'=$row;');
+		}
+		return $rtn;
 	}
 	public function update($data,$where){
 		$keys=$this->data[0];
