@@ -2,6 +2,7 @@
 namespace Catpow;
 
 class CSV implements \Iterator,\ArrayAccess{
+	const CAST_NUMERIC=1,CAST_BOOL=2,FILL_COLUMN=4;
 	public $data=array(),$file,$current_index=1;
 	private $hash,$tree,$depth;
 	
@@ -35,8 +36,11 @@ class CSV implements \Iterator,\ArrayAccess{
 		return array_combine($this->data[0],$this->data[$offset+1]);
 	}
 	
-	public function __construct($csv,$fill_column=false){
+	public function __construct($csv,$flags=0){
 		if(empty($csv)){return;}
+		$cast_numeric=$flags&self::CAST_NUMERIC;
+		$cast_bool=$flags&self::CAST_BOOL;
+		$fill_column=$flags&self::FILL_COLUMN;
 		if(is_array($csv)){
 			$this->data=array_map(function($row){
 				return array_values($row);
@@ -47,7 +51,7 @@ class CSV implements \Iterator,\ArrayAccess{
 			$csv=fopen($csv,'r');
 			if(empty($fill_column)){
 				while($row=fgetcsv($csv)){
-					array_push($this->data,$row);
+					array_push($this->data,self::cast_values($row,$flags));
 				}
 			}
 			else{
@@ -67,10 +71,22 @@ class CSV implements \Iterator,\ArrayAccess{
 						if(empty($row[$index])){$row[$index]=$current_values[$index];}
 						else{$current_values[$index]=$row[$index];}
 					}
-					array_push($this->data,$row);
+					array_push($this->data,self::cast_values($row,$flags));
 				}
 			}
 		}
+	}
+	private static function cast_values($values,$flags){
+		if($flags&(self::CAST_NUMERIC|self::CAST_BOOL)){
+			foreach($values as $key=>$val){
+				if($flags&self::CAST_NUMERIC && is_numeric($val)){$values[$key]=(float)$val;}
+				if($flags&self::CAST_BOOL){
+					if($val==='TRUE'){$values[$key]=true;}
+					if($val==='FALSE'){$values[$key]=false;}
+				}
+			}
+		}
+		return $values;
 	}
 	public function is_flat(){
 		foreach($this->data as $row){
