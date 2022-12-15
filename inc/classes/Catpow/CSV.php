@@ -269,7 +269,7 @@ class CSV implements \Iterator,\ArrayAccess{
 				if(!empty($this->data[$r][$c])){$current_keys[$i]=$this->data[$r][$c];}
 				$sel.="['{$current_keys[$i]}']";
 			}
-			eval('$rtn'.$sel.'="'.$this->data[$r][$target_col].'";');
+			eval('$rtn'.$sel.'=$this->data[$r][$target_col];');
 		}
 		return $rtn;
 	}
