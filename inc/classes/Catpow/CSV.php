@@ -251,14 +251,31 @@ class CSV implements \Iterator,\ArrayAccess{
 	}
 	public function column($col){
 		$rtn=[];
-		if(!is_numeric($col)){$col=array_search($col,$this->data[0]);}
+		if(is_array($col) && count($col)===1){$col=$col[0];}
+		if(!is_array($col)){
+			if(!is_numeric($col)){$col=array_search($col,$this->data[0]);}
+			return array_column(array_slice($this->data,1),$col);
+		}
+		$rtn=[];
+		$current_keys=[];
+		$collect_by=[];
+		foreach($col as $i=>$c){
+			$collect_by[$i]=!is_numeric($c)?array_search($c,$this->data[0]):$c;
+		}
+		$target_col=array_pop($collect_by);
 		for($r=1,$l=count($this->data);$r<$l;$r++){
-			$rtn[]=$this->data[$r][$col];
+			$sel='';
+			foreach($collect_by as $i=>$c){
+				if(!empty($this->data[$r][$c])){$current_keys[$i]=$this->data[$r][$c];}
+				$sel.="['{$current_keys[$i]}']";
+			}
+			eval('$rtn'.$sel.'="'.$this->data[$r][$target_col].'";');
 		}
 		return $rtn;
 	}
 	public function dict($keys=null,$where=[]){
 		if(is_null($keys)){$keys=$this->data[0][0];}
+		if(is_array($keys) && count($keys)===1){$keys=$keys[0];}
 		if(!is_array($keys)){
 			return array_column($this->select($where),null,$keys);
 		}
