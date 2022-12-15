@@ -199,14 +199,14 @@ function add_shortcode($name,$function){
 	return ShortCode::add_shortcode($name,$function);
 }
 
-function csv($csv){
+function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL){
 	global $page;
 	if(substr($csv,-4)!=='.csv'){$csv='csv/'.$csv.'.csv';}
 	if(!empty($page)){
-		return new CSV($page->get_the_file($csv));
+		return new CSV($page->get_the_file($csv),$flags);
 	}
 	if(file_exists($f=ABSPATH.'/'.$csv) || file_exists($f=TMPL_DIR.'/'.$csv) || file_exists($f=CONF_DIR.'/'.$csv) || file_exists($f=INC_DIR.'/'.$csv)){
-		return new CSV($f);
+		return new CSV($f,$flags);
 	}
 	return false;
 }
