@@ -267,3 +267,10 @@ function contents($contents,$vars=[],$children=[]){
 	include $page->get_the_file('contents/'.$contents.'.php');
 	return ob_get_clean();
 }
+
+function svg($props,$children=[]){
+	$svg=new SVG($props,$children);
+	ob_start();
+	$svg->render();
+	return ob_get_clean();
+}
