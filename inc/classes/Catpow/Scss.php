@@ -122,7 +122,10 @@ class Scss{
 				$hsla=$color->toHsla(method_exists($color,'alpha')?hexdec($color->alpha())/255:1);
 				foreach(['h'=>'hue','s'=>'saturation','l'=>'lightness','a'=>'alpha'] as $p=>$prop){
 					$$p=round($hsla->{$prop}(),2);
-					if($p==='h'){$vars["--root-tones-{$key}-h"]=$h;}
+					if($p==='h'){
+						$vars["--root-tones-{$key}-h"]=$h;
+						$vars["--container-tones-{$key}-h"]=$h;
+					}
 					$vars["--tones-{$key}-{$p}"]=($p==='h' || $p==='a')?$$p:$$p.'%';
 				}
 				$vars["--tones-{$key}-t"]=(1-$l/100).'%';
@@ -135,8 +138,10 @@ class Scss{
 			$classes=[];
 			foreach(static::parse_map_data($args[0]) as $key=>$val){
 				if(preg_match('/\d/',$key) || in_array($key,['hr','hs']) || $val==='transparent'){continue;}
-				foreach(range(-9,9) as $n){
+				foreach(range(-6,6) as $n){
 					$classes['.is-color'.$n]["--tones-{$key}-h"]="calc(var(--root-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
+					$classes['.is-color'.$n]["--container-tones-{$key}-h"]="var(--tones-{$key}-h)";
+					$classes['.is-color_'.$n]["--tones-{$key}-h"]="calc(var(--container-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
 				}
 			}
 			return self::create_map_data($classes);
