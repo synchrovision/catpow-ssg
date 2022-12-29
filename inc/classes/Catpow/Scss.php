@@ -84,6 +84,7 @@ class Scss{
 		$scssc->registerFunction('translate_color',function($args){
 			$args=array_map([static::$scssc,'compileValue'],$args);
 			$color=false;
+			if($args[0]==='inherit' || !empty(Colors::NAMED_COLORS[$args[0]])){return Compiler::$false;}
 			if(preg_match('/^([a-z]+)?(_|\-\-)?(\-?\d+)?$/',$args[0],$matches)){
 				$key=$matches[1]?:'m';
 				$sep=$matches[2]??null;
