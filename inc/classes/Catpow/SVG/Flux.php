@@ -1,7 +1,7 @@
 <?php
 namespace Catpow\SVG;
 class Flux extends Shape{
-	protected $default_atts=['stroke'=>'currentColor'];
+	protected $default_atts=['stroke'=>'currentColor','fill'=>'none'];
 	public function render(){
 		srand($this->props['seed']??1);
 		$num=$this->props['num']??rand(32,128);
