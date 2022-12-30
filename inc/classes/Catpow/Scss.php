@@ -83,32 +83,7 @@ class Scss{
 		});
 		$scssc->registerFunction('translate_color',function($args){
 			$args=array_map([static::$scssc,'compileValue'],$args);
-			$color=false;
-			if($args[0]==='inherit' || !empty(Colors::NAMED_COLORS[$args[0]])){return Compiler::$false;}
-			if(preg_match('/^([a-z]+)?(_|\-\-)?(\-?\d+)?$/',$args[0],$matches)){
-				$key=$matches[1]?:'m';
-				$sep=$matches[2]??null;
-				$staticHue=$sep==='--';
-				$relativeHue=$sep==='_';
-				$num=$matches[3]??null;
-				$f='var(--tones-'.$key.'-%s)';
-				$rf='var(--root-tones-'.$key.'-%s)';
-				$color=sprintf(
-					'hsla(%s,%s,%s,%s)',
-					is_null($num)?
-					sprintf($f,'h'):
-					($staticHue?
-						$num:
-						(($num==='0')?
-							sprintf($relativeHue?$f:$rf,'h'):
-							sprintf('calc('.($relativeHue?$f:$rf).' + var(--tones-hr,20) * %s + var(--tones-hs,0))','h',$num)
-						)
-					),
-					sprintf($f,'s'),
-					$args[1]==='false'?sprintf($f,'l'):sprintf('calc(100%% - '.$f.' * %s)','t',$args[1]),
-					$args[2]==='false'?'var(--tones-'.$key.'-a)':'calc(var(--tones-'.$key.'-a) * '.$args[2].')'
-				);
-			}
+			$color=self::translate_color($args[0],$args[1]==='false'?100:(int)$args[1],$args[2]==='false'?1:(float)$args[2]);
 			if(empty($color)){return Compiler::$false;}
 			return [TYPE::T_KEYWORD,$color];
 		});
@@ -147,6 +122,34 @@ class Scss{
 			return self::create_map_data($classes);
 		});
 		return static::$scssc=$scssc;
+	}
+	public static function translate_color($color,$tint=100,$alpha=1){
+		if($color==='none' || $color==='inherit' || !empty(Colors::NAMED_COLORS[$color])){return false;}
+		if(preg_match('/^([a-z]+)?(_|\-\-)?(\-?\d+)?$/',$color,$matches)){
+			$key=$matches[1]?:'m';
+			$sep=$matches[2]??null;
+			$staticHue=$sep==='--';
+			$relativeHue=$sep==='_';
+			$num=$matches[3]??null;
+			$f='var(--tones-'.$key.'-%s)';
+			$rf='var(--root-tones-'.$key.'-%s)';
+			return sprintf(
+				'hsla(%s,%s,%s,%s)',
+				is_null($num)?
+				sprintf($f,'h'):
+				($staticHue?
+					$num:
+					(($num==='0')?
+						sprintf($relativeHue?$f:$rf,'h'):
+						sprintf('calc('.($relativeHue?$f:$rf).' + var(--tones-hr,20) * %s + var(--tones-hs,0))','h',$num)
+					)
+				),
+				sprintf($f,'s'),
+				(empty($tint) || $tint==100)?sprintf($f,'l'):sprintf('calc(100%% - '.$f.' * %s)','t',$tint),
+				(empty($alpha) || $alpha>=1)?'var(--tones-'.$key.'-a)':'calc(var(--tones-'.$key.'-a) * '.$alpha.')'
+			);
+		}
+		return false;
 	}
 	public static function compile($scss_file,$css_file){
 		if(version_compare(PHP_VERSION, '5.4')<0)return;
