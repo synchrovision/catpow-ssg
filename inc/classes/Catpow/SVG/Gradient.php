@@ -1,5 +1,6 @@
 <?php
 namespace Catpow\SVG;
+use Catpow\Scss;
 class Gradient{
 	protected $container,$id,$props,$type;
 	public function __construct($container,$props){
@@ -14,9 +15,14 @@ class Gradient{
 			if(is_string($stop)){
 				$stop=static::parse_stop($stop);
 			}
+			$className='svg-stop';
+			if(!empty($stop['className'])){
+				$className.=' '.$stop['className'];
+			}
 			printf(
-				'<stop class="svg-stop %s" offset="%s"%s/>',
-				$stop['className'],$offset,
+				'<stop class="%s" offset="%s"%s%s/>',
+				$className,$offset,
+				empty($stop['color'])?'':' stop-color="'.$stop['color'].'"',
 				empty($stop['opacity'])?'':' stop-opacity="'.$stop['opacity'].'"'
 			);
 		}
@@ -27,16 +33,19 @@ class Gradient{
 	}
 	protected function get_stops(){
 		if(!empty($this->props['stops'])){return $this->props['stops'];}
-		return [
-			'0%'=>'is-color_-1',
-			'100%'=>'is-color_1',
-		];
+		return ['0%'=>'m_-1','100%'=>'m_1'];
 	}
 	public static function parse_stop($stop){
-		if(preg_match('/^(.+) (\d?\.\d+)$/',$stop,$matches)){
-			return ['className'=>$matches[1],'opacity'=>$matches[2]];
+		if(preg_match('/^\.(.+)( (\d?\.\d+))?$/',$stop,$matches)){
+			return ['className'=>$matches[1],'color'=>'currentColor','opacity'=>$matches[3]??null];
 		}
-		return ['className'=>$stop];
+		
+		if(preg_match('/^([\w_\-]+)( (\d+))?( (0?\.\d+))?$/',$stop,$matches)){
+			if($color=Scss::translate_color($matches[1],$matches[3]??null,$matches[5]??null)){
+				return ['color'=>$color];
+			}
+		}
+		return ['color'=>$stop];
 	}
 	public static function get_linear_gradient_anchor_points_from_degree($deg){
 		$rad1=$deg/180*pi();
