@@ -269,7 +269,7 @@ function contents($contents,$vars=[],$children=[]){
 }
 
 function svg($props,$children=[]){
-	$svg=new SVG($props,$children);
+	$svg=new SVG\SVG($props,$children);
 	ob_start();
 	$svg->render();
 	return ob_get_clean();
