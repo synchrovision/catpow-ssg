@@ -94,7 +94,9 @@ class Scss{
 				if(in_array($key,['hr','hs'])){$$key=$val;}
 				if($val==='transparent'){continue;}
 				$color=\Spatie\Color\Factory::fromString($val);
-				$hsla=$color->toHsla(method_exists($color,'alpha')?hexdec($color->alpha())/255:1);
+				$alpha=method_exists($color,'alpha')?$color->alpha():1;
+				if(is_string($alpha)){$alpha=hexdec($alpha)/255;}
+				$hsla=$color->toHsla($alpha);
 				foreach(['h'=>'hue','s'=>'saturation','l'=>'lightness','a'=>'alpha'] as $p=>$prop){
 					$$p=round($hsla->{$prop}(),2);
 					if($p==='h'){
