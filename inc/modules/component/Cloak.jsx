@@ -8,7 +8,7 @@ export const Cloak=(props)=>{
 	const ref=useRef({});
 	
 	const isEntry=useMemo(()=>{
-		return false;
+		return !document.referrer.includes(document.location.host);
 	},[]);
 	const [loading,setLoading]=useState(true);
 	const [phase,setPhase]=useState('init');
