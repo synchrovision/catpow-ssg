@@ -19,8 +19,8 @@ class SVG{
 	}
 	public function render(){
 		printf(
-			'<svg class="%s" viewBox="%s" xmlns="http://www.w3.org/2000/svg"%s>'."\n",
-			$this->className,$this->viewBox,$this->get_attributes()
+			'<svg class="%s" viewBox="%s" width="%s" height="%s" xmlns="http://www.w3.org/2000/svg"%s>'."\n",
+			$this->className,$this->viewBox,$this->width,$this->height,$this->get_attributes()
 		);
 		foreach($this->children as $key=>$child){
 			if(is_array($child)){
