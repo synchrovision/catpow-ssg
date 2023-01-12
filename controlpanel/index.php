@@ -17,19 +17,30 @@
 			pages:[],
 			init(){
 				const {pc,lt,tb,sp}=this.$refs;
+				const coefMap=new Map();
+				const updateCoef=(iframe)=>{
+					if(!pc.contentWindow.document){return;}
+					const pcd=pc.contentWindow.document.documentElement;
+					const pcsy=Math.max(1,pcd.scrollHeight-pcd.clientHeight);
+					[lt,tb,sp].forEach((f)=>{
+						if(!f.contentWindow.document){coefMap.set(f,1);return;}
+						const d=f.contentWindow.document.documentElement;
+						const sy=Math.max(1,d.scrollHeight-d.clientHeight);
+						coefMap.set(f,sy/pcsy);
+					});
+				}
 				const syncScroll=()=>{
-					const y=pc.contentWindow.scrollY,h=pc.contentWindow.innerHeight;
-					const c=y/h;
-					console.log({h,c});
-					[lt,tb,sp].forEach((iframe)=>{
-						iframe.contentWindow.scroll({
-							top:c*iframe.contentWindow.innerHeight
+					[lt,tb,sp].forEach((f)=>{
+						f.contentWindow.scroll({
+							top:coefMap.get(f)*pc.contentWindow.scrollY
 						});
 					});
 				}
 				pc.addEventListener('load',()=>{
+					updateCoef();
 					pc.contentWindow.addEventListener('scroll',syncScroll);
 				});
+				const timer=setInterval(updateCoef,100);
 			},
 			updateIndex(){
 				con.get('index').then((res)=>{
