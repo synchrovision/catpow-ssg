@@ -87,15 +87,21 @@ html{
 .previews{
 	@include bnd((h:f));
 	@include bg((c:#fff));
-	@include flx((w:n));
+	@include flx((w:w));
 }
 .preview{
-	@include bnd((p:r,h:98%,mg:5));
-	&_sp{
-		@include bnd((f:0 0 225));
-	}
+	@include bnd((p:r,mg:5));
 	&_pc{
-		@include bnd((f:1 1 600));
+		@include bnd((f:1 1 f,h:calc(98% - 30rem)));
+	}
+	&_lt{
+		@include bnd((f:1 1 480,h:480));
+	}
+	&_tb{
+		@include bnd((f:0 0 640,h:480));
+	}
+	&_sp{
+		@include bnd((f:0 0 225,h:480));
 	}
 	&__contents{
 		@include bnd((p:a,l:0,t:0,w:160%,h:160%,bs:b));
@@ -104,6 +110,12 @@ html{
 		@include bdr((p:b,w:40));
 		@include bdr((p:t l,c:#444));
 		@include shd((b:5));
+	}
+	&_lt &{
+		&__contents{
+			@include bnd((w:400%,h:400%));
+			@include trn((s:.25));
+		}
 	}
 }
 .index{
