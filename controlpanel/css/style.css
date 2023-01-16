@@ -15,7 +15,6 @@ html {
   text-size-adjust: 100%;
 }
 html {
-  font-size: 62.5%;
   color: #444;
   font-family: "Helvetica Neue", "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
   min-height: 100vh;
@@ -28,9 +27,19 @@ html {
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
-@media (max-width:959px) {
+@media (max-width:960px) {
   html {
-    font-size: 2.5vw;
+    font-size: 1.6vw;
+  }
+}
+@media (max-width:720px) {
+  html {
+    font-size: 2.4vw;
+  }
+}
+@media (max-width:480px) {
+  html {
+    font-size: 3.2vw;
   }
 }
 .siteLayout {
@@ -111,7 +120,7 @@ html {
   -webkit-box-flex: 0;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 30rem;
+  flex-basis: 12.5rem;
   overflow-y: auto;
   max-height: 90vh;
   height: auto;
@@ -120,7 +129,7 @@ html {
   -webkit-box-flex: 1;
   flex-grow: 1;
   flex-shrink: 1;
-  flex-basis: 30rem;
+  flex-basis: 62.5rem;
 }
 .pane {
   display: block;
@@ -182,6 +191,10 @@ html {
 }
 .previews {
   height: 100%;
+  min-width: 62.5rem;
+  width: auto;
+  padding: 0.25rem;
+  box-sizing: border-box;
   background-color: #fff;
   display: -webkit-box;
   display: -webkit-flex;
@@ -189,75 +202,95 @@ html {
   -webkit-box-lines: multiple;
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
+  gap: 0.25rem;
 }
 .preview {
   position: relative;
-  margin: 0.3125rem;
+  border-style: solid;
+  border-width: 0.25rem;
+  border-color: #222;
+  border-radius: 0.5rem;
+  border-bottom-width: 1.875rem;
+  border-top-color: #444;
+  border-left-color: #444;
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.3);
 }
 .preview_pc {
   -webkit-box-flex: 1;
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 100%;
-  height: calc(98% - 30rem);
+  height: calc(100% - 16rem);
 }
 .preview_lt {
   -webkit-box-flex: 1;
   flex-grow: 1;
   flex-shrink: 1;
-  flex-basis: 30rem;
-  height: 30rem;
+  flex-basis: 16rem;
+  height: 11.25rem;
 }
 .preview_tb {
   -webkit-box-flex: 0;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 40rem;
-  height: 30rem;
+  flex-basis: 16rem;
+  height: 11.25rem;
 }
 .preview_sp {
   -webkit-box-flex: 0;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 14.0625rem;
-  height: 30rem;
+  flex-basis: 5.625rem;
+  height: 11.25rem;
 }
 .preview__contents {
   position: absolute;
   left: 0rem;
   top: 0rem;
-  width: 160%;
-  height: 160%;
   box-sizing: border-box;
   -webkit-transform-origin: 0 0;
   transform-origin: 0 0;
-  transform: -webkit- scale(0.625);
-  transform: scale(0.625);
-  border-style: solid;
-  border-width: 0.625rem;
-  border-color: #222;
-  border-radius: 0.625rem;
-  border-bottom-width: 2.5rem;
-  border-top-color: #444;
-  border-left-color: #444;
-  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.3);
 }
-.preview_lt .preview__contents {
+.preview_pc .preview__contents {
+  width: 200%;
+  height: 200%;
+  transform: -webkit- scale(0.5);
+  transform: scale(0.5);
+}
+.preview_lt .preview__contents, .preview_tb .preview__contents, .preview_sp .preview__contents {
   width: 400%;
   height: 400%;
   transform: -webkit- scale(0.25);
   transform: scale(0.25);
 }
+.preview__control {
+  display: block;
+  position: absolute;
+  right: 0rem;
+  bottom: -1.875rem;
+  padding: 0.25rem;
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+}
+.icon {
+  font-family: "Material Icons";
+}
 .index {
-  padding: 1rem;
+  padding: 0.75rem;
+  list-style: none;
 }
 .index__item {
-  padding: 0.5rem;
-  font-size: 1.5rem;
+  padding: 0.25rem;
+  font-size: 0.75rem;
   color: #444;
   cursor: pointer;
 }
 .index__item.active {
   color: #007cba;
+}
+.index__item a {
+  color: #444;
 }
 /*# sourceMappingURL=./style.css.map */

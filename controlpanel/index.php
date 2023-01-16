@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="css/style.css">
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <script>
 	function app(){
 		var con=axios.create({
@@ -64,25 +65,21 @@
 					<template x-for="page in pages">
 						<li class="index__item" :class="{active:page==currentPage}">
 							<span x-text="page" @click="currentPage=page"></span>
-							<a :href="page" target="_blank">»</a>
+							<a class="icon" :href="page" target="_blank">open_in_new</a>
 						</li>
 					</template>
 				</ul>
 			</div>
 			<div class="siteMain__contents">
 				<div class="previews">
-					<div class="preview preview_pc">
-						<iframe class="preview__contents" :src="currentPage" frameborder="0" x-ref="pc"></iframe>
+					<?php foreach(['pc','lt','tb','sp'] as $d): ?>
+					<div class="preview preview_<?=$d?>">
+						<iframe class="preview__contents" :src="currentPage" frameborder="0" x-ref="<?=$d?>"></iframe>
+						<div class="preview__control">
+							<div class="icon" @click="()=>$refs.<?=$d?>.contentWindow.location.reload()">replay</div>
+						</div>
 					</div>
-					<div class="preview preview_lt">
-						<iframe class="preview__contents" :src="currentPage" frameborder="0" x-ref="lt"></iframe>
-					</div>
-					<div class="preview preview_tb">
-						<iframe class="preview__contents" :src="currentPage" frameborder="0" x-ref="tb"></iframe>
-					</div>
-					<div class="preview preview_sp">
-						<iframe class="preview__contents" :src="currentPage" frameborder="0" x-ref="sp"></iframe>
-					</div>
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
