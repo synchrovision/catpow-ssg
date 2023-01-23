@@ -113,12 +113,14 @@ class Scss{
 		});
 		$scssc->registerFunction('get_color_classes',function($args){
 			$classes=[];
-			foreach(static::parse_map_data($args[0]) as $key=>$val){
-				if(preg_match('/\d/',$key) || in_array($key,['hr','hs']) || $val==='transparent'){continue;}
-				foreach(range(-6,6) as $n){
-					$classes['.is-color'.$n]["--tones-{$key}-h"]="calc(var(--root-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
-					$classes['.is-color'.$n]["--container-tones-{$key}-h"]="var(--tones-{$key}-h)";
-					$classes['.is-color_'.$n]["--tones-{$key}-h"]="calc(var(--container-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
+			if(!empty($args[0])){
+				foreach(static::parse_map_data($args[0]) as $key=>$val){
+					if(preg_match('/\d/',$key) || in_array($key,['hr','hs']) || $val==='transparent'){continue;}
+					foreach(range(-6,6) as $n){
+						$classes['.is-color'.$n]["--tones-{$key}-h"]="calc(var(--root-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
+						$classes['.is-color'.$n]["--container-tones-{$key}-h"]="var(--tones-{$key}-h)";
+						$classes['.is-color_'.$n]["--tones-{$key}-h"]="calc(var(--container-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
+					}
 				}
 			}
 			return self::create_map_data($classes);
