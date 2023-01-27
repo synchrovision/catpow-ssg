@@ -14,9 +14,6 @@ export const Particle=(props)=>{
 	const partStyles=useMemo(()=>{
 		
 	},[props.partStyleCallback,dur]);
-	const partStyles=useMemo(()=>{
-		
-	},[props.initPart]);
 	
 	const initPart=useMemo(()=>{
 		return (part)=>{
@@ -75,7 +72,7 @@ export const Particle=(props)=>{
 		<div className={classes()} >
 			{parts.map(({index})=>(
 				<div className={classes._part()} style={part.css}>{children[part.index]}</div>
-			)))}
+			))}
 		</div>
 	);
 }
