@@ -4,28 +4,9 @@
 	"scripts": {
 		"watch": "php compiler.php"
 	},
-	"devDependencies": {
-		"@babel/cli": "*",
-		"@babel/core": "*",
-		"@babel/plugin-proposal-object-rest-spread": "*",
-		"@babel/plugin-transform-react-jsx": "*",
-		"@babel/preset-env": "*",
-		"css-loader": "^5.2.6",
-		"sass": "^1.35.1",
-		"sass-loader": "^12.1.0",
-		"style-loader": "^2.0.0"
-	},
 	"dependencies": {
-		"@emotion/react": "^11.4.0",
-		"babel-loader": "^8.2.2",
-		"classnames": "^2.3.1",
-		"emotion": "^11.0.0",
-		"js-cookie": "^3.0.1",
-		"react": "^18.1.0",
-		"react-dom": "^18.1.0",
-		"react-scripts":"*",
-		"ts-loader": "^9.3.0",
-		"webpack": "^5.38.1",
-		"webpack-cli": "^4.7.2"
+		"esbuild-svgr-plugin":"*",
+		"esbuild-sass-plugin":"*",
+		"js-cookie": "*"
 	}
 }
