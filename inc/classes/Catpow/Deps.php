@@ -49,12 +49,12 @@ class Deps{
 			]
 		]
 	];
-	public $enqueued=[],$rendered=[];
+	public $enqueued=[],$missed=[],$rendered=[];
 	public function __construct($type){
 		$this->type=$type;
 	}
 	public function enqueue($handler,$src=null,$deps=[]){
-		if(isset($this->enqueued[$handler])){return;}
+		if(isset($this->enqueued[$handler]) || isset($this->missed[$handler])){return;}
 		if(isset(self::$regsitered[$this->type][$handler])){
 			$deps=self::$regsitered[$this->type][$handler]['deps']??null;
 			if(!empty($deps)){
@@ -64,6 +64,13 @@ class Deps{
 			return;
 		}
 		if(!isset($src)){$src=$handler;}
+		if(strpos($src,'://')===false){
+			global $page;
+			if(!$page->file_should_exsits($src)){
+				$this->missed[$handler]=1;
+				return false;
+			}
+		}
 		if(!empty($deps)){
 			foreach((array)$deps as $dep){$this->enqueue($dep);}
 		}
