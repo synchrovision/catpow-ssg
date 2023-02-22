@@ -48,6 +48,33 @@ class Page{
 		if(substr($uri,0,1)==='/'){return ABSPATH.$uri;}
 		return ABSPATH.$this->dir.$uri;
 	}
+	public function file_should_exsits($file){
+		if(substr($file,0,1)==='/'){
+			if(
+				file_exists($f=ABSPATH.$file) || 
+				file_exists(TMPL_DIR.$file) || 
+				file_exists(INC_DIR.'/'.$file)
+			){return true;}
+		}
+		else{
+			if(
+				file_exists($f=ABSPATH.$this->dir.$file) ||
+				file_exists(TMPL_DIR.$this->dir.$file)
+			){return true;}
+		}
+		$ext=strrchr($file,'.');
+		if($ext==='.js'){
+			if(
+				Jsx::get_jsx_file_for_file($file) ||
+				Jsx::get_entry_jsx_file_for_file($file) || 
+				Jsx::get_entry_tsx_file_for_file($file)
+			){return true;}
+		}
+		if($ext==='.css'){
+			if(Scss::get_scss_file_for_file($file)){return true;}
+		}
+		return false;
+	}
 	public function generate_webp_for_image($image){
 		$im=$this->get_gd($image);
 		if(empty($im)){return false;}
