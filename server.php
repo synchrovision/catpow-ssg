@@ -64,10 +64,17 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 				copy($tmpl_file,$file);
 			}
 		}
+		else{
+			if(!file_exists($file)){
+				init();
+				Catpow\Site::copy_file_from_remote_if_not_exists($uri);
+			}
+		}
 		return false;
 	case 'css':
 		init();
 		Catpow\Scss::compile_for_file($file);
+		Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		return false;
 	case 'html':
 	case 'svg':
@@ -104,6 +111,10 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		}
 		return $should_output;
 	default:
+		if(!file_exists($file)){
+			init();
+			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
+		}
 		return false;
 }
 
