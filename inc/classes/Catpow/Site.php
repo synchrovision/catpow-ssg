@@ -10,7 +10,7 @@ class Site{
 		if(empty($info) && file_exists($site_config_file=CONF_DIR.'/site_config.php')){
 			global $sitemap;
 			include($site_config_file);
-			$info=$site;
+			if(isset($site)){$info=$site;}
 		}
 		return $GLOBALS['site']=static::$instance=new static($info);
 	}
