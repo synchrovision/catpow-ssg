@@ -385,6 +385,7 @@ class CSV implements \Iterator,\ArrayAccess{
 		if(is_a($cond,'Closure')){
 			if(!$cond($val)){return false;}
 		}
+		if(is_bool($cond)){return $val===$cond;}
 		if(is_numeric($cond)){$cond=strval($cond);}
 		if(is_string($cond)){
 			if(substr($cond,0,1)==='/'){
