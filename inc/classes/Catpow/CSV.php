@@ -68,7 +68,7 @@ class CSV implements \Iterator,\ArrayAccess{
 				$current_values=[];
 				while($row=fgetcsv($csv)){
 					foreach($fill_column as $index){
-						if(empty($row[$index])){$row[$index]=$current_values[$index];}
+						if(empty($row[$index])){$row[$index]=$current_values[$index]??null;}
 						else{$current_values[$index]=$row[$index];}
 					}
 					array_push($this->data,self::cast_values($row,$flags));
