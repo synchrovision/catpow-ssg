@@ -5,8 +5,8 @@
 		"watch": "php compiler.php"
 	},
 	"dependencies": {
-		"@svgr/core":"*",
-		"esbuild-sass-plugin":"*",
+		"@svgr/core": "^7.0.0",
+		"esbuild-sass-plugin": "*",
 		"js-cookie": "*"
 	}
 }
