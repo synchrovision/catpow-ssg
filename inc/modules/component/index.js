@@ -7,6 +7,7 @@ export * from './SVG/index.js';
 export * from './Cloak.jsx';
 export * from './ElasticBox.jsx';
 export * from './Parallax.jsx';
+export * from './Portal.jsx';
 export * from './RawNode.jsx';
 export * from './ScrollSpy.jsx';
 export * from './Slider.jsx';
