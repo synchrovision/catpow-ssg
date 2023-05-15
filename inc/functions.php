@@ -175,7 +175,7 @@ function simple_md($text,$classes=[]){
 	return $text;
 }
 function rtf($text,$pref='rtf'){
-	$text=preg_replace('/(（.+?）)/u','<small class="'.$pref.'-small">$1</small>',$text);
+	$text=preg_replace('/\(\((.+?)\)\)/u','<small class="'.$pref.'-small">$1</small>',$text);
 	$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="'.$pref.'-strong">$1</strong>',$text);
 	$text=preg_replace('/``(.+?)``/u','<code class="'.$pref.'-code">$1</code>',$text);
 	$text=preg_replace('/^※(.+)$/um','<span class="'.$pref.'-annotation">$1</span>',$text);
@@ -184,7 +184,7 @@ function rtf($text,$pref='rtf'){
 	$text=preg_replace('/\[tel:((\d+)\-(\d+)\-(\d+))\]/u','<a class="'.$pref.'-tel" href="tel:$2$3$4" target="_brank">$1</a>',$text);
 	$text=preg_replace('/\[\[(.+?)\]\]\((.+?)\)/u','<a class="'.$pref.'-button" href="$2" target="_brank"><span class="'.$pref.'-button__label">$1</span></a>',$text);
 	$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link" href="$2" target="_brank">$1</a>',$text);
-	$text=preg_replace('/(.{1,8}?)：(.+)/u','<dl class="'.$pref.'-dl"><dt class="'.$pref.'-dl__dt">$1</dt><dd class="'.$pref.'-dl__dd">$2</dd></dl>',$text);
+	$text=preg_replace('/(.{1,8}?) ： (.+)/u','<dl class="'.$pref.'-dl"><dt class="'.$pref.'-dl__dt">$1</dt><dd class="'.$pref.'-dl__dd">$2</dd></dl>',$text);
 	$text=preg_replace('/^・ (.+(\n　.+)*)$/um','<ul class="'.$pref.'-ul"><li class="'.$pref.'-ul__li">$1</li></ul>',$text);
 	$text=preg_replace('/^\d{1,2}\. (.+(\n　.+)*)$/um','<ol class="'.$pref.'-ol"><li class="'.$pref.'-ol__li">$1</li></ol>',$text);
 	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="'.$pref.'\-\1">/u','',$text);
