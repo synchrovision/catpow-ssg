@@ -1,7 +1,7 @@
 <?php
 namespace Catpow;
 class Page{
-	public $uri,$filename,$dir_uri,$router_uri,$info,$scripts,$styles;
+	public $uri,$filename,$dir,$dir_uri,$router_uri,$info,$scripts,$styles;
 	private static $instance;
 	private function __construct($uri,$info){
 		$this->uri=$uri;

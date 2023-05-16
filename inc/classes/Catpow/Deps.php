@@ -1,6 +1,7 @@
 <?php
 namespace Catpow;
 class Deps{
+	public $type;
 	public static $regsitered=[
 		'js'=>[
 			'react-dev'=>[
