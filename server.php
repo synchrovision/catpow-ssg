@@ -128,6 +128,6 @@ function init(){
 		$dotenv = Dotenv\Dotenv::createImmutable(APP_DIR);
 		$dotenv->load();
 	}
-	if(file_exists($f=CONF_DIR.'/functions.php')){include($f);}
-	if(file_exists($f=INC_DIR.'/functions.php')){include($f);}
+	if(file_exists($f=CONF_DIR.'/functions.php')){require_once($f);}
+	if(file_exists($f=INC_DIR.'/functions.php')){require_once($f);}
 }
