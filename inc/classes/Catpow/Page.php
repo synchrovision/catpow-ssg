@@ -62,16 +62,16 @@ class Page{
 				file_exists(TMPL_DIR.$this->dir.$file)
 			){return true;}
 		}
-		$ext=strrchr($file,'.');
+		$ext=strrchr($f,'.');
 		if($ext==='.js'){
 			if(
-				Jsx::get_jsx_file_for_file($file) ||
-				Jsx::get_entry_jsx_file_for_file($file) || 
-				Jsx::get_entry_tsx_file_for_file($file)
+				Jsx::get_jsx_file_for_file($f) ||
+				Jsx::get_entry_jsx_file_for_file($f) || 
+				Jsx::get_entry_tsx_file_for_file($f)
 			){return true;}
 		}
 		if($ext==='.css'){
-			if(Scss::get_scss_file_for_file($file)){return true;}
+			if(Scss::get_scss_file_for_file($f)){return true;}
 		}
 		return false;
 	}
