@@ -1,5 +1,5 @@
 export const slider=function(el,param={}){
-	const app=this;
+	const app={};
 	const items=el.children;
 	app.param=Object.assign({interval:5000,autoPlay:true},param);
 	const l=app.length=el.children.length;
@@ -28,7 +28,7 @@ export const slider=function(el,param={}){
 				if(entry.intersectionRatio>0){app.play();}
 				else{app.stop();}
 			});
-		});
+		},{threshold:[0,.1]});
 		app.observer.observe(el);
 	}
 	app.goto(0);
