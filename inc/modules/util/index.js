@@ -10,6 +10,8 @@ export * from './bem.jsx';
 export * from './calc.jsx';
 
 export * from './slider.jsx';
+export * from './scrollspy.jsx';
+
 export * from './colors.jsx';
 export * from './bez.jsx';
 export * from './fib.jsx';
