@@ -32,5 +32,7 @@ export const slider=function(el,param={}){
 		app.observer.observe(el);
 	}
 	app.goto(0);
+	el.classList.add('is-init');
+	window.requestAnimationFrame(()=>el.classList.remove('is-init'));
 	return app;
 }
