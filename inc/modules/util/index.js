@@ -14,6 +14,7 @@ export * from './scrollspy.jsx';
 
 export * from './colors.jsx';
 export * from './bez.jsx';
+export * from './bsearch.jsx';
 export * from './fib.jsx';
 export * from './rand.jsx';
 export * from './wave.jsx';
