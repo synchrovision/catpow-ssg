@@ -82,11 +82,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'rdf':
 	case 'xml':
 		init();
-		if(file_exists($site_config_file=CONF_DIR.'/site_config.php')){
-			global $sitemap;
-			include($site_config_file);
-			Catpow\Site::init($site??null);
-		}
+		Catpow\Site::init($site??null);
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
 		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
