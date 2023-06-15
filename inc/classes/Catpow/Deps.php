@@ -66,10 +66,15 @@ class Deps{
 		}
 		if(!isset($src)){$src=$handler;}
 		if(strpos($src,'://')===false){
-			global $page;
+			global $site,$page;
 			if(!$page->file_should_exsits($src)){
 				$this->missed[$handler]=1;
 				return false;
+			}
+			if($src[0]==='/'){
+				if(!is_null($site->use_relative_path)){
+					$src=$page->path_to_root.substr($src,1);
+				}
 			}
 		}
 		if(!empty($deps)){
