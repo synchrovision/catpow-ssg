@@ -1,20 +1,31 @@
 export const slider=function(el,param={}){
 	const app={};
-	const items=el.children;
 	app.param=Object.assign({interval:5000,autoPlay:true},param);
 	const l=app.length=el.children.length;
 	const h=l>>1;
 	app.current=param.initialSlide || 0;
-	app.goto=(i)=>{
-		i=((i%l)+l)%l;
-		app.current=i;
+	const setUpdateItems=(items,i)=>{
+		const l=items.length;
 		for(let p=-h;p<l-h;p++){
-			const item=el.children[(p+i+l)%l];
+			const item=items[(p+i+l)%l];
 			item.classList.toggle('is-before',p<0);
 			item.classList.toggle('is-prev',p===-1);
 			item.classList.toggle('is-current',p===0);
 			item.classList.toggle('is-next',p===1);
 			item.classList.toggle('is-after',p>0);
+		}
+	};
+	app.goto=(i)=>{
+		i=((i%l)+l)%l;
+		app.current=i;
+		setUpdateItems(el.children,i);
+		if(param.sync){
+			if(Array.isArray(param.sync)){
+				param.sync.forEach((target)=>setUpdateItems(target.children,i));
+			}
+			else{
+				setUpdateItems(param.sync.children,i);
+			}
 		}
 	}
 	app.prev=()=>app.goto(app.current-1);
