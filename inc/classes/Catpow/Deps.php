@@ -67,7 +67,7 @@ class Deps{
 		if(!isset($src)){$src=$handler;}
 		if(strpos($src,'://')===false){
 			global $site,$page;
-			if(!$page->file_should_exsits($src)){
+			if(!$page->file_should_exists($src)){
 				$this->missed[$handler]=1;
 				return false;
 			}
