@@ -49,7 +49,7 @@ class Page{
 		if(substr($uri,0,1)==='/'){return ABSPATH.$uri;}
 		return ABSPATH.$this->dir.$uri;
 	}
-	public function file_should_exsits($file){
+	public function file_should_exists($file){
 		if(substr($file,0,1)==='/'){
 			if(
 				file_exists($f=ABSPATH.$file) || 
