@@ -14,8 +14,61 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+:root {
+  --root-tones-b-h: 0;
+  --container-tones-b-h: 0;
+  --tones-b-h: 0;
+  --tones-b-s: 0%;
+  --tones-b-l: 98.82%;
+  --tones-b-a: 1;
+  --tones-b-t: 0.0118%;
+  --root-tones-m-h: 200.16;
+  --container-tones-m-h: 200.16;
+  --tones-m-h: 200.16;
+  --tones-m-s: 59.8%;
+  --tones-m-l: 40%;
+  --tones-m-a: 1;
+  --tones-m-t: 0.6%;
+  --root-tones-a-h: 200.11;
+  --container-tones-a-h: 200.11;
+  --tones-a-h: 200.11;
+  --tones-a-s: 70.2%;
+  --tones-a-l: 50%;
+  --tones-a-a: 1;
+  --tones-a-t: 0.5%;
+  --root-tones-t-h: 0;
+  --container-tones-t-h: 0;
+  --tones-t-h: 0;
+  --tones-t-s: 0%;
+  --tones-t-l: 20%;
+  --tones-t-a: 1;
+  --tones-t-t: 0.8%;
+  --root-tones-i-h: 0;
+  --container-tones-i-h: 0;
+  --tones-i-h: 0;
+  --tones-i-s: 0%;
+  --tones-i-l: 98.82%;
+  --tones-i-a: 1;
+  --tones-i-t: 0.0118%;
+  --root-tones-shd-h: 0;
+  --container-tones-shd-h: 0;
+  --tones-shd-h: 0;
+  --tones-shd-s: 0%;
+  --tones-shd-l: 0%;
+  --tones-shd-a: 0.2;
+  --tones-shd-t: 1%;
+  --root-tones-lt-h: 0;
+  --container-tones-lt-h: 0;
+  --tones-lt-h: 0;
+  --tones-lt-s: 0%;
+  --tones-lt-l: 100%;
+  --tones-lt-a: 0.4;
+  --tones-lt-t: 0%;
+  --tones-hr: 20;
+  --tones-hs: 0;
+}
 html {
-  color: #444;
+  color: #333;
   font-family: "Helvetica Neue", "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
   min-height: 100vh;
   height: auto;
@@ -78,35 +131,35 @@ html {
   width: 100%;
 }
 .siteHeader {
-  padding: 1rem;
+  padding: 0.75rem;
   box-sizing: border-box;
-  background-image: -webkit-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: -moz-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: -ms-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: -o-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: linear-gradient(180deg, #3396c8, #007cba);
+  background-image: -webkit-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: -moz-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: -ms-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: -o-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: linear-gradient(180deg, #5395b5, #297aa3);
 }
 .siteHeader__title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-family: "Helvetica Neue", "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
-  color: #fff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  color: #fcfcfc;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .siteFooter {
-  padding: 1rem;
+  padding: 0.375rem;
   box-sizing: border-box;
-  background-image: -webkit-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: -moz-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: -ms-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: -o-linear-gradient(bottom, #3396c8, #007cba);
-  background-image: linear-gradient(180deg, #3396c8, #007cba);
+  background-image: -webkit-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: -moz-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: -ms-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: -o-linear-gradient(bottom, #5395b5, #297aa3);
+  background-image: linear-gradient(180deg, #5395b5, #297aa3);
 }
 .siteFooter__text {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 0.875rem;
   font-family: "Helvetica Neue", "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
-  color: #fff;
+  color: #fcfcfc;
 }
 .siteMain {
   display: -webkit-box;
@@ -138,14 +191,14 @@ html {
   padding: 1rem;
   overflow: hidden;
   border-radius: 1rem;
-  box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.8) inset, -3px -3px 3px rgba(0, 0, 0, 0.1), -3px -3px 3px rgba(0, 0, 0, 0.1) inset, 3px 3px 3px rgba(255, 255, 255, 0.8);
+  box-shadow: 3px 3px 3px rgba(255, 255, 255, 0.4) inset, -3px -3px 3px hsla(var(--tones-sh-h),var(--tones-sh-s),var(--tones-sh-l),var(--tones-sh-a)), -3px -3px 3px hsla(var(--tones-sh-h),var(--tones-sh-s),var(--tones-sh-l),var(--tones-sh-a)) inset, 3px 3px 3px rgba(255, 255, 255, 0.4);
 }
 .pane__header {
   padding: 0.2rem;
   text-align: center;
   font-size: 1.5rem;
   font-family: "Helvetica Neue", "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .pane__contents {
   padding: 2rem;
@@ -159,8 +212,8 @@ html {
   border-radius: 2em;
   text-align: center;
   font-weight: 700;
-  box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8) inset, -3px -3px 3px rgba(255, 255, 255, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.1) inset, 3px 3px 3px rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4) inset, -3px -3px 3px rgba(255, 255, 255, 0.4), -1px -1px 1px hsla(var(--tones-sh-h),var(--tones-sh-s),var(--tones-sh-l),var(--tones-sh-a)) inset, 3px 3px 3px hsla(var(--tones-sh-h),var(--tones-sh-s),var(--tones-sh-l),var(--tones-sh-a));
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 .button_l {
@@ -183,11 +236,11 @@ html {
   margin: 0.3em;
   border-style: solid;
   border-width: 0.1em;
-  border-color: #007cba;
+  border-color: #297aa3;
   border-radius: 1.5em;
 }
 .button:active {
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset, -3px -3px 3px rgba(0, 0, 0, 0.1), -1px -1px 1px rgba(255, 255, 255, 0.8) inset, 3px 3px 3px rgba(255, 255, 255, 0.8);
+  box-shadow: 1px 1px 1px hsla(var(--tones-sh-h),var(--tones-sh-s),var(--tones-sh-l),var(--tones-sh-a)) inset, -3px -3px 3px hsla(var(--tones-sh-h),var(--tones-sh-s),var(--tones-sh-l),var(--tones-sh-a)), -1px -1px 1px rgba(255, 255, 255, 0.4) inset, 3px 3px 3px rgba(255, 255, 255, 0.4);
 }
 .previews {
   height: 100%;
@@ -213,7 +266,7 @@ html {
   border-bottom-width: 1.875rem;
   border-top-color: #444;
   border-left-color: #444;
-  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.2);
 }
 .preview_pc {
   -webkit-box-flex: 1;
@@ -269,13 +322,47 @@ html {
   right: 0rem;
   bottom: -1.875rem;
   padding: 0.25rem;
-  color: #fff;
+  color: #fcfcfc;
   font-size: 1.25rem;
   line-height: 1.25rem;
   cursor: pointer;
 }
 .icon {
   font-family: "Material Icons";
+}
+.search {
+  position: relative;
+  padding: 0.5rem;
+}
+.search::before {
+  content: "🔎";
+  display: block;
+  position: absolute;
+  top: 0rem;
+  right: 0rem;
+  bottom: 0rem;
+  left: 0rem;
+  inset: 0rem;
+  width: 1em;
+  height: 1em;
+  margin: auto;
+  margin-left: 1rem;
+  line-height: 1em;
+}
+.search__input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  padding: 0.5em;
+  padding-left: 2em;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1.125rem;
+  color: #333;
+  border-style: none;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
 }
 .index {
   padding: 0.75rem;
@@ -284,13 +371,16 @@ html {
 .index__item {
   padding: 0.25rem;
   font-size: 0.75rem;
-  color: #444;
+  color: #333;
   cursor: pointer;
 }
 .index__item.active {
-  color: #007cba;
+  color: #297aa3;
+}
+.index__item:not(.visible) {
+  display: none;
 }
 .index__item a {
-  color: #444;
+  color: #333;
 }
 /*# sourceMappingURL=./style.css.map */

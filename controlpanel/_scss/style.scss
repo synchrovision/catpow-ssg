@@ -1,5 +1,15 @@
 @import 'admin_style_config.scss';
+$colors:(
+	b:hsl(200,0%,99%),
+	m:hsl(200,60%,40%),
+	a:hsl(200,70%,50%),
+	t:hsl(200,0%,20%),
+	i:hsl(200,0%,99%),
+	shd:hsla(0,0%,0%,0.2),
+	lt:hsla(0,0%,100%,0.4),
+);
 @include default-break;
+@include define_color_vars;
 
 html{
 	@include txt((c:t,f:t));
@@ -29,18 +39,18 @@ html{
 	}
 }
 .siteHeader{
-	@include bnd((pd:1rem,bs:b));
+	@include bnd((pd:12,bs:b));
 	@include bg((g:v (m,80) m));
 	&__title{
-		@include txt((a:c,p:2rem,f:h,c:i));
+		@include txt((a:c,p:24,f:h,c:i));
 		@include shd((t:1));
 	}
 }
 .siteFooter{
-	@include bnd((pd:1rem,bs:b));
+	@include bnd((pd:6,bs:b));
 	@include bg((g:v (m,80) m));
 	&__text{
-		@include txt((a:c,p:1.5rem,f:h,c:i));
+		@include txt((a:c,p:14,f:h,c:i));
 	}
 }
 .siteMain{
@@ -138,6 +148,20 @@ html{
 .icon{
 	@include txt((f:i));
 }
+.search{
+	@include bnd((p:r,pd:8));
+	&::before{
+		content:'🔎';
+		@include bnd((d:b,p:a,i:0,w:1em,h:1em,mg:a,mgl:16));
+		@include txt((h:1em));
+	}
+	&__input{
+		@include bnd((ap:n,d:b,pd:.5em,pdl:2em,w:f,bs:b));
+		@include txt((p:18,c:t));
+		@include bdr((s:n,r:4));
+		@include shd((b:-2));
+	}
+}
 .index{
 	@include bnd((pd:12));
 	@include txt((l:n));
@@ -147,6 +171,9 @@ html{
 		@include usr((c:p));
 		&.active{
 			@include txt((c:m));
+		}
+		&:not(.visible){
+			@include bnd((d:n));
 		}
 		a{
 			@include txt((c:t));

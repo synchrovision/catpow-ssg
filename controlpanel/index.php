@@ -15,6 +15,7 @@
 		return {
 			baseURL:'<?=BASE_URL?>',
 			currentPage:'',
+			keyword:'',
 			pages:[],
 			init(){
 				const {pc,lt,tb,sp}=this.$refs;
@@ -61,9 +62,12 @@
 		</div>
 		<div class="siteMain" x-data="app()" x-init="updateIndex">
 			<div class="siteMain__sidebar">
+				<div class="search">
+					<input type="text" class="search__input" x-model="keyword"/>
+				</div>
 				<ul class="index">
 					<template x-for="page in pages">
-						<li class="index__item" :class="{active:page==currentPage}">
+						<li class="index__item" :class="{active:page==currentPage,visible:!keyword || page.includes(keyword)}">
 							<span x-text="page" @click="currentPage=page"></span>
 							<a class="icon" :href="page" target="_blank">open_in_new</a>
 						</li>
