@@ -1,6 +1,6 @@
 export const scrollspy=function(items,param={}){
 	const app={};
-	app.param=Object.assign({threshold:[0,.25,.5,1]},param);
+	app.param=Object.assign({threshold:[0,.01,.25,.5,1]},param);
 	app.observer=new IntersectionObserver((entries)=>{
 		entries.forEach((entry)=>{
 			console.log(entry.intersectionRatio);
