@@ -1,9 +1,8 @@
 export const slider=function(el,param={}){
 	const app={};
-	app.param=Object.assign({interval:5000,autoPlay:true},param);
+	app.param=Object.assign({interval:5000,autoPlay:true,isNav:false},param);
 	const l=app.length=el.children.length;
 	const h=l>>1;
-	app.current=param.initialSlide || 0;
 	const setUpdateItems=(items,i)=>{
 		const l=items.length;
 		for(let p=-h;p<l-h;p++){
@@ -13,8 +12,15 @@ export const slider=function(el,param={}){
 			item.classList.toggle('is-current',p===0);
 			item.classList.toggle('is-next',p===1);
 			item.classList.toggle('is-after',p>0);
+			item.style.setProperty('--slide-p',p);
 		}
 	};
+	const registerAsNav=(items)=>{
+		const l=items.length;
+		for(let i=0;i<l;i++){
+			items[i].addEventListener('click',()=>app.goto(i));
+		}
+	}
 	app.goto=(i)=>{
 		i=((i%l)+l)%l;
 		app.current=i;
@@ -42,7 +48,18 @@ export const slider=function(el,param={}){
 		},{threshold:[0,.1]});
 		app.observer.observe(el);
 	}
-	app.goto(0);
+	if(app.param.isNav){
+		registerAsNav(el.children);
+		if(param.sync){
+			if(Array.isArray(param.sync)){
+				param.sync.forEach((target)=>{registerAsNav(target.children);});
+			}
+			else{
+				registerAsNav(param.sync.children);
+			}
+		}
+	}
+	app.goto(param.initialSlide || 0);
 	el.classList.add('is-init');
 	window.requestAnimationFrame(()=>el.classList.remove('is-init'));
 	return app;
