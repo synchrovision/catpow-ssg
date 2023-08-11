@@ -3,7 +3,6 @@ export const scrollspy=function(items,param={}){
 	app.param=Object.assign({threshold:[0,.01,.25,.5,1]},param);
 	app.observer=new IntersectionObserver((entries)=>{
 		entries.forEach((entry)=>{
-			console.log(entry.intersectionRatio);
 			if(entry.intersectionRatio>0){entry.target.classList.add('has-visible');}
 			if(entry.intersectionRatio>=.25){entry.target.classList.add('has-quarter-visible');}
 			if(entry.intersectionRatio>=.5){entry.target.classList.add('has-half-visible');}
