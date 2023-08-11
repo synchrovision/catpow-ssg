@@ -11,6 +11,7 @@ export * from './calc.jsx';
 
 export * from './slider.jsx';
 export * from './scrollspy.jsx';
+export * from './scrollsync.jsx';
 
 export * from './colors.jsx';
 export * from './bez.jsx';
