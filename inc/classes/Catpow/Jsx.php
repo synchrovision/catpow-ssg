@@ -14,7 +14,7 @@ class Jsx{
 		putenv('NODE_PATH='.getenv('NODE_PATH').':'.INC_DIR.'/node_modules');
 		chdir(INC_DIR);
 		if(!file_exists(INC_DIR.'/node_modules')){
-			passthru('npm install');
+			passthru('npm update -i');
 		}
 	}
 	public static function get_jsx_file_for_file($file){
