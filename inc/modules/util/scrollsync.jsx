@@ -1,12 +1,12 @@
 export const scrollsync=function(el,param={}){
 	const app={};
-	app.param=Object.assign({nav:false,direction:'y',margin:0},param);
+	app.param=Object.assign({nav:false,direction:'y',margin:40},param);
 	const items=el.children;
 	const updateActiveItem=()=>{
 		let i,index=-1;
 		const l=el.children.length;
 		const bnd=el.getBoundingClientRect();
-		const cx=bnd.left+bnd.width/2,cy=bnd.top+bnd.height/2;
+		const cx=bnd.left+app.param.margin,cy=bnd.top+app.param.margin;
 		for(i=0;i<l;i++){
 			const bnd=el.children[i].getBoundingClientRect();
 			if(bnd.left<cx && bnd.top<cy && bnd.right>cx && bnd.bottom>cy){
@@ -42,7 +42,7 @@ export const scrollsync=function(el,param={}){
 	app.goto=(index)=>{
 		const bnd1=el.getBoundingClientRect();
 		const bnd2=el.children[index].getBoundingClientRect();
-		el.scrollBy({[app.param.direction==='x'?'left':'top']:bnd2.top-bnd1.top+app.param.margin});
+		el.scrollTo({top:el.scrollTop+bnd2.top-bnd1.top+app.param.margin});
 		updateActiveItem();
 	};
 	app.prev=()=>app.goto(app.current-1);
