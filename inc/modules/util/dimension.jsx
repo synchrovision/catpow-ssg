@@ -6,34 +6,35 @@ export const parallax=(el,vars={})=>{
 	window.addEventListener('resize',updateCoef);
 	updateCoef();
 	const keys=Object.keys(vars);
+	const testCallback=(cb)=>{
+		const tbl=[];
+		for(let n=0;n<=100;n+=5){
+			tbl.push({n,rusult:cb(n/100)});
+		}
+		console.table(tbl);
+	}
 	keys.forEach((key)=>{
 		if(Array.isArray(vars[key])){
-			const vs=vars[key];
+			const vs=[0,0].concat(vars[key]);
 			if(vs.length & 1){vs.push(1);}
-			if(vs.length===2){
-				const s=vs[0],c=1/(vs[1]-vs[0]);
-				vars[key]=(p)=>Math.max(0,Math.min((p-s)*c,1));
+			if(vs[vs.length-2]!==1){vs.push(1,1);}
+			const es=[],cs=[],ds=[];
+			for(let i=2;i<vs.length;i+=2){
+				const c=(vs[i+1]-vs[i-1])/(vs[i]-vs[i-2]);
+				es.push(vs[i]);
+				cs.push(c);
+				ds.push(vs[i+1]-c*vs[i]);
 			}
-			else{
-				const ss=[],es=[],cs=[];
-				for(let i=0;i<vs.length;i+=2){
-					ss.push(vs[i]);
-					es.push(vs[i+1]);
-					cs.push(1/(vs[i+1]-vs[i]));
-				}
-				vars[key]=(p)=>{
-					for(let i=0;i<ss.length;i++){
-						if(p<es[i]){
-							const a=(p-ss[i])*cs[i];
-							return Math.max(0,Math.min((i&1)?(1-a):a,1));
-						}
+			vars[key]=(p)=>{
+				for(let i=0;i<es.length;i++){
+					if(p<=es[i]){
+						return p*cs[i]+ds[i]
 					}
-					return (ss.length&1)?1:0;
 				}
+				return 1;
 			}
 		}
 	});
-	
 	const tick=(t)=>{
 		const bnd=el.getBoundingClientRect();
 		const p=Math.min(1,Math.max(0,(wh-bnd.top)/(bnd.height+wh)));
