@@ -3,7 +3,7 @@ export const slider=function(el,param={}){
 	app.param=Object.assign({interval:5000,autoPlay:true,isNav:false},param);
 	const l=app.length=el.children.length;
 	const h=l>>1;
-	const setUpdateItems=(items,i)=>{
+	const updateItemsClass=(items,i)=>{
 		const l=items.length;
 		for(let p=-h;p<l-h;p++){
 			const item=items[(p+i+l)%l];
@@ -24,13 +24,13 @@ export const slider=function(el,param={}){
 	app.goto=(i)=>{
 		i=((i%l)+l)%l;
 		app.current=i;
-		setUpdateItems(el.children,i);
+		updateItemsClass(el.children,i);
 		if(param.sync){
 			if(Array.isArray(param.sync)){
-				param.sync.forEach((target)=>setUpdateItems(target.children,i));
+				param.sync.forEach((target)=>updateItemsClass(target.children,i));
 			}
 			else{
-				setUpdateItems(param.sync.children,i);
+				updateItemsClass(param.sync.children,i);
 			}
 		}
 	}
