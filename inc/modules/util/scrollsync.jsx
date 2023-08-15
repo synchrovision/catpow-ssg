@@ -23,6 +23,10 @@ export const scrollsync=function(el,param={}){
 				updateItemsClass(app.param.nav.children,index);
 			}
 		}
+		if(app.param.controls){
+			if(app.param.controls.prev){app.param.controls.prev.classList.toggle('is-disabled',index<=0);}
+			if(app.param.controls.next){app.param.controls.next.classList.toggle('is-disabled',index>=l-1);}
+		}
 		app.current=index;
 		el.style.setProperty('--scroll-index',index);
 	};
@@ -45,8 +49,8 @@ export const scrollsync=function(el,param={}){
 		el.scrollTo({top:el.scrollTop+bnd2.top-bnd1.top+app.param.margin});
 		updateActiveItem();
 	};
-	app.prev=()=>app.goto(app.current-1);
-	app.next=()=>app.goto(app.current+1);
+	app.prev=()=>app.goto(Math.max(0,app.current-1));
+	app.next=()=>app.goto(Math.min(items.length-1,app.current+1));
 	const registerAsNav=(items)=>{
 		const l=items.length;
 		for(let i=0;i<l;i++){
@@ -60,6 +64,10 @@ export const scrollsync=function(el,param={}){
 		else{
 			registerAsNav(app.param.nav.children);
 		}
+	}
+	if(app.param.controls){
+		if(app.param.controls.prev){app.param.controls.prev.addEventListener('click',app.prev);}
+		if(app.param.controls.next){app.param.controls.next.addEventListener('click',app.next);}
 	}
 	app.timer=setInterval(updateActiveItem,100);
 	updateActiveItem();
