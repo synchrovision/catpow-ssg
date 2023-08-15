@@ -1,18 +1,26 @@
 export const scrollsync=function(el,param={}){
 	const app={};
-	app.param=Object.assign({nav:false,direction:'y',margin:40},param);
+	app.param=Object.assign({nav:false},param);
+	if(!app.param.direction){
+		app.param.direction=(el.clientHeight<el.scrollHeight)?'y':'x';
+	}
+	if(!app.param.position){
+		const ssa=getComputedStyle(el.children[0])['scroll-snap-align'];
+		app.param.position={start:0,center:0.5,end:1}[ssa] || 0;
+	}
+	const k1={x:'left',y:'top'}[app.param.direction];
+	const k2={x:'right',y:'bottom'}[app.param.direction];
+	const k3={x:'scrollLeft',y:'scrollTop'}[app.param.direction];
+	const k4={x:'width',y:'height'}[app.param.direction];
 	const items=el.children;
 	const updateActiveItem=()=>{
 		let i,index=-1;
 		const l=el.children.length;
 		const bnd=el.getBoundingClientRect();
-		const cx=bnd.left+app.param.margin,cy=bnd.top+app.param.margin;
+		const c=bnd[k1]+bnd[k4]*app.param.position;
 		for(i=0;i<l;i++){
 			const bnd=el.children[i].getBoundingClientRect();
-			if(bnd.left<cx && bnd.top<cy && bnd.right>cx && bnd.bottom>cy){
-				index=i;
-				break;
-			}
+			if(bnd[k2]>c){index=i;break;}
 		}
 		updateItemsClass(el.children,index);
 		if(app.param.nav){
@@ -46,7 +54,10 @@ export const scrollsync=function(el,param={}){
 	app.goto=(index)=>{
 		const bnd1=el.getBoundingClientRect();
 		const bnd2=el.children[index].getBoundingClientRect();
-		el.scrollTo({top:el.scrollTop+bnd2.top-bnd1.top+app.param.margin});
+		const p=app.param.position;
+		el.scrollTo({
+			[k1]:el[k3]+(bnd2[k1]+bnd2[k4]*p)-(bnd1[k1]+bnd1[k4]*p)
+		});
 		updateActiveItem();
 	};
 	app.prev=()=>app.goto(Math.max(0,app.current-1));
