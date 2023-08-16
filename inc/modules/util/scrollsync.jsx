@@ -12,6 +12,9 @@ export const scrollsync=function(el,param={}){
 	const k2={x:'right',y:'bottom'}[app.param.direction];
 	const k3={x:'scrollLeft',y:'scrollTop'}[app.param.direction];
 	const k4={x:'width',y:'height'}[app.param.direction];
+	const k5={x:'scrollWidth',y:'scrollHeight'}[app.param.direction];
+	const ps={x:'paddingLeft',y:'paddingTop'}[app.param.direction];
+	const pe={x:'paddingRight',y:'paddingBottom'}[app.param.direction];
 	const items=el.children;
 	const updateActiveItem=()=>{
 		let i,index=-1;
@@ -51,6 +54,19 @@ export const scrollsync=function(el,param={}){
 			item.style.setProperty('--scroll-p',p);
 		}
 	};
+	const updateNavClass=()=>{
+		if(!app.param.nav){return;}
+		const bnd=el.getBoundingClientRect();
+		const p=app.param.position;
+		const ls=bnd[k1]+bnd[k4]*p-el[k3];
+		const le=ls+el[k5]-bnd[k4];
+		for(let i=0;i<el.children.length;i++){
+			const bnd=el.children[i].getBoundingClientRect();
+			app.param.nav.children[i].classList.toggle('is-disabled',bnd[k2]<ls || bnd[k1]>le);
+		}
+	}
+	const observer=new ResizeObserver(updateNavClass);
+	observer.observe(el);
 	app.goto=(index)=>{
 		const bnd1=el.getBoundingClientRect();
 		const bnd2=el.children[index].getBoundingClientRect();
@@ -81,6 +97,7 @@ export const scrollsync=function(el,param={}){
 		if(app.param.controls.next){app.param.controls.next.addEventListener('click',app.next);}
 	}
 	app.timer=setInterval(updateActiveItem,100);
+	updateNavClass();
 	updateActiveItem();
 	return app;
 }
