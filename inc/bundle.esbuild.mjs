@@ -59,5 +59,12 @@ await esbuild.build({
 	entryPoints: [process.argv[2]],
 	outfile: process.argv[3],
 	bundle:true,
-	plugins:[pathResolver,svgAsJsx,sassPlugin()]
+	plugins:[
+		pathResolver,
+		svgAsJsx,
+		sassPlugin({
+			type:'style',
+			loadPaths:['../../','../../_config','../../_tmpl','./scss']
+		})
+	]
 })
