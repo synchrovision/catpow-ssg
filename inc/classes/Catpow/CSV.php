@@ -188,7 +188,7 @@ class CSV implements \Iterator,\ArrayAccess{
 	
 	public function select($where=[],$orderby=false,$limit=0){
 		$rtn=[];
-		$keys=$this->data[0];
+		$keys=$this->data[0]??[];
 		$limit=(int)$limit;
 		for($r=1,$l=count($this->data);$r<$l;$r++){
 			foreach($where as $key=>$cond){
