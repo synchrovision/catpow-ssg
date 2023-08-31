@@ -10,14 +10,8 @@ export const Cloak=(props)=>{
 	const isEntry=useMemo(()=>{
 		return !document.referrer.includes(document.location.host);
 	},[]);
-	const [loading,setLoading]=useState(true);
 	const [phase,setPhase]=useState('init');
 	
-	useEffect(()=>{
-		window.addEventListener('load',()=>{
-			window.requestAnimationFrame(()=>setLoading(false));
-		});
-	},[]);
 	useEffect(()=>{
 		if(phase==='complete'){
 			if(onComplete){onComplete();}
@@ -44,10 +38,21 @@ export const Cloak=(props)=>{
 			const forwardPhaseIfLoaded=()=>{
 				if(document.readyState==='complete'){
 					forwardPhase();
+					return true;
 				}
+				return false;
 			};
+			const observeReadyStateEveryFrames=()=>{
+				if(!forwardPhaseIfLoaded()){
+					window.requestAnimationFrame(observeReadyStateEveryFrames);
+				}
+			}
 			ref.current.addEventListener('animationiteration',forwardPhaseIfLoaded);
-			forwardPhaseIfGetNoAnimation();
+			window.requestAnimationFrame(()=>{
+				if(ref.current.getAnimations().length<1){
+					observeReadyStateEveryFrames();
+				}
+			});
 			return ()=>{
 				ref.current.removeEventListener('animationiteration',forwardPhaseIfLoaded);
 			};
