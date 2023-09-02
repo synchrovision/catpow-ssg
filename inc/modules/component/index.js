@@ -14,3 +14,5 @@ export * from './Slider.jsx';
 export * from './TabPanel.jsx';
 export * from './TextBuild.jsx';
 export * from './Transition.jsx';
+
+export * from './Loop.jsx';
