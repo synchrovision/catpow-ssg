@@ -1,3 +1,5 @@
+import {debounce} from './debounce.jsx';
+
 export const scrollsync=function(el,param={}){
 	const app={};
 	app.param=Object.assign({nav:false},param);
@@ -96,7 +98,8 @@ export const scrollsync=function(el,param={}){
 		if(app.param.controls.prev){app.param.controls.prev.addEventListener('click',app.prev);}
 		if(app.param.controls.next){app.param.controls.next.addEventListener('click',app.next);}
 	}
-	app.timer=setInterval(updateActiveItem,100);
+	el.addEventListener('scroll',debounce(updateActiveItem,100));
+	window.addEventListener('resize',debounce(updateActiveItem,100));
 	updateNavClass();
 	updateActiveItem();
 	return app;
