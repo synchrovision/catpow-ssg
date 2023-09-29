@@ -3,6 +3,9 @@ export * from './dimension.jsx';
 export * from './ease.jsx';
 export * from './geom.jsx';
 
+export * from './debounce.jsx';
+export * from './throttle.jsx';
+
 export * from './string.jsx';
 export * from './dom.jsx';
 export * from './data.jsx';
