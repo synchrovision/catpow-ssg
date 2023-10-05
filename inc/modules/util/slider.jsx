@@ -33,6 +33,9 @@ export const slider=function(el,param={}){
 				updateItemsClass(param.sync.children,i);
 			}
 		}
+		if(param.nav){
+			updateItemsClass(param.nav.children,i);
+		}
 	}
 	app.prev=()=>app.goto(app.current-1);
 	app.next=()=>app.goto(app.current+1);
@@ -58,6 +61,9 @@ export const slider=function(el,param={}){
 				registerAsNav(param.sync.children);
 			}
 		}
+	}
+	if(app.param.nav){
+		registerAsNav(app.param.nav.children);
 	}
 	app.goto(param.initialSlide || 0);
 	el.classList.add('is-init');
