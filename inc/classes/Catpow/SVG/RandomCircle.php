@@ -21,7 +21,7 @@ class RandomCircle extends Shape{
 				}
 			}
 		}
-		printf('<g class="%s"/>',$this->className);
+		printf('<g class="%s">',$this->className);
 		for($i=0;$i<$num;$i++){
 			$r=rand($min,$max);
 			$x0=$x+rand(0,$width);

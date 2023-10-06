@@ -21,7 +21,7 @@ class RandomRects extends Shape{
 				}
 			}
 		}
-		printf('<g class="%s"/>',$this->className);
+		printf('<g class="%s">',$this->className);
 		for($i=0;$i<$num;$i++){
 			$w=rand($min,$max);
 			$h=rand($min,$max);
