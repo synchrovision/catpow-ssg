@@ -47,6 +47,19 @@ export const parallax=(el,vars={})=>{
 	}
 	window.requestAnimationFrame(tick);
 };
+export const simpleParallax=(el,target)=>{
+	if(!target){target=el.parentElement;}
+	el.style.setProperty('position','fixed');
+	el.style.setProperty('inset','0');
+	const update=()=>{
+		const bnd=target.getBoundingClientRect(),wh=window.innerHeight;
+		const t=Math.max(0,Math.min(1,bnd.top/wh))*100;
+		const b=Math.max(0,Math.min(1,bnd.bottom/wh))*100;
+		el.style.setProperty('clip-path',`polygon(0% ${t}%, 100% ${t}%, 100% ${b}%, 0% ${b}%)`);
+	}
+	document.addEventListener('scroll',(cb)=>window.requestAnimationFrame(update));
+	window.addEventListener('resize',(cb)=>window.requestAnimationFrame(update));
+}
 export const dimensionBox=(box)=>{
 	const body=box.children[0];
 	const observer=new ResizeObserver((entries)=>{
