@@ -14,6 +14,7 @@ class RandomRects extends Shape{
 		$min=$this->props['min']??rand($u>>3,$u>>1);
 		$max=$this->props['max']??rand($u>>1,$u);
 		$atts=$this->get_attributes();
+		$inner=!empty($this->props['inner']);
 		foreach($colors as $i=>$color){
 			if(preg_match('/^([\w_\-]+)( (\d+))?( (0?\.\d+))?$/',$color,$matches)){
 				if($color=Scss::translate_color($matches[1],$matches[3]??null,$matches[5]??null)){
@@ -25,8 +26,14 @@ class RandomRects extends Shape{
 		for($i=0;$i<$num;$i++){
 			$w=rand($min,$max);
 			$h=rand($min,$max);
-			$x0=$x+rand(-$w,$width-$w);
-			$y0=$y+rand(-$h,$height-$h);
+			if($inner){
+				$x0=$x+rand(0,$width-$w*2);
+				$y0=$y+rand(0,$height-$h*2);
+			}
+			else{
+				$x0=$x+rand(-$w,$width-$w);
+				$y0=$y+rand(-$h,$height-$h);
+			}
 			printf('<rect fill="%s" x="%s" y="%s" width="%s" height="%s"%s/>',$colors[$i%count($colors)],$x0,$y0,$w*2,$h*2,$atts);
 		}
 		echo '</g>';

@@ -14,6 +14,7 @@ class RandomCircle extends Shape{
 		$min=$this->props['min']??rand($u>>3,$u>>1);
 		$max=$this->props['max']??rand($u>>1,$u);
 		$atts=$this->get_attributes();
+		$inner=!empty($this->props['inner']);
 		foreach($colors as $i=>$color){
 			if(preg_match('/^([\w_\-]+)( (\d+))?( (0?\.\d+))?$/',$color,$matches)){
 				if($color=Scss::translate_color($matches[1],$matches[3]??null,$matches[5]??null)){
@@ -24,8 +25,14 @@ class RandomCircle extends Shape{
 		printf('<g class="%s">',$this->className);
 		for($i=0;$i<$num;$i++){
 			$r=rand($min,$max);
-			$x0=$x+rand(0,$width);
-			$y0=$y+rand(0,$height);
+			if($inner){
+				$x0=$x+rand($r,$width-$r);
+				$y0=$y+rand($r,$height-$r);
+			}
+			else{
+				$x0=$x+rand(0,$width);
+				$y0=$y+rand(0,$height);
+			}
 			printf('<circle fill="%s" cx="%s" cy="%s" r="%s"%s/>',$colors[$i%count($colors)],$x0,$y0,$r,$atts);
 		}
 		echo '</g>';
