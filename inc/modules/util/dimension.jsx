@@ -59,6 +59,7 @@ export const simpleParallax=(el,target)=>{
 	}
 	document.addEventListener('scroll',(cb)=>window.requestAnimationFrame(update));
 	window.addEventListener('resize',(cb)=>window.requestAnimationFrame(update));
+	update();
 }
 export const dimensionBox=(box)=>{
 	const body=box.children[0];
