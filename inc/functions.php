@@ -157,6 +157,9 @@ function texts($file='texts'){
 	}
 	return $cache[$file]=$data;
 }
+function nl2wbr($str){
+	return str_replace("\n",'<wbr/>',str_replace("\n\n",'<br/>',$str));
+}
 function md($text){
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
