@@ -46,6 +46,21 @@ class Page{
 		if(file_exists($f=TMPL_DIR.'/'.$file)){return $f;}
 		if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
 	}
+	public function get_the_latest_file($file){
+		if(substr($file,0,1)==='/'){
+			if(file_exists($f=ABSPATH.$file)){$f1=$f;}
+			if(file_exists($f=TMPL_DIR.$file)){$f2=$f;}
+			elseif(file_exists($f=INC_DIR.'/'.$file)){$f2=$f;}
+		}
+		else{
+			if(file_exists($f=ABSPATH.$this->dir.$file)){$f1=$f;}
+			if(file_exists($f=TMPL_DIR.$this->dir.$file)){$f2=$f;}
+			elseif(file_exists($f=ABSPATH.'/'.$file)){$f2=$f;}
+			elseif(file_exists($f=TMPL_DIR.'/'.$file)){$f2=$f;}
+			elseif(file_exists($f=INC_DIR.'/'.$file)){$f2=$f;}
+		}
+		return empty($f2)?$f1:((empty($f1) || filemtime($f2)>filemtime($f1))?$f2:$f1);
+	}
 	public function get_file_path_for_uri($uri){
 		if(substr($uri,0,1)==='/'){return ABSPATH.$uri;}
 		return ABSPATH.$this->dir.$uri;
@@ -80,7 +95,7 @@ class Page{
 	public function generate_webp_for_image($image){
 		$im=$this->get_gd($image);
 		if(empty($im)){return false;}
-		$file=$this->get_the_file($image);
+		$file=$this->get_the_latest_file($image);
 		$dest_file=$this->get_file_path_for_uri($image);
 		$dest_dir=dirname($dest_file);
 		if(!is_dir($dest_dir)){mkdir($dest_dir,0755,true);}
@@ -91,7 +106,7 @@ class Page{
 		return preg_replace('/\.\w+$/','.webp',$image);
 	}
 	public function get_gd($image){
-		$file=$this->get_the_file($image);
+		$file=$this->get_the_latest_file($image);
 		if(empty($file)){return false;}
 		switch(strrchr($image,'.')){
 			case '.jpg':
