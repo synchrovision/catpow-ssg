@@ -6,10 +6,6 @@ export const scrollsync=function(el,param={}){
 	if(!app.param.direction){
 		app.param.direction=(el.clientHeight<el.scrollHeight)?'y':'x';
 	}
-	if(!app.param.position){
-		const ssa=getComputedStyle(app.param.items[0])['scroll-snap-align'];
-		app.param.position={start:0,center:0.5,end:1}[ssa] || 0;
-	}
 	const k1={x:'left',y:'top'}[app.param.direction];
 	const k2={x:'right',y:'bottom'}[app.param.direction];
 	const k3={x:'scrollLeft',y:'scrollTop'}[app.param.direction];
@@ -17,10 +13,6 @@ export const scrollsync=function(el,param={}){
 	const k5={x:'scrollWidth',y:'scrollHeight'}[app.param.direction];
 	const ps={x:'paddingLeft',y:'paddingTop'}[app.param.direction];
 	const pe={x:'paddingRight',y:'paddingBottom'}[app.param.direction];
-	if(!app.param.padding){
-		const ssa=getComputedStyle(app.param.items[0])['scroll-snap-align'];
-		app.param.padding=parseFloat(getComputedStyle(el)['scroll-padding-'+(ssa==='end'?k2:k1)]);
-	}
 	const updateActiveItem=()=>{
 		let i,index=-1;
 		const l=app.param.items.length;
@@ -67,6 +59,17 @@ export const scrollsync=function(el,param={}){
 			});
 		}
 	}
+	const initParam=()=>{
+		const ssa=getComputedStyle(app.param.items[0])['scroll-snap-align'];
+		if(!app.param.position){
+			app.param.position={start:0,center:0.5,end:1}[ssa] || 0;
+		}
+		if(!app.param.padding){
+			app.param.padding=parseFloat(getComputedStyle(el)['scroll-padding-'+(ssa==='end'?k2:k1)]);
+			if(isNaN(app.param.padding)){app.param.padding=0;}
+		}
+	};
+	initParam();
 	const observer=new ResizeObserver(updateNavClass);
 	observer.observe(el);
 	app.goto=(index)=>{
@@ -107,6 +110,7 @@ export const scrollsync=function(el,param={}){
 	}
 	el.addEventListener('scroll',debounce(updateActiveItem,100));
 	window.addEventListener('resize',debounce(updateActiveItem,100));
+	window.addEventListener('load',initParam);
 	updateNavClass();
 	updateActiveItem();
 	return app;
