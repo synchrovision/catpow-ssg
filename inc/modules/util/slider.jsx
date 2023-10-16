@@ -28,16 +28,16 @@ export const slider=function(el,param={}){
 		i=((i%l)+l)%l;
 		app.current=i;
 		updateItemsClass(el.children,i);
-		if(param.sync){
-			if(Array.isArray(param.sync)){
+		if(app.param.sync){
+			if(Array.isArray(app.param.sync)){
 				param.sync.forEach((target)=>updateItemsClass(target.children,i));
 			}
 			else{
-				updateItemsClass(param.sync.children,i);
+				updateItemsClass(app.param.sync.children,i);
 			}
 		}
 		if(param.nav){
-			updateItemsClass(param.nav.children,i);
+			updateItemsClass(app.param.nav.children,i);
 		}
 	}
 	app.prev=()=>app.goto(app.current-1);
@@ -61,14 +61,17 @@ export const slider=function(el,param={}){
 	}
 	if(app.param.isNav){
 		registerAsNav(el.children);
-		if(param.sync){
-			if(Array.isArray(param.sync)){
+		if(app.param.sync){
+			if(Array.isArray(app.param.sync)){
 				param.sync.forEach((target)=>{registerAsNav(target.children);});
 			}
 			else{
-				registerAsNav(param.sync.children);
+				registerAsNav(app.param.sync.children);
 			}
 		}
+	}
+	if(typeof app.param.nav === 'string'){
+		app.param.nav=document.querySelector(app.param.nav);
 	}
 	if(app.param.nav){
 		registerAsNav(app.param.nav.children);
