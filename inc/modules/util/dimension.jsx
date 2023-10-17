@@ -52,10 +52,12 @@ export const simpleParallax=(el,target)=>{
 	el.style.setProperty('position','fixed');
 	el.style.setProperty('inset','0');
 	const update=()=>{
-		const bnd=target.getBoundingClientRect(),wh=window.innerHeight;
+		const bnd=target.getBoundingClientRect(),wh=window.innerHeight,ww=window.innerWidth;
 		const t=Math.max(0,Math.min(1,bnd.top/wh))*100;
 		const b=Math.max(0,Math.min(1,bnd.bottom/wh))*100;
-		el.style.setProperty('clip-path',`polygon(0% ${t}%, 100% ${t}%, 100% ${b}%, 0% ${b}%)`);
+		const l=Math.max(0,Math.min(1,bnd.left/ww))*100;
+		const r=Math.max(0,Math.min(1,bnd.right/ww))*100;
+		el.style.setProperty('clip-path',`polygon(${l}% ${t}%, ${r}% ${t}%, ${r}% ${b}%, ${l}% ${b}%)`);
 	}
 	document.addEventListener('scroll',(cb)=>window.requestAnimationFrame(update));
 	window.addEventListener('resize',(cb)=>window.requestAnimationFrame(update));
