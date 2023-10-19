@@ -8,6 +8,11 @@ $colors:(
 	shd:hsla(0,0%,0%,0.2),
 	lt:hsla(0,0%,100%,0.4),
 );
+$fonts:(
+	h:$gothic,
+	t:$gothic,
+	i:"Material Icons"
+);
 @include default-break;
 @include define_color_vars;
 
