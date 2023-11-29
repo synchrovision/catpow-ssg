@@ -82,7 +82,7 @@ export const scrollsync=function(el,param={}){
 		updateActiveItem();
 	};
 	app.prev=()=>app.goto(Math.max(0,app.current-1));
-	app.next=()=>app.goto(Math.min(items.length-1,app.current+1));
+	app.next=()=>app.goto(Math.min(app.param.items.length-1,app.current+1));
 	const registerAsNav=(items)=>{
 		const l=items.length;
 		for(let i=0;i<l;i++){
