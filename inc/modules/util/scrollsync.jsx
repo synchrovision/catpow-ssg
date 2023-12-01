@@ -160,6 +160,8 @@ export const scrollsync=function(el,param={}){
 	}
 	if(app.param.auto){
 		app.play();
+		el.addEventListener('touchstart',app.pause);
+		el.addEventListener('touchend',app.play);
 	}
 	el.addEventListener('scroll',debounce(updateActiveItem,100),{passive: true});
 	window.addEventListener('resize',debounce(updateActiveItem,100));
