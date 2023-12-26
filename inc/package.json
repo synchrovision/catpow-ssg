@@ -5,7 +5,9 @@
 		"watch": "php compiler.php"
 	},
 	"dependencies": {
-		"@svgr/core": "^7.0.0",
+		"react": "*",
+		"react-dom": "*",
+		"esbuild-plugin-svgr": "*",
 		"esbuild-sass-plugin": "*",
 		"js-cookie": "*"
 	}
