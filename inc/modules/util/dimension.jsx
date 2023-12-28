@@ -48,7 +48,7 @@ export const parallax=(el,vars={})=>{
 	window.requestAnimationFrame(tick);
 };
 export const simpleParallax=(el,target)=>{
-	if(!target){target=el.parentElement;}
+	if(!target || !target.getBoundingClientRect){target=el.parentElement;}
 	el.style.setProperty('position','fixed');
 	el.style.setProperty('inset','0');
 	const update=()=>{
