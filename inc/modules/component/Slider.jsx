@@ -2,7 +2,7 @@
 
 export const Slider=(props)=>{
 	const {useState,useMemo,useCallback,useEffect,useRef,useReducer}=React;
-	const {className="cp-slider",children,loop=false,dots=true,arrow=true,timer=false,interval=5000,onSwipeLeft,onSwipeRight}=props;
+	const {className="cp-slider",children,loop=false,dots=true,arrow=true,timer=false,touch=false,interval=5000,onSwipeLeft,onSwipeRight}=props;
 	const [isHold,setIsHold]=useState(false);
 	const ref=useRef();
 	const tmp=useRef({org:{x:0,w:0,c:0,t:0},crr:{x:0,t:0},diff:{x:0,p:0,t:0},delta:{x:0,t:0},time:{s:0,c:0,p:0}});
@@ -30,6 +30,9 @@ export const Slider=(props)=>{
 	const [state,dispatch]=useReducer(reducer,{
 		current:props.defaultSlide || 0
 	});
+	useEffect(()=>{
+		dispatch({type:'GOTO',index:props.activeSlide})
+	},[props.activeSlide]);
 	const classes=useMemo(()=>bem(className),[className]);
 	
 	const getSlideClasses=useMemo(()=>{
@@ -78,6 +81,7 @@ export const Slider=(props)=>{
 		);
 	},[arrow,dots,loop,timer]);
 	useEffect(()=>{
+		return;
 		var requestID;
 		const {org,crr,diff,delta,time}=tmp.current;
 		const updateValue=(obj,e)=>{
@@ -138,9 +142,11 @@ export const Slider=(props)=>{
 			delta.x=delta.t=diff.x=diff.p=diff.t=0;
 			setIsHold(false);
 		};
-		ref.current.addEventListener('touchstart',handleTouchStart);
-		ref.current.addEventListener('touchmove',handleTouchMove);
-		ref.current.addEventListener('touchend',handleTouchEnd);
+		if(touch){
+			ref.current.addEventListener('touchstart',handleTouchStart);
+			ref.current.addEventListener('touchmove',handleTouchMove);
+			ref.current.addEventListener('touchend',handleTouchEnd);
+		}
 		time.c=1/interval;
 		const tick=(timestamp)=>{
 			if(time.s===0 || diff.x){time.s=timestamp;}
@@ -153,9 +159,11 @@ export const Slider=(props)=>{
 		return ()=>{
 			if(timer){cancelAnimationFrame(requestID);}
 			if(!ref.current){return;}
-			ref.current.removeEventListener('touchstart',handleTouchStart);
-			ref.current.removeEventListener('touchmove',handleTouchMove);
-			ref.current.removeEventListener('touchend',handleTouchEnd);
+			if(touch){
+				ref.current.removeEventListener('touchstart',handleTouchStart);
+				ref.current.removeEventListener('touchmove',handleTouchMove);
+				ref.current.removeEventListener('touchend',handleTouchEnd);
+			}
 		};
 	},[ref.current,tmp.current,setIsHold,timer,interval]);
 	
