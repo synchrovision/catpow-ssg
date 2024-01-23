@@ -33,6 +33,14 @@ class Scss{
 		$scssc->addImportPath(INC_DIR.'/scss/');
 		$scssc->setSourceMap(Compiler::SOURCE_MAP_FILE);
 		$scssc->setIgnoreErrors(true);
+		$scssc->registerFunction('debug',function($args){
+			error_log(var_export($args,1));
+			return false;
+		});
+		$scssc->registerFunction('get_real_type',function($args){
+			error_log(var_export($args[0][0],1));
+			return [TYPE::T_KEYWORD,$args[0][0]];
+		});
 		$scssc->registerFunction('list_elements',function($args)use($scssc){
 			if(empty($args[0][2][0]) || empty($args[1][2][0])){return Compiler::$emptyList;}
 			try{
