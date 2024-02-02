@@ -9,12 +9,12 @@ PHPのビルドインサーバーを利用したシンプルな静的サイト�
 サイトのディレクトリに移動し
 
  ```command
-git clone --recursive https://github.com/synchrovision/catpow-ssg.git _compiler
+git clone --recursive https://github.com/cpprj/catpow-ssg.git _compiler
  ```
  または、サブモジュールとして
 
  ```command
-git submodule add https://github.com/synchrovision/catpow-ssg.git _compiler
+git submodule add https://github.com/cpprj/catpow-ssg.git _compiler
  ```
  
 でインストール
