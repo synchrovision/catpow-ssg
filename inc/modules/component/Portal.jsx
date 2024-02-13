@@ -12,7 +12,7 @@
 		}
 		const el=document.createElement('div');
 		if(props.id){el.id=props.id;}
-		el.className=props.className;
+		if(props.className){el.className=props.className;}
 		document.body.appendChild(el);
 		return el;
 	},[]);
