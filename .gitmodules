@@ -1,3 +1,3 @@
 [submodule "inc/scss"]
 	path = inc/scss
-	url = https://github.com/cpprj/catpow-scss.git
+	url = https://github.com/synchrovision/catpow-scss.git
