@@ -179,7 +179,10 @@ function simple_md($text,$classes=[]){
 }
 function rtf($text,$pref='rtf'){
 	$text=preg_replace('/\(\((.+?)\)\)/u','<small class="'.$pref.'-small">$1</small>',$text);
+	$text=preg_replace('/\*\*\*\*(.+?)\*\*\*\*/u','<strong class="'.$pref.'-strongest">$1</strong>',$text);
+	$text=preg_replace('/\*\*\*(.+?)\*\*\*/u','<strong class="'.$pref.'-stronger">$1</strong>',$text);
 	$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="'.$pref.'-strong">$1</strong>',$text);
+	$text=preg_replace('/##(.+?)##/u','<em class="'.$pref.'-em">$1</em>',$text);
 	$text=preg_replace('/~~(.+?)~~/u','<del class="'.$pref.'-del">$1</del>',$text);
 	$text=preg_replace('/``(.+?)``/u','<code class="'.$pref.'-code">$1</code>',$text);
 	$text=preg_replace('/^※(.+)$/um','<span class="'.$pref.'-annotation">$1</span>',$text);
