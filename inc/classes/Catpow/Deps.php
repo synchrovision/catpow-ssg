@@ -6,17 +6,17 @@ class Deps{
 		'js'=>[
 			'react-dev'=>[
 				'set'=>[
-					['src'=>'https://unpkg.com/react@18/umd/react.development.js','attr'=>'crossorigin'],
-					['src'=>'https://unpkg.com/react-dom@18/umd/react-dom.development.js','attr'=>'crossorigin']
+					['src'=>'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.min.js','attr'=>'crossorigin'],
+					['src'=>'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.min.js','attr'=>'crossorigin']
 				]
 			],
 			'react'=>[
 				'set'=>[
-					['src'=>'https://unpkg.com/react@18/umd/react.production.min.js','attr'=>'crossorigin'],
-					['src'=>'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js','attr'=>'crossorigin']
+					['src'=>'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js','attr'=>'crossorigin'],
+					['src'=>'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js','attr'=>'crossorigin']
 				]
 			],
-			'alpine'=>['src'=>'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js','attr'=>'defer'],
+			'alpine'=>['src'=>'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js','attr'=>'defer'],
 			'alpine2'=>[
 				'set'=>[
 					['src'=>'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js','attr'=>'type="module"'],
