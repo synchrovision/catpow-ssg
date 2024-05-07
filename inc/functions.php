@@ -120,7 +120,7 @@ function table($data,$props=null){
 			$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??'']));
 			foreach($data[$r] as $c=>$cell){
 				if(is_null($cell)){continue;}
-				$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell));
+				$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell,$r,$c));
 			}
 			$rtn.='</tr>';
 		}
@@ -131,7 +131,7 @@ function table($data,$props=null){
 		$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??'']));
 		foreach($data[$r] as $c=>$cell){
 			if(is_null($cell)){continue;}
-			$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell));
+			$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell,$r,$c));
 		}
 		$rtn.='</tr>';
 	}
