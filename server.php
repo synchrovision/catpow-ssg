@@ -77,6 +77,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		return false;
 	case 'html':
+	case 'shtml':
 	case 'svg':
 	case 'rss':
 	case 'rdf':
@@ -93,7 +94,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 				copy($tmpl_file,$file);
 			}
 		}
-		if(substr($file,-5)==='.html'){
+		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ')){
 				echo preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)" \-\->/',function($matches){
