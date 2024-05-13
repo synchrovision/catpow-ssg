@@ -106,6 +106,9 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 				$should_output=true;
 			}
 		}
+		if(!file_exists($file)){
+			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
+		}
 		return $should_output;
 	default:
 		if(!file_exists($file)){
