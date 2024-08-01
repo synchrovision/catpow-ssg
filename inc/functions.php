@@ -42,17 +42,17 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 						if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
 							imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
 						}
-						$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s" type="image/webp"/>',$u*2,$src);
+						$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s?%d" type="image/webp"/>',$u*2,$src,filemtime($file));
 					}
 				}
 			}
 			if(!empty($webp=$page->generate_webp_for_image($name))){
 				$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
 			}
-			$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/>',$name,$alt,$size[0],$size[1]);
+			$rtn.=sprintf('<img src="%s?%d" alt="%s" width="%d" height="%d"/>',$name,filemtime($file),$alt,$size[0],$size[1]);
 		}
 		else{
-			$rtn.=sprintf('<img src="%s" alt="%s"/>',$name,$alt);
+			$rtn.=sprintf('<img src="%s?%d" alt="%s"/>',$name,filemtime($file),$alt);
 		}
 	}
 	$rtn.='</picture>';
