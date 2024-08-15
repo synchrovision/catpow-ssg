@@ -2,6 +2,7 @@ import {debounce} from './debounce.jsx';
 
 export const scrollsync=function(el,param={}){
 	const app={};
+	if(el==null){return null;}
 	app.param=Object.assign({nav:false,items:el.children,loop:false,auto:false,interval:5000},param);
 	app.param.items=Array.from(app.param.items);
 	if(!app.param.direction){
