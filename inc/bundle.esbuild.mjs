@@ -6,7 +6,7 @@ import svgr from 'esbuild-plugin-svgr';
 let pathResolver={
 	name:'pathResolver',
 	setup(build) {
-		build.onResolve({filter: /^(util|component)$/},async(args)=>{
+		build.onResolve({filter: /^(util|component|hooks)$/},async(args)=>{
 			const result=await build.resolve('./'+args.path,{
 				kind:'import-statement',
 				resolveDir:'./modules',
