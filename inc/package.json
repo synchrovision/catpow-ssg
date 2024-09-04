@@ -8,7 +8,7 @@
 		"react": "*",
 		"react-dom": "*",
 		"esbuild-plugin-svgr": "*",
-		"esbuild-sass-plugin": "*",
+		"esbuild-plugin-inline-import": "*",
 		"js-cookie": "*"
 	}
 }

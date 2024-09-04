@@ -10,20 +10,20 @@ class Block{
 	}
 	public function init(){
 		if(!is_dir($this->dir)){
-			if(!is_dir(TMPL_DIR.'/blocks/'.$block) && is_dir(INC_DIR.'/blocks/'.$block)){
+			if(!is_dir(TMPL_DIR.'/blocks/'.$this->block) && is_dir(INC_DIR.'/blocks/'.$this->block)){
 				$files=new \RecursiveIteratorIterator(
 					new \RecursiveDirectoryIterator(
-						INC_DIR.'/blocks/'.$block,
+						INC_DIR.'/blocks/'.$this->block,
 						\RecursiveDirectoryIterator::SKIP_DOTS
 					),
 					\RecursiveIteratorIterator::SELF_FIRST
 				);
 				foreach($files as $file){
 					if($file->is_dir()){
-						mkdir(TMPL_DIR.'/blocks/'.$block.'/'.$files->getSubPathName(),0755);
+						mkdir(TMPL_DIR.'/blocks/'.$this->block.'/'.$files->getSubPathName(),0755);
 					}
 					else{
-						copy($file,TMPL_DIR.'/blocks/'.$block.'/'.$files->getSubPathName());
+						copy($file,TMPL_DIR.'/blocks/'.$this->block.'/'.$files->getSubPathName());
 					}
 				}
 			}

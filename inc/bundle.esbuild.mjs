@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild';
-import {sassPlugin} from 'esbuild-sass-plugin';
 import svgr from 'esbuild-plugin-svgr';
+import inlineImportPlugin from 'esbuild-plugin-inline-import';
 
 
 let pathResolver={
@@ -28,17 +28,20 @@ let pathResolver={
 		});
 	},
 }
+let inlineCssImporter=inlineImportPlugin({
+	filter:/css:/,
+	transform:async (contents,args)=>{
+		return contents;
+	}
+});
 
 await esbuild.build({
 	entryPoints: [process.argv[2]],
 	outfile: process.argv[3],
 	bundle:true,
 	plugins:[
+		inlineCssImporter,
 		pathResolver,
 		svgr(),
-		sassPlugin({
-			type:'style',
-			loadPaths:['../../','../../_config','../../_tmpl','./scss']
-		})
 	]
 })
