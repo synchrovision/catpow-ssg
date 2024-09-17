@@ -14,7 +14,7 @@ class FLOCSS extends CssRule{
 		if(empty($bem)){$bem=$this;}
 		if(empty($bem->b)){return;}
 		$sel='$this->selectors';
-		$sel.="['".implode("']['&-",$bem->b)."']";
+		$sel.="['.".implode("']['&-",$bem->b)."']";
 		if(!empty($bem->e)){
 			$sel.="['&__".implode("']['&-",$bem->e)."']";
 		}
