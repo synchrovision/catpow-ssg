@@ -9,10 +9,10 @@ class CSV implements \Iterator,\ArrayAccess{
 	public function rewind():void{
 		$this->current_index=1;
 	}
-	public function current():mixed{
+	public function current(){
 		return array_combine($this->data[0],$this->data[$this->current_index]);
 	}
-	public function key():mixed{
+	public function key(){
 		return $this->current_index;
 	}
 	public function next():void{
@@ -31,7 +31,7 @@ class CSV implements \Iterator,\ArrayAccess{
 	public function offsetUnset($offset):void{
 		unset($this->data[$offset+1]);
 	}
-	public function offsetGet($offset):mixed{
+	public function offsetGet($offset){
 		if(empty($this->data[$offset+1])){return null;}
 		return array_combine($this->data[0],$this->data[$offset+1]);
 	}
