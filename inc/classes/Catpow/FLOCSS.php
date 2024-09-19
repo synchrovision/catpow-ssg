@@ -8,7 +8,7 @@ class FLOCSS extends CssRule{
 		if(empty($this->b)){return null;}
 		$b_class=implode('-',$this->b);
 		if(empty($this->e)){return $b_class;}
-		return $b_class.'__'.implode('-',$this->e);
+		return $b_class.'__'.end($this->e);
 	}
 	public function add_selector($bem=null){
 		if(empty($bem)){$bem=$this;}
@@ -16,7 +16,7 @@ class FLOCSS extends CssRule{
 		$sel='$this->selectors';
 		$sel.="['.".implode("']['&-",$bem->b)."']";
 		if(!empty($bem->e)){
-			$sel.="['&__".implode("']['&-",$bem->e)."']";
+			$sel.="['&__".end($bem->e)."']";
 		}
 		if(eval("return empty({$sel});")){eval($sel."=[];");}
 	}
@@ -37,7 +37,7 @@ class FLOCSS extends CssRule{
 	private function _apply($el){
 		if(!is_a($el,\DOMElement::class)){return;}
 		if(empty($el->getAttribute('class'))){
-			if(in_array($el->tagName,['br','link','script','source'],true) || empty($this->b)){return;}
+			if(in_array($el->tagName,['br','link','script','source'],true)){return;}
 			if(!in_array($el->tagName,['template'],true)){
 				$el->setAttribute('class','_'.$el->tagName);
 			}
@@ -49,7 +49,7 @@ class FLOCSS extends CssRule{
 				$this->b_stuck[]=[$this->b,$this->e];
 				$this->b=[$matches[1]];
 				if(!empty($matches[2])){
-					$this->b=array_merge($this->b,explode('-',$matches[2]));
+					$this->b=array_merge($this->b,explode('-',substr($matches[2],1)));
 				}
 				$this->e=[];
 				$this->add_selector();
