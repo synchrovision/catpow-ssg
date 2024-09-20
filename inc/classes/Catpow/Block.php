@@ -93,14 +93,14 @@ class Block{
 				mb_encode_numericentity($block->get_html(),[0x80,0xffff,0,0xffff],'UTF-8'),
 				\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
 			);
-			$block_el=$doc->importNode($tmp->firstElementChild,true);
-			$el->replaceWith($block_el);
+			$block_el=$doc->importNode($tmp->childNodes->item(0),true);
+			$el->parentNode->replaceChild($block_el,$el);
 			$el=$block_el;
 		}
 		elseif($el->tagName==='slot'){
 			$id=$el->getAttribute('id');
 			$slot=self::$slots[$id];
-			$el->replaceWith($slot);
+			$el->parentNode->replaceChild($slot,$el);
 			$el=$slot;
 			unset(self::$slots[$id]);
 		}
