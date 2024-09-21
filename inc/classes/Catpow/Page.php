@@ -26,11 +26,11 @@ class Page{
 		$this->info=$info;
 	}
 	public static function get_instance(){
-		if(!isset(static::$instance)){static::$instance=new static($uri,$info);}
 		return static::$instance;
 	}
 	public static function init($uri,$info=null){
-		return $GLOBALS['page']=static::get_instance();
+		if(!isset(static::$instance)){static::$instance=new static($uri,$info);}
+		return $GLOBALS['page']=static::$instance;
 	}
 	public function get_the_page_file($file){
 		if(file_exists($f=ABSPATH.$this->dir.$file)){return $f;}
@@ -136,7 +136,7 @@ class Page{
 		}
 	}
 	public function use_element($element){
-		$this->scripts->enqueue('/element/'.$element.'/script.js');
+		$this->scripts->enqueue('/elements/'.$element.'/script.js');
 	}
 	public function render_deps(){
 		$this->scripts->render();
