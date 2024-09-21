@@ -2,6 +2,36 @@
 
 All notable changes to `color` will be documented in this file
 
+## 1.5.3 - 2022-12-18
+
+### What's Changed
+
+- Refactor tests to pest by @AyoobMH in https://github.com/spatie/color/pull/80
+- Add PHP 8.2 Support by @patinthehat in https://github.com/spatie/color/pull/81
+- Fix rgb to cmyk division by zero bug by @stefanriehl in https://github.com/spatie/color/pull/82
+
+### New Contributors
+
+- @AyoobMH made their first contribution in https://github.com/spatie/color/pull/80
+- @patinthehat made their first contribution in https://github.com/spatie/color/pull/81
+- @stefanriehl made their first contribution in https://github.com/spatie/color/pull/82
+
+**Full Changelog**: https://github.com/spatie/color/compare/1.5.2...1.5.3
+
+## 1.5.2 - 2022-06-24
+
+### What's Changed
+
+- Add RegEx fix to Validate.php too... by @jcogs-design in https://github.com/spatie/color/pull/73
+- Fix typo in Distance::CIE76. by @Angel5a in https://github.com/spatie/color/pull/76
+
+### New Contributors
+
+- @jcogs-design made their first contribution in https://github.com/spatie/color/pull/73
+- @Angel5a made their first contribution in https://github.com/spatie/color/pull/76
+
+**Full Changelog**: https://github.com/spatie/color/compare/1.5.1...1.5.2
+
 ## 1.5.1 - 2022-04-12
 
 ## What's Changed
