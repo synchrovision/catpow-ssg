@@ -135,6 +135,9 @@ class Page{
 			$this->styles->enqueue('/blocks/'.$block.'/style.css');
 		}
 	}
+	public function use_element($element){
+		$this->scripts->enqueue('/element/'.$element.'/script.js');
+	}
 	public function render_deps(){
 		$this->scripts->render();
 		$this->styles->render();
