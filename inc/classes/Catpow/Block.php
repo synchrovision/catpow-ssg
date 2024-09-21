@@ -1,7 +1,7 @@
 <?php
 namespace Catpow;
 class Block{
-	private static $slots=[];
+	private static $slots=[],$schemas=[];
 	public $block,$part='',$props,$children,$dir;
 	public function __construct($block,$props=[],$children=[]){
 		list($this->block,$this->part)=explode('/',$block.'/');
@@ -30,10 +30,6 @@ class Block{
 			}
 			mkdir($this->dir,0755,1);
 		}
-		if($f=self::get_block_file($this->block,'block.json')){
-			$conf=json_decode(file_get_contents($f));
-		}
-		if(empty($conf)){$conf=[];}
 	}
 	public function get_html(){
 		global $page;
@@ -74,10 +70,12 @@ class Block{
 	private static function _convert($el,$doc){
 		if(!is_a($el,\DOMElement::class) && !is_a($el,\DOMDocumentFragment::class)){return;}
 		if(substr($el->tagName,0,6)==='block-'){
-			$atts=['level'=>self::get_level($el)];
-			foreach($el->attributes as $attr){
-				$atts[$attr->name]=$attr->value;
+			$block_name=substr($el->tagName,6);
+			if(!isset(self::$schemas[$block_name])){
+				self::$schemas[$block_name]=empty($schema_file=self::get_block_file($block_name,'schema.json'))?false:json_decode(file_get_contents($schema_file),true);
 			}
+			$atts=self::extract_atts($el,$doc,self::$schemas[$block_name]);
+			$atts['level']=self::get_level($el);
 			$id=uniqid();
 			$slot=$doc->createDocumentFragment();
 			if($el->hasChildNodes()){
@@ -86,7 +84,7 @@ class Block{
 				}
 			}
 			self::$slots[$id]=$slot;
-			$block=new self(substr($el->tagName,6),$atts,sprintf('<slot id="%s"/>',$id));
+			$block=new self($block_name,$atts,sprintf('<slot id="%s"/>',$id));
 			$block->init();
 			$tmp=new \DOMDocument();
 			$tmp->loadHTML(
@@ -121,5 +119,60 @@ class Block{
 			return self::get_level($el->parentNode);
 		}
 		return 0;
+	}
+	public static function extract_atts($el,$doc,$schema=null){
+		if(empty($schema) || isset($schema['properties'])){
+			$atts=[];
+			foreach($el->attributes as $attr){
+				$atts[$attr->name]=$attr->value;
+			}
+			if(empty($schema)){return $atts;}
+			if($el->hasChildNodes()){
+				for($i=0;$i<$el->childNodes->length;$i++){
+					$child=$el->childNodes->item($i);
+					if(!is_a($child,\DOMElement::class)){continue;}
+					if(isset($schema['properties'][$child->tagName])){
+						$atts[$child->tagName]=self::extract_atts($child,$doc,$schema['properties'][$child->tagName]);
+						$el->removeChild($child);
+						$i--;
+					}
+				}
+			}
+			foreach($atts as $key=>$val){
+				if(!empty($schema['properties'][$key]['items']) && is_string($val)){
+					$atts[$key]=csv($val)->items;
+				}
+			}
+			return $atts;
+		}
+		if(isset($schema['items'])){
+			$items=[];
+			while($el->childNodes->length){
+				$child=$el->childNodes->item(0);
+				if(is_a($child,\DOMElement::class)){
+					$items[]=self::extract_atts($child,$doc,$schema['items']);
+				}
+				$el->removeChild($child);
+			}
+			return $items;
+		}
+		if(isset($schema['type']) && in_array($schema['type'],['bool','intger','number','string'])){
+			$value=$el->hasAttribute('value')?$el->getAttribute('value'):$el->textContent;
+			switch($schema['type']){
+				case 'bool':return !in_array(strtolower(trim($value)),['0','false','no']);
+				case 'intger':return (int)$value;
+				case 'number':return (float)$value;
+				default: $value;
+			}
+		}
+		$id=uniqid();
+		$slot=$doc->createDocumentFragment();
+		if($el->hasChildNodes()){
+			while($el->childNodes->length){
+				$slot->appendChild($el->childNodes->item(0));
+			}
+		}
+		self::$slots[$id]=$slot;
+		return sprintf('<slot id="%s"/>',$id);
 	}
 }
