@@ -25,8 +25,12 @@ class Page{
 		}
 		$this->info=$info;
 	}
+	public static function get_instance(){
+		if(!isset(static::$instance)){static::$instance=new static($uri,$info);}
+		return static::$instance;
+	}
 	public static function init($uri,$info=null){
-		return $GLOBALS['page']=static::$instance=new static($uri,$info);
+		return $GLOBALS['page']=static::get_instance();
 	}
 	public function get_the_page_file($file){
 		if(file_exists($f=ABSPATH.$this->dir.$file)){return $f;}
