@@ -1,6 +1,7 @@
 export const el=(tag,props,children,namespace)=>{
 	const el=namespace?document.createElementNS(namespace,tag):document.createElement(tag);;
 	const appendChild=(child)=>{
+		if(child==null){return;}
 		if(child instanceof Node){
 			el.appendChild(child);
 		}
