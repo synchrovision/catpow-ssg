@@ -4,3 +4,6 @@ export const renderComponents=()=>{
 		ReactDOM.render(React.createElement(window[el.dataset.component]),{...el.dataset});
 	});
 };
+export const nl2br=(text)=>{
+	return text.split(/(\n)/).map((line,index)=>line==="\n"?<br/>:line);
+};
