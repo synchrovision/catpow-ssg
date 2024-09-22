@@ -4,20 +4,20 @@ class Element{
 	static $all_elements;
 	public static function compile($element){
 		$js_file=ABSPATH.'/elements/script.js';
-		$jsx_file=self::get_element_file($element,'/script.jsx');
-		$css_file=self::get_element_file($element,'/style.css');
-		$scss_file=self::get_element_file($element,'/style.scss');
+		$jsx_file=self::get_element_file($element,'script.jsx');
+		$css_file=self::get_element_file($element,'style.css');
+		$scss_file=self::get_element_file($element,'style.scss');
 		$max_mtime=filemtime($jsx_file);
 		if($scss_file){
 			if(empty($css_file) || filemtime($css_file)<filemtime($scss_file)){
 				if(empty($css_file)){
-					$css_file=substr($scss_file,-4).'css';
+					$css_file=substr($scss_file,0,-4).'css';
 				}
 				Scss::compile($scss_file,$css_file);
 			}
 			$max_mtime=max($max_mtime,filemtime($css_file));
 		}
-		if(!file_exists($js_file) || ($js_file)<$max_mtime){
+		if(!file_exists($js_file) || filemtime($js_file)<$max_mtime){
 			Jsx::bundle($jsx_file,$js_file);
 		}
 	}
