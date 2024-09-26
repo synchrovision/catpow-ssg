@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ControlPanel</title>
+<title>Catpow SSG</title>
 <link rel="stylesheet" href="css/style.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -18,13 +18,13 @@
 			keyword:'',
 			pages:[],
 			init(){
-				const {pc,lt,tb,sp}=this.$refs;
+				const {pc,sp}=this.$refs;
 				const coefMap=new Map();
 				const updateCoef=(iframe)=>{
 					if(!pc.contentWindow.document){return;}
 					const pcd=pc.contentWindow.document.documentElement;
 					const pcsy=Math.max(1,pcd.scrollHeight-pcd.clientHeight);
-					[lt,tb,sp].forEach((f)=>{
+					[sp].forEach((f)=>{
 						if(!f.contentWindow.document){coefMap.set(f,1);return;}
 						const d=f.contentWindow.document.documentElement;
 						const sy=Math.max(1,d.scrollHeight-d.clientHeight);
@@ -32,7 +32,7 @@
 					});
 				}
 				const syncScroll=()=>{
-					[lt,tb,sp].forEach((f)=>{
+					[sp].forEach((f)=>{
 						f.contentWindow.scroll({
 							top:coefMap.get(f)*pc.contentWindow.scrollY
 						});
@@ -56,39 +56,39 @@
 </head>
 
 <body>
-	<div class="siteLayout">
-		<div class="siteHeader">
-			<h2 class="siteHeader__title">Control Panel</h2>
+	<div class="cp-layout">
+		<div class="cp-header">
+			<h2 class="cp-header__title">Catpow SSG</h2>
 		</div>
-		<div class="siteMain" x-data="app()" x-init="updateIndex">
-			<div class="siteMain__sidebar">
-				<div class="search">
-					<input type="text" class="search__input" x-model="keyword"/>
+		<div class="cp-main" x-data="app()" x-init="updateIndex">
+			<div class="cp-main__sidebar">
+				<div class="cp-search">
+					<input type="text" class="cp-search__input" x-model="keyword"/>
 				</div>
-				<ul class="index">
+				<ul class="cp-index">
 					<template x-for="page in pages">
-						<li class="index__item" :class="{active:page==currentPage,visible:!keyword || page.includes(keyword)}">
-							<span x-text="page" @click="currentPage=page"></span>
-							<a class="icon" :href="page" target="_blank">open_in_new</a>
+						<li class="cp-index-item" :class="{'is-active':page==currentPage,'is-visible':!keyword || page.includes(keyword)}">
+							<span class="cp-index-item__label" x-text="page" @click="currentPage=page"></span>
+							<a class="cp-index-item__icon" :href="page" target="_blank">open_in_new</a>
 						</li>
 					</template>
 				</ul>
 			</div>
-			<div class="siteMain__contents">
-				<div class="previews">
-					<?php foreach(['pc','lt','tb','sp'] as $d): ?>
-					<div class="preview preview_<?=$d?>">
-						<iframe class="preview__contents" :src="currentPage" frameborder="0" x-ref="<?=$d?>"></iframe>
-						<div class="preview__control">
-							<div class="icon" @click="()=>$refs.<?=$d?>.contentWindow.location.reload()">replay</div>
+			<div class="cp-main__contents">
+				<div class="cp-previews">
+					<?php foreach(['pc','sp'] as $d): ?>
+					<div class="cp-preview is-media-<?=$d?>">
+						<iframe class="cp-preview__contents" :src="currentPage" frameborder="0" x-ref="<?=$d?>"></iframe>
+						<div class="cp-preview-control">
+							<div class="cp-preview-control__icon" @click="()=>$refs.<?=$d?>.contentWindow.location.reload()">replay</div>
 						</div>
 					</div>
 					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
-		<div class="siteFooter">
-			<p class="siteFooter__text">Catpow-SSG</o>
+		<div class="cp-footer">
+			<p class="cp-footer__text">Catpow-SSG</o>
 		</div>
 	</div>
 </body>

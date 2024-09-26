@@ -1,9 +1,9 @@
 @import 'admin_style_config.scss';
 $colors:(
 	b:hsl(200,0%,99%),
-	m:hsl(200,60%,40%),
-	a:hsl(200,70%,50%),
-	t:hsl(200,0%,20%),
+	m:hsl(200,30%,10%),
+	a:hsl(200,70%,20%),
+	t:hsl(200,0%,10%),
 	i:hsl(200,0%,99%),
 	shd:hsla(0,0%,0%,0.2),
 	lt:hsla(0,0%,100%,0.4),
@@ -30,158 +30,112 @@ html{
 		@include txt((p:3.2vw));
 	}
 }
-.siteLayout{
-	@include bnd((h:100vh));
-	@include flx((w:n,d:c,a:f));
-	.siteHeader{
-		@include bnd((f:0 0 a,w:f));
+
+.cp{
+	&-layout{
+		@include bnd((h:100vh));
+		@include flx((w:n,d:c,a:f));
 	}
-	.siteMain{
+	&-header{
+		@include bnd((f:0 0 a,w:f));
+		@include bnd((pd:12,bs:b));
+		@include bg((g:v (m,80) m));
+		&__title{
+			@include txt((a:c,p:24,f:h,c:i));
+			@include shd((t:1));
+		}
+	}
+	&-main{
 		@include bnd((f:1 1 a));
+		@include flx((w:n));
+		&__sidebar{
+			@include bnd((f:0 0 200,oy:a,h:a 90vh));
+			@include bg((c:m 5));
+		}
+		&__contents{
+			@include bnd((f:1 1 1000,oy:a,h:a 90vh));
+		}
 	}
-	.siteFooter{
+	&-footer{
 		@include bnd((f:0 0 a,w:f));
+		@include bnd((pd:6,bs:b));
+		@include bg((g:v (m,80) m));
+		&__text{
+			@include txt((a:c,p:14,f:h,c:i));
+		}
 	}
-}
-.siteHeader{
-	@include bnd((pd:12,bs:b));
-	@include bg((g:v (m,80) m));
-	&__title{
-		@include txt((a:c,p:24,f:h,c:i));
-		@include shd((t:1));
+	&-search{
+		@include bnd((p:r,pd:8));
+		&::before{
+			content:'🔎';
+			@include bnd((d:b,p:a,i:0,w:1em,h:1em,mg:a,mgl:16));
+			@include txt((h:1em));
+		}
+		&__input{
+			@include bnd((ap:n,d:b,pd:.5em,pdl:2em,w:f,bs:b));
+			@include txt((p:18,c:t));
+			@include bdr((s:n,r:4));
+			@include shd((b:-2));
+		}
 	}
-}
-.siteFooter{
-	@include bnd((pd:6,bs:b));
-	@include bg((g:v (m,80) m));
-	&__text{
-		@include txt((a:c,p:14,f:h,c:i));
+	&-index{
+		@include bnd((pd:12));
+		@include txt((l:n));
+		&-item{
+			@include bnd((pd:4));
+			@include txt((p:12,c:t));
+			@include usr((c:p));
+			&.is-active{
+				@include txt((c:m));
+			}
+			&:not(.is-visible){
+				@include bnd((d:n));
+			}
+			&__icon{
+				@include txt((f:i));
+			}
+			&__label{
+				@include txt((c:t));
+			}
+		}
 	}
-}
-.siteMain{
-	@include flx((w:n));
-	&__sidebar{
-		@include bnd((f:0 0 200,oy:a,h:a 90vh));
-	}
-	&__contents{
-		@include bnd((f:1 1 1000));
-	}
-}
-.pane{
-	@include bnd((d:b,p:r,mg:1rem,pd:1rem,o:h));
-	@include bdr((r:1rem));
-	@include shd((bve:-3));
-	&__header{
-		@include bnd((pd:.2rem));
-		@include txt((a:c,p:1.5rem,f:h));
-		@include shd((t:1));
-	}
-	&__contents{
-		@include bnd((pd:2rem));
-		@include txt((p:2rem));
-	}
-}
-.button{
-	@include bnd((d:b,p:r,mg:1em,pd:.6em));
-	@include bdr((r:2em));
-	@include txt((a:c,w:b));
-	@include shd((bvo:3,t:1));
-	@include usr((c:p));
-	&_l{
-		@include txt((p:3rem));
-	}
-	&_m{
-		@include txt((p:2rem));
-	}
-	&_s{
-		@include txt((p:1.5rem));
-	}
-	&::before{
-		content:'';
-		@include bnd((d:b,p:a,t:0,b:0,l:0,r:0,mg:.3em));
-		@include bdr((s:s,w:.1em,c:m,r:1.5em));
-	}
-	&:active{
-		@include shd((bvo:-3));
-	}
-}
-.previews{
-	@include bnd((h:f,w:1000 a,pd:4,bs:b));
-	@include bg((c:#fff));
-	@include flx((w:w,g:4));
-}
-.preview{
-	@include bnd((p:r));
-	@include bdr((s:s,w:4,c:#222,r:8));
-	@include bdr((p:b,w:30));
-	@include bdr((p:t l,c:#444));
-	@include shd((b:5));
-	&_pc{
-		@include bnd((f:1 1 f,h:calc(100% - 16rem)));
-	}
-	&_lt{
-		@include bnd((f:1 1 256,h:180));
-	}
-	&_tb{
-		@include bnd((f:0 0 256,h:180));
-	}
-	&_sp{
-		@include bnd((f:0 0 90,h:180));
-	}
-	&__contents{
-		@include bnd((p:a,l:0,t:0,bs:b));
-		@include trn((to:0 0));
-	}
-	&_pc &{
+	&-preview{
+		$block:&;
+		@include bnd((p:r));
+		@include bdr((s:s,w:12,c:#222,r:8));
+		@include bdr((p:b,w:30));
+		@include bdr((p:t l,c:#444));
+		@include shd((b:5));
+		&-control{
+			@include bnd((d:b,p:a,r:0,b:-30,pd:4));
+			@include txt((c:i,p:20,h:20));
+			@include usr((c:p));
+			&__icon{
+				@include txt((f:i));
+			}
+		}
 		&__contents{
-			@include bnd((w:200%,h:200%));
-			@include trn((s:.5));
+			@include bnd((p:a,l:0,t:0,bs:b));
+			@include trn((to:0 0));
+			#{$block}.is-media-pc>&{
+				@include bnd((w:160%,h:160%));
+				@include trn((s:.625));
+			}
+			#{$block}.is-media-sp>&{
+				@include bnd((w:125%,h:125%));
+				@include trn((s:.8));
+			}
+		}
+		&.is-media-pc{
+			@include bnd((f:1 1 300,h:720));
+		}
+		&.is-media-sp{
+			@include bnd((f:0 0 360,h:720));
 		}
 	}
-	&_lt &,&_tb &,&_sp &{
-		&__contents{
-			@include bnd((w:400%,h:400%));
-			@include trn((s:.25));
-		}
-	}
-	&__control{
-		@include bnd((d:b,p:a,r:0,b:-30,pd:4));
-		@include txt((c:i,p:20,h:20));
-		@include usr((c:p));
-	}
-}
-.icon{
-	@include txt((f:i));
-}
-.search{
-	@include bnd((p:r,pd:8));
-	&::before{
-		content:'🔎';
-		@include bnd((d:b,p:a,i:0,w:1em,h:1em,mg:a,mgl:16));
-		@include txt((h:1em));
-	}
-	&__input{
-		@include bnd((ap:n,d:b,pd:.5em,pdl:2em,w:f,bs:b));
-		@include txt((p:18,c:t));
-		@include bdr((s:n,r:4));
-		@include shd((b:-2));
-	}
-}
-.index{
-	@include bnd((pd:12));
-	@include txt((l:n));
-	&__item{
-		@include bnd((pd:4));
-		@include txt((p:12,c:t));
-		@include usr((c:p));
-		&.active{
-			@include txt((c:m));
-		}
-		&:not(.visible){
-			@include bnd((d:n));
-		}
-		a{
-			@include txt((c:t));
-		}
+	&-previews{
+		@include bnd((h:720,w:1000 a,pd:4,bs:b));
+		@include flx((w:w,g:4));
+		@include bg((c:#fff));
 	}
 }
