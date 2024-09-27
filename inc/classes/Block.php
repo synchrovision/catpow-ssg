@@ -95,6 +95,30 @@ class Block{
 			$el->parentNode->replaceChild($block_el,$el);
 			$el=$block_el;
 		}
+		elseif($el->tagName==='rtf'){
+			$tmp=new \DOMDocument();
+			$frag=$doc->createDocumentFragment();
+			if($el->hasChildNodes()){
+				while($el->childNodes->length){
+					$frag->appendChild($el->childNodes->item(0));
+				}
+			}
+			$html=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
+			if(preg_match('/^(\n\s+)/mu',$html,$matches)){
+				$html=str_replace($matches[1],"\n",$html);
+			}
+			$html=rtf($html,$el->hasAttribute('class')?$el->getAttribute('class'):'rtf');
+			$tmp->loadHTML(
+				mb_encode_numericentity('<tmp>'.$html.'</tmp>',[0x80,0xffff,0,0xffff],'UTF-8'),
+				\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
+			);
+			$tmp_el=$doc->importNode($tmp->childNodes->item(0),true);
+			$frag=$doc->createDocumentFragment();
+			while($tmp_el->childNodes->length){
+				$frag->appendChild($tmp_el->childNodes->item(0));
+			}
+			$el->parentNode->replaceChild($frag,$el);
+		}
 		elseif($el->tagName==='slot'){
 			$id=$el->getAttribute('id');
 			$slot=self::$slots[$id];
