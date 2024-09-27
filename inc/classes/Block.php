@@ -161,6 +161,15 @@ class Block{
 						$i--;
 					}
 				}
+				if(empty($schema['properties']['children']) && $el->hasChildNodes()){
+					$id=uniqid();
+					$slot=$doc->createDocumentFragment();
+					while($el->childNodes->length){
+						$slot->appendChild($el->childNodes->item(0));
+					}
+					self::$slots[$id]=$slot;
+					$atts['children']=sprintf('<slot id="%s"/>',$id);
+				}
 			}
 			foreach($atts as $key=>$val){
 				if(!empty($schema['properties'][$key]['items']) && is_string($val)){
