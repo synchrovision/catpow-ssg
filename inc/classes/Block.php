@@ -156,7 +156,15 @@ class Block{
 					$child=$el->childNodes->item($i);
 					if(!is_a($child,\DOMElement::class)){continue;}
 					if(isset($schema['properties'][$child->tagName])){
-						$atts[$child->tagName]=self::extract_atts($child,$doc,$schema['properties'][$child->tagName]);
+						if(isset($schema['properties'][$child->tagName]['key'])){
+							self::array_set_value(
+								$atts,$schema['properties'][$child->tagName]['key'],
+								self::extract_atts($child,$doc,$schema['properties'][$child->tagName])
+							);
+						}
+						else{
+							$atts[$child->tagName]=self::extract_atts($child,$doc,$schema['properties'][$child->tagName]);
+						}
 						$el->removeChild($child);
 						$i--;
 					}
@@ -207,5 +215,27 @@ class Block{
 		}
 		self::$slots[$id]=$slot;
 		return sprintf('<slot id="%s"/>',$id);
+	}
+	protected static function array_set_value(&$array,$key,$value){
+		if(strpos($key,'[')===false){$array[$key]=$value;}
+		elseif(preg_match('/^(\w+)((\[\w+\])*)(\[\])?$/',$key,$matches)){
+			$ref=&$array[$matches[1]];
+			if(!empty($matches[2])){
+				$keys=explode('][',substr($matches[2],1,-1));
+				foreach($keys as $key){
+					$ref=&$ref[$key];
+				}
+			}
+			if(empty($matches[4])){
+				$ref=$value;
+			}
+			else{
+				$ref[]=$value;
+			}
+			
+		}
+		else{
+			error_log("{$key} is not valid key");
+		}
 	}
 }
