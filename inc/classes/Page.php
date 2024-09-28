@@ -165,6 +165,7 @@ class Page{
 			while($page=$page->get_parent()){
 				array_unshift($ancestors,$page);
 			}
+			array_unshift($ancestors,new self('/'));
 			return $this->ancestors=$ancestors;
 		}
 		if(isset($this->info[$name])){return $this->info[$name];}
