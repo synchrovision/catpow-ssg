@@ -197,7 +197,11 @@ function rtf($text,$pref='rtf'){
 	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="'.$pref.'\-\1">/u','',$text);
 	$text=str_replace("\n　",'<br/>',$text);
 	$text=preg_replace('/(<\/\w+>)\n/','$1',$text);
+	$text=rxf($text,$pref);
 	return $text;
+}
+function rxf($text,$pref='rxf'){
+	return RXF\RXF::replace($text,$pref);
 }
 function do_shortcode($str){
 	return ShortCode::do_shortcode($str);

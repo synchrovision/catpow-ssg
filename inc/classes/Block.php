@@ -95,7 +95,7 @@ class Block{
 			$el->parentNode->replaceChild($block_el,$el);
 			$el=$block_el;
 		}
-		elseif($el->tagName==='rtf'){
+		elseif($el->tagName==='rtf' || $el->tagName==='rxf'){
 			$tmp=new \DOMDocument();
 			$frag=$doc->createDocumentFragment();
 			if($el->hasChildNodes()){
@@ -107,7 +107,7 @@ class Block{
 			if(preg_match('/^(\n\s+)/mu',$html,$matches)){
 				$html=str_replace($matches[1],"\n",$html);
 			}
-			$html=rtf($html,$el->hasAttribute('class')?$el->getAttribute('class'):'rtf');
+			$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
 			$tmp->loadHTML(
 				mb_encode_numericentity('<tmp>'.$html.'</tmp>',[0x80,0xffff,0,0xffff],'UTF-8'),
 				\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
