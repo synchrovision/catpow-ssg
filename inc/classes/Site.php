@@ -1,25 +1,42 @@
 <?php
 namespace Catpow;
 class Site{
-	public $info;
+	public $info,$sitemap;
 	private static $instance;
-	private function __construct($info){
+	private function __construct($info,$sitemap){
 		$this->info=$info;
+		$this->sitemap=$sitemap;
 	}
-	public static function init($info=null){
-		if(empty($info) && file_exists($site_config_file=CONF_DIR.'/site_config.php')){
-			global $sitemap;
-			include($site_config_file);
-			if(isset($site)){$info=$site;}
+	public static function init($info='site-info',$sitemap='site-sitemap'){
+		if(is_string($info)){$info=csv($info)[0];}
+		if(is_string($sitemap)){$sitemap=csv($sitemap)->dict('uri');}
+		return $GLOBALS['site']=static::$instance=new static($info,$sitemap);
+	}
+	public function get_page_info($uri){
+		$sitemap=$this->sitemap;
+		if(isset($sitemap[$uri])){return $sitemap[$uri];}
+		if(substr($uri,-1)==='/'){
+			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $info;}
+			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $info;}
 		}
-		return $GLOBALS['site']=static::$instance=new static($info);
+		$pathinfo=pathinfo($uri);
+		if(['filenam']==='index'){
+			if(!empty($info=$sitemap[$pathinfo['dirname'].'/']??null)){return $info;}
+		}
+		$dir=$pathinfo['dirname'];
+		do{
+			if(!empty($info=$sitemap[$dir.'/*']??null)){return $info;}
+			$dir=dirname($dir);
+		}
+		while(!empty($dir) && $dir!=='.' && $dir!=='/');
+		return null;
 	}
 	public function __get($name){
 		if(isset($this->info[$name])){return $this->info[$name];}
 	}
 	public static function get_instance(){
-		if(empty($GLOBALS['site'])){static::init();}
-		return $GLOBALS['site'];
+		if(empty(static::$instance)){static::init();}
+		return static::$instance;
 	}
 	public static function copy_file_from_remote_if_not_exists($uri){
 		if(
