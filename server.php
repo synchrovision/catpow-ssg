@@ -82,7 +82,6 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'rdf':
 	case 'xml':
 		init();
-		Catpow\Site::init($site??null);
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
 		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
@@ -122,4 +121,5 @@ function init(){
 	}
 	if(file_exists($f=CONF_DIR.'/functions.php')){require_once($f);}
 	if(file_exists($f=INC_DIR.'/functions.php')){require_once($f);}
+	if(file_exists($f=CONF_DIR.'/init.php')){require_once($f);}
 }
