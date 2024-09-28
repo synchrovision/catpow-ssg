@@ -2,8 +2,10 @@
 namespace Catpow;
 class Page{
 	public $uri,$path_to_root,$filename,$dir,$dir_uri,$router_uri,$info,$scripts,$styles;
+	protected $ancestors;
 	private static $instance;
-	private function __construct($uri,$info){
+	private function __construct($uri,$info=null){
+		$site=Site::get_instance();
 		$this->uri=$uri;
 		$this->path_to_root=str_repeat('../',substr_count(ltrim($uri,'/'),'/'));
 		if($this->path_to_root===''){$this->path_to_root='./';}
@@ -12,16 +14,9 @@ class Page{
 		$this->scripts=new Deps('js');
 		$this->styles=new Deps('css');
 		
-		if(empty($info) && empty($info=$GLOBALS['sitemap'][$uri]??null)){
-			$dir=(substr($uri,-1)==='/')?rtrim($uri,'/'):dirname($uri);
-			do{
-				if(!empty($info=$GLOBALS['sitemap'][$router_uri=$dir.'/*']??null)){
-					$this->router_uri=$router_uri;
-					break;
-				}
-				$dir=dirname($dir);
-			}
-			while(!empty($dir) && $dir!=='.' && $dir!=='/');
+		if(empty($info)){
+			$info=$site->get_page_info($uri);
+			if(substr($info['uri'],-1)==='*'){$this->router_uri=$info['uri'];}
 		}
 		$this->info=$info;
 	}
@@ -142,7 +137,36 @@ class Page{
 		$this->scripts->render();
 		$this->styles->render();
 	}
+	protected function get_parent(){
+		$site=Site::get_instance();
+		if(isset($this->info['parent'])){
+			if(empty($parent_uri=$this->info['parent']) || empty($site->sitemap[$parent_uri])){return null;}
+			return new self($parent_uri,$site->sitemap[$parent_uri]);
+		}
+		$dir=dirname($this->uri);
+		if(in_array(basename($this->uri),['index.html','index.php'])){$dir=dirname($dir);}
+		do{
+			if(!empty($info=$site->get_page_info($dir.'/'))){return new self($dir.'/',$info);}
+			$dir=dirname($dir);
+		}
+		while(!empty($dir) && $dir!=='.' && $dir!=='/');
+		return null;
+	}
 	public function __get($name){
+		if($name==='parent'){
+			return $this->get_parent();
+		}
+		if($name==='ancestors'){
+			if(isset($this->ancestors)){return $this->ancestors;}
+			$site=Site::get_instance();
+			$sitemap=$site->sitemap;
+			$ancestors=[];
+			$page=$this;
+			while($page=$page->get_parent()){
+				array_unshift($ancestors,$page);
+			}
+			return $this->ancestors=$ancestors;
+		}
 		if(isset($this->info[$name])){return $this->info[$name];}
 	}
 }
