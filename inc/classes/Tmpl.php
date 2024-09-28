@@ -105,7 +105,8 @@ class Tmpl{
 		return false;
 	}
 	public static function get_tmpl_file_for_uri($uri){
-		global $sitemap;
+		$site=Site::get_instance();
+		$sitemap=$site->sitemap;
 		if(empty($sitemap[$uri]['template'])){return false;}
 		if(file_exists($f=ABSPATH.$sitemap[$uri]['template'])){return $f;}
 		if(file_exists($f=TMPL_DIR.$sitemap[$uri]['template'])){return $f;}
