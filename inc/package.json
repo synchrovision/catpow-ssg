@@ -5,10 +5,11 @@
 		"watch": "php compiler.php"
 	},
 	"dependencies": {
-		"react": "*",
-		"react-dom": "*",
-		"esbuild-plugin-svgr": "*",
+		"acorn": "^8.12.1",
 		"esbuild-plugin-inline-import": "*",
-		"js-cookie": "*"
+		"esbuild-plugin-svgr": "*",
+		"js-cookie": "*",
+		"react": "*",
+		"react-dom": "*"
 	}
 }
