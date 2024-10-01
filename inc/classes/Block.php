@@ -95,17 +95,18 @@ class Block{
 			$el->parentNode->replaceChild($block_el,$el);
 			$el=$block_el;
 		}
-		elseif($el->tagName==='rtf' || $el->tagName==='rxf'){
+		elseif($el->tagName==='rtf' || $el->tagName==='rxf' || $el->tagName==='md'){
 			$tmp=new \DOMDocument();
-			$frag=$doc->createDocumentFragment();
+			$html=$el->hasAttribute('file')?file_get_contents(Page::get_instance()->get_the_file($el->getAttribute('file'))):'';
 			if($el->hasChildNodes()){
+				$frag=$doc->createDocumentFragment();
 				while($el->childNodes->length){
 					$frag->appendChild($el->childNodes->item(0));
 				}
-			}
-			$html=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
-			if(preg_match('/^(\n\s+)/mu',$html,$matches)){
-				$html=str_replace($matches[1],"\n",$html);
+				$html.=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
+				if(preg_match('/^(\n\s+)/mu',$html,$matches)){
+					$html=str_replace($matches[1],"\n",$html);
+				}
 			}
 			$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
 			$tmp->loadHTML(
