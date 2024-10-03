@@ -1,12 +1,11 @@
 <?php
 namespace Catpow\API;
+use Catpow\Site;
 class Index{
 	public static function request($req){
-		if(file_exists($f=CONF_DIR.'/site_config.php')){
-			include $f;
-			if(!empty($sitemap)){
-				return array_keys($sitemap);
-			}
+		$site=Site::get_instance();
+		if(!empty($site->sitemap)){
+			return array_keys($site->sitemap);
 		}
 		return self::get_html_files_in_dir();
 	}
