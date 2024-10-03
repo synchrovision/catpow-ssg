@@ -11,15 +11,8 @@ export * from './data.jsx';
 export * from './bem.jsx';
 export * from './calc.jsx';
 
-export * from './ready.jsx';
-export * from './observeSelector.jsx';
-export * from './observeIntersection.jsx';
-
-export * from './slider.jsx';
-export * from './scrollspy.jsx';
-export * from './scrollsync.jsx';
+export * from './observer.jsx';
 
 export * from './color.jsx';
-export * from './bsearch.jsx';
-export * from './range.jsx';
+export * from './array.jsx';
 export * from './wave.jsx';
