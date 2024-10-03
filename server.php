@@ -109,7 +109,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		if(!file_exists($file)){
 			init();
 			$result=Catpow\Tmpl::attempt_routing($uri);
-			if($reuslt!==0){return $result;}
+			if($result!==0){return $result;}
 			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		}
 		return false;
