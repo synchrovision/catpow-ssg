@@ -30,13 +30,13 @@ class Tmpl{
 			if(!file_exists($f=dirname($router_file).'/.htaccess')){
 				file_put_contents($f,"RewriteEngine on\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".basename($router_file)." [L]");
 			}
+			Page::init($router_uri);
+			$site=Site::get_instance();
+			$sitemap=$site->sitemap;
+			$page=Page::get_instance();
 			if(($tmpl_file=self::get_tmpl_file_for_file($router_file)) || ($tmpl_file=self::get_tmpl_file_for_uri($router_uri))){
 				ob_start();
-				Page::init($router_uri);
 				try{
-					$site=Site::get_instance();
-					$sitemap=$site->sitemap;
-					$page=Page::get_instance();
 					include $tmpl_file;
 					if(!is_dir(dirname($router_file))){
 						mkdir(dirname($router_file),0755,true);
