@@ -8,7 +8,9 @@ class Tmpl{
 			ob_start();
 			Page::init($uri);
 			try{
-				global $sitemap,$site,$page;
+				$site=Site::get_instance();
+				$sitemap=$site->sitemap;
+				$page=Page::get_instance();
 				include $tmpl_file;
 				if(!is_dir(dirname($file))){
 					mkdir(dirname($file),0755,true);
@@ -32,7 +34,9 @@ class Tmpl{
 				ob_start();
 				Page::init($router_uri);
 				try{
-					global $sitemap,$site,$page;
+					$site=Site::get_instance();
+					$sitemap=$site->sitemap;
+					$page=Page::get_instance();
 					include $tmpl_file;
 					if(!is_dir(dirname($router_file))){
 						mkdir(dirname($router_file),0755,true);
@@ -72,7 +76,8 @@ class Tmpl{
 		}
 	}
 	public static function get_router_file_for_uri($uri){
-		global $sitemap;
+		$site=Site::get_instance();
+		$sitemap=$site->sitemap;
 		if(substr($uri,0,1)!=='/'){return false;}
 		if(
 			substr($uri,-1)!=='/' &&
