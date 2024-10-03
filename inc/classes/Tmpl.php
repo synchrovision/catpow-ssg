@@ -25,6 +25,27 @@ class Tmpl{
 			}
 			return self::UPDATED_FILE;
 		}
+		return self::attempt_routing($uri);
+	}
+	public static function lint_file($file){
+		switch(strrchr($file,'.')){
+			case '.html':{
+				if(file_exists($tidy_conf_file=CONF_DIR.'/tidy.conf')){
+					$html=file_get_contents($file);
+					$html=preg_replace('/ @([\w\.\-:]+=)/',' x-on:$1',$html);
+					$html=preg_replace('/ :([\w\.\-:]+=)/',' x-bind:$1',$html);
+					file_put_contents($file,$html);
+					passthru("tidy -im -config {$tidy_conf_file} {$file}");
+					$html=file_get_contents($file);
+					$html=preg_replace('/ x-on:([\w\.\-:]+=)/',' @$1',$html);
+					$html=preg_replace('/ x-bind:([\w\.\-:]+=)/',' :$1',$html);
+					file_put_contents($file,$html);
+				}
+				break;
+			}
+		}
+	}
+	public static function attempt_routing($uri){
 		if($router_file=self::get_router_file_for_uri($uri)){
 			$router_uri=str_replace(ABSPATH,'',dirname($router_file)).'/*';
 			if(!file_exists($f=dirname($router_file).'/.htaccess')){
@@ -56,24 +77,6 @@ class Tmpl{
 			return self::SHOULD_OUTPUT|self::USE_ROUTER;
 		}
 		return 0;
-	}
-	public static function lint_file($file){
-		switch(strrchr($file,'.')){
-			case '.html':{
-				if(file_exists($tidy_conf_file=CONF_DIR.'/tidy.conf')){
-					$html=file_get_contents($file);
-					$html=preg_replace('/ @([\w\.\-:]+=)/',' x-on:$1',$html);
-					$html=preg_replace('/ :([\w\.\-:]+=)/',' x-bind:$1',$html);
-					file_put_contents($file,$html);
-					passthru("tidy -im -config {$tidy_conf_file} {$file}");
-					$html=file_get_contents($file);
-					$html=preg_replace('/ x-on:([\w\.\-:]+=)/',' @$1',$html);
-					$html=preg_replace('/ x-bind:([\w\.\-:]+=)/',' :$1',$html);
-					file_put_contents($file,$html);
-				}
-				break;
-			}
-		}
 	}
 	public static function get_router_file_for_uri($uri){
 		$site=Site::get_instance();
