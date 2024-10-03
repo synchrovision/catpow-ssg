@@ -1,4 +1,4 @@
-import {debounce} from './debounce.jsx';
+import {debounce} from 'util';
 
 export const scrollsync=function(el,param={}){
 	const app={};
