@@ -6,27 +6,15 @@ import inlineImportPlugin from 'esbuild-plugin-inline-import';
 let pathResolver={
 	name:'pathResolver',
 	setup(build) {
-		build.onResolve({filter: /^(util|component|hooks)$/},async(args)=>{
-			const result=await build.resolve('./'+args.path,{
-				kind:'import-statement',
-				resolveDir:'./modules',
-			});
-			if(result.errors.length>0){
-				return {errors:result.errors};
+		build.onResolve({filter:/^@?\w/},async(args)=>{
+			for(const resolveDir of ['./modules','./node_modules']){
+				const result=await build.resolve('./'+args.path,{
+					kind:'import-statement',resolveDir
+				});
+				if(result.errors.length===0){return {path:result.path};}
 			}
-			return {path:result.path};
 		});
-		build.onResolve({filter: /^\w/},async(args)=>{
-			const result=await build.resolve('./'+args.path,{
-				kind:'import-statement',
-				resolveDir:'./node_modules',
-			});
-			if(result.errors.length>0){
-				return {errors:result.errors};
-			}
-			return {path:result.path};
-		});
-	},
+	}
 }
 let inlineCssImporter=inlineImportPlugin({
 	filter:/css:/,
