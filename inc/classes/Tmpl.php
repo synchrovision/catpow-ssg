@@ -51,13 +51,13 @@ class Tmpl{
 			if(!file_exists($f=dirname($router_file).'/.htaccess')){
 				file_put_contents($f,"RewriteEngine on\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".basename($router_file)." [L]");
 			}
-			Page::init($router_uri);
-			$site=Site::get_instance();
-			$sitemap=$site->sitemap;
-			$page=Page::get_instance();
 			if(($tmpl_file=self::get_tmpl_file_for_file($router_file)) || ($tmpl_file=self::get_tmpl_file_for_uri($router_uri))){
 				ob_start();
 				try{
+					Page::init($router_uri);
+					$site=Site::get_instance();
+					$sitemap=$site->sitemap;
+					$page=Page::get_instance();
 					include $tmpl_file;
 					if(!is_dir(dirname($router_file))){
 						mkdir(dirname($router_file),0755,true);
@@ -65,7 +65,7 @@ class Tmpl{
 					file_put_contents($router_file,ob_get_clean());
 					static::lint_file($router_file);
 					usleep(1000);
-					include $router_file;
+					(function()use($router_file){include $router_file;})();
 					return self::SHOULD_OUTPUT|self::UPDATED_FILE|self::USE_ROUTER;
 				}
 				catch(\Error $e){
@@ -73,7 +73,7 @@ class Tmpl{
 					error_log($e->getMessage());
 				}
 			}
-			include $router_file;
+			(function()use($router_file){include $router_file;})();
 			return self::SHOULD_OUTPUT|self::USE_ROUTER;
 		}
 		return 0;
