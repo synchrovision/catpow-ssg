@@ -3,4 +3,4 @@
 	url = https://github.com/synchrovision/catpow-scss.git
 [submodule "inc/modules"]
 	path = inc/modules
-	url = https://github.com/synchrovision/catpow-esm
+	url = https://github.com/synchrovision/catpow-esm.git
