@@ -160,13 +160,13 @@ function texts($file='texts'){
 function nl2wbr($str){
 	return str_replace("\n",'<wbr/>',str_replace("\n\n",'<br/>',$str));
 }
-function md($text,$class='md-'){
+function md($text,$class='md'){
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
 		global $page;
 		$text=file_get_contents($page->get_the_file($text));
 	}
-	return sprintf('<div class="%s-">%s</div>',$class,\Michelf\MarkdownExtra::defaultTransform($text));
+	return sprintf('<div class="%s-">%s</div>',$class,MarkDown::do_markdown($text));
 }
 function simple_md($text,$classes=[]){
 	$classes=array_merge(
