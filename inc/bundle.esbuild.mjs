@@ -6,13 +6,21 @@ import inlineImportPlugin from 'esbuild-plugin-inline-import';
 let pathResolver={
 	name:'pathResolver',
 	setup(build) {
+		const externalModules = new Set(build.initialOptions.external || []);
+		
+		build.onResolve({filter:/^catpow/},async(args)=>{
+			const result=await build.resolve('./'+args.path.slice(6),{
+				kind:'import-statement',resolveDir:'./modules/src'
+			});
+			if(result.errors.length===0){return {path:result.path};}
+		});
 		build.onResolve({filter:/^@?\w/},async(args)=>{
-			for(const resolveDir of ['./modules','./node_modules']){
-				const result=await build.resolve('./'+args.path,{
-					kind:'import-statement',resolveDir
-				});
-				if(result.errors.length===0){return {path:result.path};}
-			}
+			if(externalModules.has(args.path)){return {path:args.path,external:true}};
+			const result=await build.resolve('./'+args.path,{
+				kind:'import-statement',
+				resolveDir:'./node_modules'
+			});
+			if(result.errors.length===0){return {path:result.path};}
 		});
 	}
 }
