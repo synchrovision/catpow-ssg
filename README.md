@@ -231,7 +231,7 @@ ob_start();
 
 テンプレートの最終行にある``<?php $s->export_selectors_file(); ?>``で``_tmpl/_scss/selectors.scss``に書き出されるファイルは以下のようになります。
 
-```scss：selectors.scss
+```scss
 .myLP{
 	&-sec1{
 		&-myBlock{
