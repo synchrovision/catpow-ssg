@@ -16,7 +16,7 @@ class Page{
 		
 		if(empty($info)){
 			$info=$site->get_page_info($uri);
-			if(substr($info['uri'],-1)==='*'){$this->router_uri=$info['uri'];}
+			if(!empty($info) && substr($info['uri'],-1)==='*'){$this->router_uri=$info['uri'];}
 		}
 		$this->info=$info;
 	}
