@@ -228,6 +228,7 @@ html {
 }
 .cp-index-item.is-active {
   color: #121c21;
+  background-color: rgba(15, 62, 86, 0.1);
 }
 .cp-index-item:not(.is-visible) {
   display: none;

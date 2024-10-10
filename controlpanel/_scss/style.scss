@@ -87,6 +87,7 @@ html{
 			@include usr((c:p));
 			&.is-active{
 				@include txt((c:m));
+				@include bg((c:a 1 .1));
 			}
 			&:not(.is-visible){
 				@include bnd((d:n));
