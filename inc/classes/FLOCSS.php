@@ -1,7 +1,7 @@
 <?php
 namespace Catpow;
 class FLOCSS extends CssRule{
-	public $s=null,$b,$e,$parent,$b_stuck=[],$selectors=[];
+	public $s=null,$b,$e,$parent,$b_stuck=[],$e_stuck=[],$selectors=[];
 	
 	protected function __construct(){}
 	public function get_class(){
@@ -43,10 +43,10 @@ class FLOCSS extends CssRule{
 			}
 		}
 		$classes=explode(' ',$el->getAttribute('class')??'');
-		$_s=$_b=$_e=false;
+		$_s=$_b=$_e=$__e=false;
 		foreach($classes as $i=>$class){
 			if(preg_match('/^([lpc](\-\w+)+)$/',$class,$matches)){
-				$this->b_stuck[]=[$this->b,$this->e];
+				$this->b_stuck[]=[$this->b,$this->e,$this->e_stuck];
 				if(($pos=strpos($matches[1],'__'))!==false){
 					$this->b=explode('-',substr($matches[1],0,$pos));
 					$this->e=explode('-',substr($matches[1],$pos+2));
@@ -59,18 +59,24 @@ class FLOCSS extends CssRule{
 				$_b=true;
 			}
 			else if(substr($class,0,1)==='-'){
-				$this->b_stuck[]=[$this->b,$this->e];
+				$this->b_stuck[]=[$this->b,$this->e,$this->e_stuck];
 				$this->b[]=substr($class,1);
 				$this->e=[];
 				$this->add_selector();
 				$_b=true;
+			}
+			else if(substr($class,0,2)==='__'){
+				$this->e_stuck[]=$this->e;
+				$this->e=[substr($class,2)];
+				$this->add_selector();
+				$__e=true;
 			}
 			else if(substr($class,0,1)==='_'){
 				$this->e[]=substr($class,1);
 				$this->add_selector();
 				$_e=true;
 			}
-			if($_s||$_b||$_e){
+			if($_s||$_b||$__e|$_e){
 				$classes[$i]=$this->get_class();
 				$el->setAttribute('class',implode(' ',$classes));
 				break;
@@ -79,7 +85,8 @@ class FLOCSS extends CssRule{
 		foreach($el->childNodes??[] as $child_el){
 			$this->_apply($child_el);
 		}
-		if($_b){list($this->b,$this->e)=array_pop($this->b_stuck);}
+		if($_b){list($this->b,$this->e,$this->e_stuck)=array_pop($this->b_stuck);}
+		if($__e){$this->e=array_pop($this->e_stuck);}
 		if($_e){array_pop($this->e);}
 	}
 }
