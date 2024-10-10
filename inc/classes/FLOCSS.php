@@ -8,7 +8,7 @@ class FLOCSS extends CssRule{
 		if(empty($this->b)){return null;}
 		$b_class=implode('-',$this->b);
 		if(empty($this->e)){return $b_class;}
-		return $b_class.'__'.end($this->e);
+		return $b_class.'__'.implode('-',$this->e);
 	}
 	public function add_selector($bem=null){
 		if(empty($bem)){$bem=$this;}
@@ -16,7 +16,7 @@ class FLOCSS extends CssRule{
 		$sel='$this->selectors';
 		$sel.="['.".implode("']['&-",$bem->b)."']";
 		if(!empty($bem->e)){
-			$sel.="['&__".end($bem->e)."']";
+			$sel.="['&__".implode("']['&-",$bem->e)."']";
 		}
 		if(eval("return empty({$sel});")){eval($sel."=[];");}
 	}
@@ -45,13 +45,16 @@ class FLOCSS extends CssRule{
 		$classes=explode(' ',$el->getAttribute('class')??'');
 		$_s=$_b=$_e=false;
 		foreach($classes as $i=>$class){
-			if(preg_match('/^([lpc]\-\w+)((\-\w+)*)$/',$class,$matches)){
+			if(preg_match('/^([lpc](\-\w+)+)$/',$class,$matches)){
 				$this->b_stuck[]=[$this->b,$this->e];
-				$this->b=[$matches[1]];
-				if(!empty($matches[2])){
-					$this->b=array_merge($this->b,explode('-',substr($matches[2],1)));
+				if(($pos=strpos($matches[1],'__'))!==false){
+					$this->b=explode('-',substr($matches[1],0,$pos));
+					$this->e=explode('-',substr($matches[1],$pos+2));
 				}
-				$this->e=[];
+				else{
+					$this->b=explode('-',$matches[1]);
+					$this->e=[];
+				}
 				$this->add_selector();
 				$_b=true;
 			}
