@@ -1,7 +1,7 @@
 <?php
 namespace Catpow;
 class WPBEM extends CssRule{
-	public $s=['cp'],$b,$e,$parent,$b_stuck=[],$selectors=[];
+	public $s=['cp'],$b,$e,$parent,$b_stuck=[],$e_stuck=[],$selectors=[];
 	
 	public function get_class(){
 		if(empty($this->b)){return implode('-',$this->s);}
@@ -69,14 +69,20 @@ class WPBEM extends CssRule{
 				$this->add_selector();
 				$_b=true;
 			}
+			else if(substr($class,-1)==='_'){
+				$this->e_stuck[]=$this->e;
+				$this->e=[substr($class,0,-1)];
+				$_e=true;
+			}
 			else if(substr($class,0,1)==='_'){
+				$this->e_stuck[]=$this->e;
 				$this->e[]=substr($class,1);
-				$this->add_selector();
 				$_e=true;
 			}
 			if($_s||$_b||$_e){
 				$classes[$i]=$this->get_class();
 				$el->setAttribute('class',implode(' ',$classes));
+				$this->add_selector();
 				break;
 			}
 		}
@@ -84,6 +90,6 @@ class WPBEM extends CssRule{
 			$this->_apply($child_el);
 		}
 		if($_b){list($this->s,$this->b,$this->e)=array_pop($this->b_stuck);}
-		if($_e){array_pop($this->e);}
+		if($_e){$this->e=array_pop($this->e_stuck);}
 	}
 }

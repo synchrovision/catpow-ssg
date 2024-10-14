@@ -65,9 +65,9 @@ class FLOCSS extends CssRule{
 				$this->add_selector();
 				$_b=true;
 			}
-			else if(substr($class,0,2)==='__'){
+			else if(substr($class,-1)==='_'){
 				$this->e_stuck[]=$this->e;
-				$this->e=[substr($class,2)];
+				$this->e=[substr($class,0,-1)];
 				$this->add_selector();
 				$__e=true;
 			}
