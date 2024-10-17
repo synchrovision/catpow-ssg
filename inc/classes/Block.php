@@ -103,6 +103,7 @@ class Block{
 				while($el->childNodes->length){
 					$frag->appendChild($el->childNodes->item(0));
 				}
+				self::_convert($frag,$doc);
 				$html.=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
 				if(preg_match('/^(\n\s+)/mu',$html,$matches)){
 					$html=str_replace($matches[1],"\n",$html);
