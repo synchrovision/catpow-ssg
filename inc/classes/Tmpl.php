@@ -109,7 +109,7 @@ class Tmpl{
 		$d=dirname($file);
 		$ext=strrchr($file,'.');
 		if(file_exists($f="{$d}/[template]{$ext}.tmpl.php")){return $f;}
-		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$d)."[template]{$ext}.php")){return $f;}
+		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$d)."/[template]{$ext}.php")){return $f;}
 		return false;
 	}
 	public static function get_tmpl_file_for_uri($uri){
