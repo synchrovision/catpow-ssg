@@ -168,11 +168,14 @@ BEM
 
 CatpowSSGはBEMによるコーディングを補助するためのクラスを備えています。
 
--で終わるクラスをセクション
-_で終わるクラスをブロック  
-_で始まるクラスをエレメント  
-_を区切りとしてモディファイア  
-としてクラスを置き換えます
+-で終わるクラスをブロック(block- → block)  
+-で始まるクラスをサブブロック(-subblock → block-subblock)  
+\_で終わるクラスをエレメント(element_ → block-subblock__element)  
+_で始まるクラスをサブエレメント(_subelement → block-subblock__element-subelement)  
+--で始まるクラスをモディファイア(--modifier → block-subblock__element-subelement--midifier)  
+としてクラスを置き換えます。
+
+モディファイアをブロックに適用した場合は、各エレメントにもそのモディファイアが追加されます。
 
 各クラス名を出力したBEMインスタンスからは``export_selectors_file``メソッドでセレクタをまとめたSCSSファイルを書き出すことができます。
 
