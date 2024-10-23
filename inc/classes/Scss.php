@@ -177,6 +177,7 @@ class Scss{
 		preg_match_all('/@import\s+(\'|")(.+?)\1/',file_get_contents($scss_file),$all_matches,\PREG_SET_ORDER);
 		$dir=dirname($scss_file).'/';
 		foreach($all_matches as $matches){
+			if(strpos($matches[2],'://')!==false){continue;}
 			if(
 				file_exists($relative_file=$dir.$matches[2]) ||
 				file_exists($relative_file=$relative_file.'.scss')
