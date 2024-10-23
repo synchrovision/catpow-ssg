@@ -67,6 +67,8 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		else{
 			if(!file_exists($file)){
 				init();
+				$result=Catpow\Tmpl::attempt_routing($uri);
+				if($result!==0){return $result;}
 				Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 			}
 		}
@@ -74,6 +76,8 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'css':
 		init();
 		Catpow\Scss::compile_for_file($file);
+		$result=Catpow\Tmpl::attempt_routing($uri);
+		if($result!==0){return $result;}
 		Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		return false;
 	case 'html':
@@ -91,6 +95,13 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 					mkdir(dirname($file),0755,true);
 				}
 				copy($tmpl_file,$file);
+			}
+		}
+		else{
+			if(!file_exists($file)){
+				$result=Catpow\Tmpl::attempt_routing($uri);
+				if($result!==0){return $result;}
+				Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 			}
 		}
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
