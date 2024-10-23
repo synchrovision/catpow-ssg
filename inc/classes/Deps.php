@@ -23,6 +23,10 @@ class Deps{
 					['src'=>'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js','attr'=>'nomodule defer']
 				]
 			],
+			'htmx'=>[
+				'src'=>'https://unpkg.com/htmx.org@2.0.3',
+				'attr'=>'integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"'
+			],
 			'axios'=>['src'=>'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'],
 			'cookie'=>['src'=>'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js'],
 			'hammerjs'=>['src'=>'https://hammerjs.github.io/dist/hammer.min.js'],
