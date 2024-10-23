@@ -166,22 +166,27 @@ class Scss{
 	public static function compile($scss_file,$css_file){
 		if(version_compare(PHP_VERSION, '5.4')<0)return;
 		$scssc=self::get_scssc();
+		$modified_time=filemtime($scss_file);
 		if(
 			file_exists($config_file=ABSPATH.'/_scss/style_config.scss') ||
 			file_exists($config_file=CONF_DIR.'/style_config.scss')
 		){
-			$style_config_modified_time=filemtime($config_file);
-		}
-		else{
-			$style_config_modified_time=0;
+			$modified_time=max($modified_time,filemtime($config_file));
 		}
 		if(!is_dir(dirname($css_file))){mkdir(dirname($css_file),0777,true);}
+		preg_match_all('/@import\s+(\'|")(.+?)\1/',file_get_contents($scss_file),$all_matches,\PREG_SET_ORDER);
+		$dir=dirname($scss_file).'/';
+		foreach($all_matches as $matches){
+			if(
+				file_exists($relative_file=$dir.$matches[2]) ||
+				file_exists($relative_file=$relative_file.'.scss')
+			){
+				$modified_time=max($modified_time,filemtime($relative_file));
+			}
+		}
 		if(
 			!file_exists($css_file) or
-			filemtime($css_file) < max(
-				filemtime($scss_file),
-				$style_config_modified_time
-			)
+			filemtime($css_file) < $modified_time
 		){
 			try{
 				self::$current_scss_file=$scss_file;
