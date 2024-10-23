@@ -8,21 +8,22 @@ PHPのビルドインサーバーを利用したシンプルな静的サイト�
 
 サイトのディレクトリに移動し
 
- ```command
-git clone --recursive https://github.com/cpprj/catpow-ssg.git _compiler
- ```
- または、サブモジュールとして
+```zsh
+git clone --recursive https://github.com/synchrovision/catpow-ssg.git _compiler
+```
 
- ```command
-git submodule add https://github.com/cpprj/catpow-ssg.git _compiler
- ```
- 
+または、サブモジュールとして
+
+```zsh
+git submodule add https://github.com/synchrovision/catpow-ssg.git _compiler
+```
+
 でインストール
 
- ```command
+```zsh
 php _compiler/server.php
- ```
- 
+```
+
 でサーバーを起動します。
 
 概要
@@ -38,7 +39,7 @@ CLIでphp8が実行できる環境が必要です。
 
 ### Macの場合
 
-```command
+```zsh
 php -v
 ```
 
@@ -48,7 +49,7 @@ php -v
 
 パッケージ管理ツール[Homebrew](https://brew.sh/index_ja)をインストールします。ターミナルで以下のコマンドを実行してください。
 
-```command
+```zsh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
@@ -230,7 +231,7 @@ ob_start();
 
 テンプレートの最終行にある``<?php $s->export_selectors_file(); ?>``で``_tmpl/_scss/selectors.scss``に書き出されるファイルは以下のようになります。
 
-```scss：selectors.scss
+```scss
 .myLP{
 	&-sec1{
 		&-myBlock{

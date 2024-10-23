@@ -83,7 +83,6 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'rdf':
 	case 'xml':
 		init();
-		Catpow\Site::init($site??null);
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
 		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
@@ -113,6 +112,8 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	default:
 		if(!file_exists($file)){
 			init();
+			$result=Catpow\Tmpl::attempt_routing($uri);
+			if($result!==0){return $result;}
 			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		}
 		return false;
@@ -120,14 +121,11 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 
 function init(){
 	require_once INC_DIR.'/vendor/autoload.php';
-	spl_autoload_register(function($class){
-		if(file_exists($f=CONF_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);return;}
-		if(file_exists($f=INC_DIR.'/classes/'.str_replace('\\','/',$class).'.php')){include($f);}
-	});
 	if(file_exists(APP_DIR.'/.env')){
 		$dotenv = Dotenv\Dotenv::createImmutable(APP_DIR);
 		$dotenv->load();
 	}
 	if(file_exists($f=CONF_DIR.'/functions.php')){require_once($f);}
 	if(file_exists($f=INC_DIR.'/functions.php')){require_once($f);}
+	if(file_exists($f=CONF_DIR.'/init.php')){require_once($f);}
 }

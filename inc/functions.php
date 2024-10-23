@@ -42,17 +42,17 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 						if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
 							imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
 						}
-						$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s" type="image/webp"/>',$u*2,$src);
+						$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s?%d" type="image/webp"/>',$u*2,$src,filemtime($file));
 					}
 				}
 			}
 			if(!empty($webp=$page->generate_webp_for_image($name))){
 				$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
 			}
-			$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/>',$name,$alt,$size[0],$size[1]);
+			$rtn.=sprintf('<img src="%s?%d" alt="%s" width="%d" height="%d"/>',$name,filemtime($file),$alt,$size[0],$size[1]);
 		}
 		else{
-			$rtn.=sprintf('<img src="%s" alt="%s"/>',$name,$alt);
+			$rtn.=sprintf('<img src="%s?%d" alt="%s"/>',$name,filemtime($file),$alt);
 		}
 	}
 	$rtn.='</picture>';
@@ -160,13 +160,13 @@ function texts($file='texts'){
 function nl2wbr($str){
 	return str_replace("\n",'<wbr/>',str_replace("\n\n",'<br/>',$str));
 }
-function md($text){
+function md($text,$class='md'){
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
 		global $page;
 		$text=file_get_contents($page->get_the_file($text));
 	}
-	return \Michelf\MarkdownExtra::defaultTransform(ShortCode::do_shortcode($text));
+	return sprintf('<div class="%s-">%s</div>',$class,MarkDown::do_markdown($text));
 }
 function simple_md($text,$classes=[]){
 	$classes=array_merge(
@@ -197,7 +197,11 @@ function rtf($text,$pref='rtf'){
 	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="'.$pref.'\-\1">/u','',$text);
 	$text=str_replace("\n　",'<br/>',$text);
 	$text=preg_replace('/(<\/\w+>)\n/','$1',$text);
+	$text=rxf($text,$pref);
 	return $text;
+}
+function rxf($text,$pref='rxf'){
+	return RXF\RXF::replace($text,$pref);
 }
 function do_shortcode($str){
 	return ShortCode::do_shortcode($str);
