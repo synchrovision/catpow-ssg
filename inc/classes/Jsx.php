@@ -48,8 +48,11 @@ class Jsx{
 		}
 		if(!file_exists($bundle_js_file) or filemtime($bundle_js_file) < $latest_filetime){
 			$site=Site::get_instance();
+			$command="node bundle.esbuild.mjs {$entry_file} {$bundle_js_file}";
+			if($site->useGlobalReact){$command.=' --useGlobalReact';}
+			if($site->debugMode){$command.=' --debugMode';}
 			ob_start();
-			passthru("node bundle.esbuild.mjs {$entry_file} {$bundle_js_file}".($site->useGlobalReact?' --useGlobalReact':''));
+			passthru($command);
 			error_log(ob_get_clean());
 		}
 	}

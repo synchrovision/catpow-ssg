@@ -9,6 +9,10 @@ const {
 	positionals
 }=parseArgs({
 	options:{
+		debugMode:{
+			type:'boolean',
+			default:false
+		},
 		useGlobalReact:{
 			type:'boolean',
 			default:false
@@ -17,7 +21,7 @@ const {
 	allowPositionals: true
 });
 
-const {useGlobalReact}=values;
+const {useGlobalReact,debugMode}=values;
 
 let pathResolver={
 	name:'pathResolver',
@@ -73,6 +77,7 @@ await esbuild.build({
 	entryPoints: [positionals[0]],
 	outfile: positionals[1],
 	bundle:true,
+	minify:!debugMode,
 	external:useGlobalReact?['react','react-dom']:[],
 	define:useGlobalReact?{
 		'React':'window.React',
