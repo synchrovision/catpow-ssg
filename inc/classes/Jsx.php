@@ -47,8 +47,9 @@ class Jsx{
 			$latest_filetime=max($latest_filetime,filemtime($bundle_file));
 		}
 		if(!file_exists($bundle_js_file) or filemtime($bundle_js_file) < $latest_filetime){
+			$site=Site::get_instance();
 			ob_start();
-			passthru("node bundle.esbuild.mjs {$entry_file} {$bundle_js_file}");
+			passthru("node bundle.esbuild.mjs {$entry_file} {$bundle_js_file}".($site->useGlobalReact?' --useGlobalReact':''));
 			error_log(ob_get_clean());
 		}
 	}
