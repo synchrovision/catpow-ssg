@@ -26,7 +26,9 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 			$has_alt_image=true;
 		}
 	}
-	$file=$page->get_the_file($name);
+	$file=$page->get_the_tmpl_file($name);
+	$has_tmpl_image=!empty($file);
+	if(!$has_tmpl_image){$file=$page->get_the_file($name);}
 	if(empty($file)){
 		$rtn.=sprintf('<img src="%s" alt="%s" width="%d" height="%d"/>',$name,$alt,100,100);
 	}
@@ -57,7 +59,6 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 	}
 	$rtn.='</picture>';
 	return $rtn;
-
 }
 function table($data,$props=null){
 	if(empty($props)){$props=[];}

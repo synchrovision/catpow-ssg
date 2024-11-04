@@ -45,6 +45,16 @@ class Page{
 		if(file_exists($f=TMPL_DIR.'/'.$file)){return $f;}
 		if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
 	}
+	public function get_the_tmpl_file($file){
+		if(substr($file,0,1)==='/'){
+			if(file_exists($f=TMPL_DIR.$file)){return $f;}
+			if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
+			return null;
+		}
+		if(file_exists($f=TMPL_DIR.$this->dir.$file)){return $f;}
+		if(file_exists($f=TMPL_DIR.'/'.$file)){return $f;}
+		if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
+	}
 	public function get_the_latest_file($file){
 		if(substr($file,0,1)==='/'){
 			if(file_exists($f=ABSPATH.$file)){$f1=$f;}
