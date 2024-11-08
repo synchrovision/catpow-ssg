@@ -80,7 +80,7 @@
 					<div class="cp-preview is-media-<?=$d?>">
 						<iframe class="cp-preview__contents" :src="currentPage" frameborder="0" x-ref="<?=$d?>"></iframe>
 						<div class="cp-preview-control">
-							<div class="cp-preview-control__icon" @click="()=>$refs.<?=$d?>.contentWindow.location.reload()">replay</div>
+							<div class="cp-preview-control__icon" @click="$refs.<?=$d?>.contentWindow.location.reload()">replay</div>
 						</div>
 					</div>
 					<?php endforeach; ?>
