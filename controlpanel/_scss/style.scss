@@ -96,7 +96,7 @@ html{
 				@include txt((f:i));
 			}
 			&__label{
-				@include txt((c:t));
+				@include txt((c:t,b:b));
 			}
 		}
 	}

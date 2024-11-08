@@ -238,6 +238,7 @@ html {
 }
 .cp-index-item__label {
   color: #1a1a1a;
+  word-break: break-all;
 }
 .cp-preview {
   position: relative;
