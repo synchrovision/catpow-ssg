@@ -3,7 +3,7 @@ $colors:(
 	b:hsl(200,0%,99%),
 	m:hsl(200,30%,10%),
 	a:hsl(200,70%,20%),
-	t:hsl(200,0%,10%),
+	t:hsl(200,0%,10%), 
 	i:hsl(200,0%,99%),
 	shd:hsla(0,0%,0%,0.2),
 	lt:hsla(0,0%,100%,0.4),
@@ -47,13 +47,18 @@ html{
 	}
 	&-main{
 		@include bnd((f:1 1 a));
-		@include flx((w:n));
+		@include bp(-960){
+			@include grd((tr:160 1fr));
+		}
+		@include bp(960){
+			@include grd((tc:240 1fr));
+		}
 		&__sidebar{
-			@include bnd((f:0 0 200,oy:a,h:a 90vh));
+			@include bnd((oy:a));
 			@include bg((c:m 5));
 		}
 		&__contents{
-			@include bnd((f:1 1 1000,oy:a,h:a 90vh));
+			@include bnd((oy:a));
 		}
 	}
 	&-footer{
@@ -81,6 +86,7 @@ html{
 	&-index{
 		@include bnd((pd:12));
 		@include txt((l:n));
+		@include grd((rc:300));
 		&-item{
 			@include bnd((pd:4));
 			@include txt((p:12,c:t));
@@ -102,7 +108,7 @@ html{
 	}
 	&-preview{
 		$block:&;
-		@include bnd((p:r));
+		@include bnd((p:r,h:calc(var(--h) * var(--s) * 1px)));
 		@include bdr((s:s,w:12,c:#222,r:8));
 		@include bdr((p:b,w:30));
 		@include bdr((p:t l,c:#444));
@@ -116,27 +122,13 @@ html{
 			}
 		}
 		&__contents{
-			@include bnd((p:a,l:0,t:0,bs:b));
-			@include trn((to:0 0));
-			#{$block}.is-media-pc>&{
-				@include bnd((w:160%,h:160%));
-				@include trn((s:.625));
-			}
-			#{$block}.is-media-sp>&{
-				@include bnd((w:125%,h:125%));
-				@include trn((s:.8));
-			}
-		}
-		&.is-media-pc{
-			@include bnd((f:1 1 300,h:720));
-		}
-		&.is-media-sp{
-			@include bnd((f:0 0 360,h:720));
+			@include bnd((p:a,l:0,t:0,w:calc(var(--w) * 1px),h:calc(var(--h) * 1px),bs:b));
+			@include trn((to:0 0,s:var(--s,1)));
 		}
 	}
 	&-previews{
-		@include bnd((h:720,w:1000 a,pd:4,bs:b));
-		@include flx((w:w,g:4));
+		@include bnd((pd:8));
+		@include grd((tc:4fr 1fr,g:8));
 		@include bg((c:#fff));
 	}
 }
