@@ -1,23 +1,17 @@
 <?php
-ini_set("error_log","php://stdout");
-define('ABSPATH',dirname(__DIR__));
-define('BASE_URL','http://localhost:8000');
-define('APP_DIR',__DIR__);
-define('APP_NAME',basename(__DIR__));
-define('APP_URL',BASE_URL.'/'.APP_NAME);
-define('CP_DIR',APP_DIR.'/controlpanel');
-define('CP_URL',APP_URL.'/controlpanel');
+require 'inc/settings.php';
 if(php_sapi_name()==='cli'){
 	chdir(APP_DIR);
 	passthru('git submodule update --init --recursive');
 	chdir(ABSPATH);
-	passthru('php -S localhost:8000 '.APP_NAME.'/server.php & open '.CP_URL.'/');
+	$descriptor=[['pipe','r'],['file','php://stdout','w'],['file','error.log','w']];
+	$main_proc=proc_open('php -S localhost:8000 '.APP_NAME.'/server.php & open '.CP_URL.'/',$descriptor,$pipes);
+	$sub_proc=proc_open('php -S localhost:8001 '.APP_NAME.'/inc/observer.php',$descriptor,$pipes);
+	while(!feof(STDIN)){sleep(10);}
+	proc_close($main_proc);
+	proc_close($sub_proc);
 	return;
 }
-define('API_URL',APP_URL.'/api');
-define('INC_DIR',APP_DIR.'/inc');
-define('CONF_DIR',ABSPATH.'/_config');
-define('TMPL_DIR',ABSPATH.'/_tmpl');
 
 $uri=explode('?',$_SERVER["REQUEST_URI"])[0];
 if(strpos($uri,'/'.APP_NAME.'/api/')===0){

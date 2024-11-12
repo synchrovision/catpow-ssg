@@ -34,21 +34,67 @@
 				const syncScroll=()=>{
 					[sp].forEach((f)=>{
 						f.contentWindow.scroll({
-							top:coefMap.get(f)*pc.contentWindow.scrollY
+							top:coefMap.get(f)*pc.contentWindow.scrollY,
+							behavior:'instant'
 						});
 					});
+				}
+				const currentPageDeps={html:false,js:[],css:[]};
+				const observeUpdate=async()=>{
+					if(currentPageDeps.html){
+						const options={
+							method:'POST',
+							headers:{"Content-Type":'application/json'},
+							body:JSON.stringify(currentPageDeps)
+						};
+						const result=await fetch('http://localhost:8001/',options).then(res=>res.json());
+						if(result.updated){
+							this.reload();
+							console.log('reload page');
+						}
+					}
+					else{
+						await new Promise((resolve)=>setTimeout(resolve,5000));
+					}
+					observeUpdate();
 				}
 				pc.addEventListener('load',()=>{
 					updateCoef();
 					pc.contentWindow.addEventListener('scroll',syncScroll);
+					currentPageDeps.js=[];
+					currentPageDeps.css=[];
+					if(pc.src.startsWith('<?=BASE_URL?>')){
+						currentPageDeps.html=(new URL(pc.src)).pathname;
+						for(const script of pc.contentDocument.scripts){
+							if(script.src.startsWith('<?=BASE_URL?>')){
+								currentPageDeps.js.push((new URL(script.src)).pathname);
+							}
+						}
+						for(const styleSheet of pc.contentDocument.styleSheets){
+							if(styleSheet.href.startsWith('<?=BASE_URL?>')){
+								currentPageDeps.css.push((new URL(styleSheet.href)).pathname);
+							}
+						}
+					}
+					else{
+						currentPageDeps.html=false;
+					}
+					console.log({currentPageDeps});
 				});
 				const timer=setInterval(updateCoef,100);
+				observeUpdate();
+			
+				this.updateIndex();
 			},
 			updateIndex(){
 				con.get('index').then((res)=>{
 					this.currentPage=res.data[0];
 					this.pages=res.data;
 				});
+			},
+			reload(){
+				this.$refs.pc.contentWindow.location.reload();
+				this.$refs.sp.contentWindow.location.reload();
 			}
 		};
 	}
@@ -60,7 +106,7 @@
 		<div class="cp-header">
 			<h2 class="cp-header__title">Catpow SSG</h2>
 		</div>
-		<div class="cp-main" x-data="app()" x-init="updateIndex">
+		<div class="cp-main" x-data="app()" x-init="init()">
 			<div class="cp-main__sidebar">
 				<div class="cp-search">
 					<input type="text" class="cp-search__input" x-model="keyword"/>
