@@ -70,10 +70,14 @@
 							headers:{"Content-Type":'application/json'},
 							body:JSON.stringify(currentPageDeps)
 						};
+						console.log('start to observe : '+currentPageDeps.html);
 						const result=await fetch('http://localhost:8001/',options).then(res=>res.json());
 						if(result.updated){
+							console.log('change detected');
 							this.reload();
-							console.log('reload page');
+						}
+						else{
+							console.log('no change detected');
 						}
 					}
 					else{
@@ -89,12 +93,12 @@
 					if(pc.src.startsWith('<?=BASE_URL?>')){
 						currentPageDeps.html=(new URL(pc.src)).pathname;
 						for(const script of pc.contentDocument.scripts){
-							if(script.src.startsWith('<?=BASE_URL?>')){
+							if(script.src && script.src.startsWith('<?=BASE_URL?>')){
 								currentPageDeps.js.push((new URL(script.src)).pathname);
 							}
 						}
 						for(const styleSheet of pc.contentDocument.styleSheets){
-							if(styleSheet.href.startsWith('<?=BASE_URL?>')){
+							if(styleSheet.href && styleSheet.href.startsWith('<?=BASE_URL?>')){
 								currentPageDeps.css.push((new URL(styleSheet.href)).pathname);
 							}
 						}
@@ -102,7 +106,6 @@
 					else{
 						currentPageDeps.html=false;
 					}
-					console.log({currentPageDeps});
 				});
 				observeUpdate();
 				
@@ -117,6 +120,7 @@
 			reload(){
 				this.$refs.pc.contentWindow.location.reload();
 				this.$refs.sp.contentWindow.location.reload();
+				console.log('reload page');
 			}
 		};
 	}
