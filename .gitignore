@@ -3,3 +3,4 @@ _notes
 package-lock.json
 logs
 .DS_Store
+error.log
