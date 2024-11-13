@@ -61,6 +61,7 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 	return $rtn;
 }
 function table($data,$props=null){
+	if(is_string($data)){$data=csv($data)->data;}
 	if(empty($props)){$props=[];}
 	if(is_string($props)){$props=['class'=>$props];}
 	$rtn=sprintf('<table%s>',HTML::get_attr_code(['class'=>$props['classes']['table']??$props['class']??null]));
