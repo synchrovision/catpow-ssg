@@ -23,7 +23,7 @@
 				//scroll sync
 				const coefMap=new Map();
 				const updateCoef=(iframe)=>{
-					if(!pc.contentWindow.document){return;}
+					if(!pc.contentWindow.document || !pc.contentWindow.document.documentElement){return;}
 					const pcd=pc.contentWindow.document.documentElement;
 					const pcsy=Math.max(1,pcd.scrollHeight-pcd.clientHeight);
 					[sp].forEach((f)=>{
@@ -62,52 +62,17 @@
 				resizeOberver.observe(sp.parentElement);
 
 				//auto reload
-				const currentPageDeps={html:false,js:[],css:[]};
-				const observeUpdate=async()=>{
-					if(currentPageDeps.html){
-						const options={
-							method:'POST',
-							headers:{"Content-Type":'application/json'},
-							body:JSON.stringify(currentPageDeps)
-						};
-						console.log('start to observe : '+currentPageDeps.html);
-						const result=await fetch('http://localhost:8001/',options).then(res=>res.json());
-						if(result.updated){
-							console.log('change detected');
-							this.reload();
-						}
-						else{
-							console.log('no change detected');
-						}
-					}
-					else{
-						await new Promise((resolve)=>setTimeout(resolve,5000));
-					}
-					observeUpdate();
-				}
-				pc.addEventListener('load',()=>{
-					updateCoef();
-					pc.contentWindow.addEventListener('scroll',syncScroll);
-					currentPageDeps.js=[];
-					currentPageDeps.css=[];
-					if(pc.src.startsWith('<?=BASE_URL?>')){
-						currentPageDeps.html=(new URL(pc.src)).pathname;
-						for(const script of pc.contentDocument.scripts){
-							if(script.src && script.src.startsWith('<?=BASE_URL?>')){
-								currentPageDeps.js.push((new URL(script.src)).pathname);
-							}
-						}
-						for(const styleSheet of pc.contentDocument.styleSheets){
-							if(styleSheet.href && styleSheet.href.startsWith('<?=BASE_URL?>')){
-								currentPageDeps.css.push((new URL(styleSheet.href)).pathname);
-							}
-						}
-					}
-					else{
-						currentPageDeps.html=false;
+				const es=new EventSource('<?=SSE_URL?>');
+				let lastLoad=0,isLoading=false;
+				pc.addEventListener('load',()=>{lastLoad=Math.floor(Date.now() / 1000);isLoading=false;});
+				es.addEventListener('update',(e)=>{
+					if(isLoading){return;}
+					const updatedFiles=JSON.parse(e.data);
+					if(Object.values(updatedFiles).some(mtime=>mtime>lastLoad)){
+						this.reload();
+						isLoading=true;
 					}
 				});
-				observeUpdate();
 				
 				this.updateIndex();
 			},

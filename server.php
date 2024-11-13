@@ -6,7 +6,7 @@ if(php_sapi_name()==='cli'){
 	chdir(ABSPATH);
 	$descriptor=[['pipe','r'],['file','php://stdout','w'],['file','error.log','w']];
 	$main_proc=proc_open('php -S localhost:8000 '.APP_NAME.'/server.php & open '.CP_URL.'/',$descriptor,$pipes);
-	$sub_proc=proc_open('php -S localhost:8001 '.APP_NAME.'/inc/observer.php',$descriptor,$pipes);
+	$sub_proc=proc_open('php -S localhost:8001 '.APP_NAME.'/inc/sse.php',$descriptor,$pipes);
 	while(!feof(STDIN)){sleep(10);}
 	proc_close($main_proc);
 	proc_close($sub_proc);
