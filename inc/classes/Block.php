@@ -69,64 +69,66 @@ class Block{
 	}
 	private static function _convert($el,$doc){
 		if(!is_a($el,\DOMElement::class) && !is_a($el,\DOMDocumentFragment::class)){return;}
-		if(substr($el->tagName,0,6)==='block-'){
-			$block_name=substr($el->tagName,6);
-			if(!isset(self::$schemas[$block_name])){
-				self::$schemas[$block_name]=empty($schema_file=self::get_block_file($block_name,'schema.json'))?false:json_decode(file_get_contents($schema_file),true);
-			}
-			$atts=self::extract_atts($el,$doc,self::$schemas[$block_name]);
-			$atts['level']=self::get_level($el);
-			$id=uniqid();
-			$slot=$doc->createDocumentFragment();
-			if($el->hasChildNodes()){
-				while($el->childNodes->length){
-					$slot->appendChild($el->childNodes->item(0));
+		if(is_a($el,\DOMElement::class)){
+			if(substr($el->tagName,0,6)==='block-'){
+				$block_name=substr($el->tagName,6);
+				if(!isset(self::$schemas[$block_name])){
+					self::$schemas[$block_name]=empty($schema_file=self::get_block_file($block_name,'schema.json'))?false:json_decode(file_get_contents($schema_file),true);
 				}
+				$atts=self::extract_atts($el,$doc,self::$schemas[$block_name]);
+				$atts['level']=self::get_level($el);
+				$id=uniqid();
+				$slot=$doc->createDocumentFragment();
+				if($el->hasChildNodes()){
+					while($el->childNodes->length){
+						$slot->appendChild($el->childNodes->item(0));
+					}
+				}
+				self::$slots[$id]=$slot;
+				$block=new self($block_name,$atts,sprintf('<slot id="%s"/>',$id));
+				$block->init();
+				$tmp=new \DOMDocument();
+				$tmp->loadHTML(
+					mb_encode_numericentity($block->get_html(),[0x80,0xffff,0,0xffff],'UTF-8'),
+					\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
+				);
+				$block_el=$doc->importNode($tmp->childNodes->item(0),true);
+				$el->parentNode->replaceChild($block_el,$el);
+				$el=$block_el;
 			}
-			self::$slots[$id]=$slot;
-			$block=new self($block_name,$atts,sprintf('<slot id="%s"/>',$id));
-			$block->init();
-			$tmp=new \DOMDocument();
-			$tmp->loadHTML(
-				mb_encode_numericentity($block->get_html(),[0x80,0xffff,0,0xffff],'UTF-8'),
-				\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
-			);
-			$block_el=$doc->importNode($tmp->childNodes->item(0),true);
-			$el->parentNode->replaceChild($block_el,$el);
-			$el=$block_el;
-		}
-		elseif($el->tagName==='rtf' || $el->tagName==='rxf' || $el->tagName==='md'){
-			$tmp=new \DOMDocument();
-			$html=$el->hasAttribute('file')?file_get_contents(Page::get_instance()->get_the_file($el->getAttribute('file'))):'';
-			if($el->hasChildNodes()){
+			elseif($el->tagName==='rtf' || $el->tagName==='rxf' || $el->tagName==='md'){
+				$tmp=new \DOMDocument();
+				$html=$el->hasAttribute('file')?file_get_contents(Page::get_instance()->get_the_file($el->getAttribute('file'))):'';
+				if($el->hasChildNodes()){
+					$frag=$doc->createDocumentFragment();
+					while($el->childNodes->length){
+						$frag->appendChild($el->childNodes->item(0));
+					}
+					self::_convert($frag,$doc);
+					$html.=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
+					if(preg_match('/^(\n\s+)/mu',$html,$matches)){
+						$html=str_replace($matches[1],"\n",$html);
+					}
+				}
+				$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
+				$tmp->loadHTML(
+					mb_encode_numericentity('<tmp>'.$html.'</tmp>',[0x80,0xffff,0,0xffff],'UTF-8'),
+					\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
+				);
+				$tmp_el=$doc->importNode($tmp->childNodes->item(0),true);
 				$frag=$doc->createDocumentFragment();
-				while($el->childNodes->length){
-					$frag->appendChild($el->childNodes->item(0));
+				while($tmp_el->childNodes->length){
+					$frag->appendChild($tmp_el->childNodes->item(0));
 				}
-				self::_convert($frag,$doc);
-				$html.=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
-				if(preg_match('/^(\n\s+)/mu',$html,$matches)){
-					$html=str_replace($matches[1],"\n",$html);
-				}
+				$el->parentNode->replaceChild($frag,$el);
 			}
-			$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
-			$tmp->loadHTML(
-				mb_encode_numericentity('<tmp>'.$html.'</tmp>',[0x80,0xffff,0,0xffff],'UTF-8'),
-				\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
-			);
-			$tmp_el=$doc->importNode($tmp->childNodes->item(0),true);
-			$frag=$doc->createDocumentFragment();
-			while($tmp_el->childNodes->length){
-				$frag->appendChild($tmp_el->childNodes->item(0));
+			elseif($el->tagName==='slot'){
+				$id=$el->getAttribute('id');
+				$slot=self::$slots[$id];
+				$el->parentNode->replaceChild($slot,$el);
+				$el=$slot;
+				unset(self::$slots[$id]);
 			}
-			$el->parentNode->replaceChild($frag,$el);
-		}
-		elseif($el->tagName==='slot'){
-			$id=$el->getAttribute('id');
-			$slot=self::$slots[$id];
-			$el->parentNode->replaceChild($slot,$el);
-			$el=$slot;
-			unset(self::$slots[$id]);
 		}
 		if($el->hasChildNodes()){
 			for($i=0;$i<$el->childNodes->length;$i++){
