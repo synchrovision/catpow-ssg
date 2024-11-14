@@ -180,29 +180,7 @@ function simple_md($text,$classes=[]){
 	return $text;
 }
 function rtf($text,$pref='rtf'){
-	$text=preg_replace('/\(\((.+?)\)\)/u','<small class="'.$pref.'-small">$1</small>',$text);
-	$text=preg_replace('/\*\*\*\*(.+?)\*\*\*\*/u','<strong class="'.$pref.'-strongest">$1</strong>',$text);
-	$text=preg_replace('/\*\*\*(.+?)\*\*\*/u','<strong class="'.$pref.'-stronger">$1</strong>',$text);
-	$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="'.$pref.'-strong">$1</strong>',$text);
-	$text=preg_replace('/##(.+?)##/u','<em class="'.$pref.'-em">$1</em>',$text);
-	$text=preg_replace('/~~(.+?)~~/u','<del class="'.$pref.'-del">$1</del>',$text);
-	$text=preg_replace('/``(.+?)``/u','<code class="'.$pref.'-code">$1</code>',$text);
-	$text=preg_replace('/^※(.+)$/um','<span class="'.$pref.'-annotation">$1</span>',$text);
-	$text=preg_replace('/■ (.+)/u','<h4 class="'.$pref.'-title">$1</h4>',$text);
-	$text=preg_replace('/!\[(.+?)\]\((.+?)\)/u','<img class="'.$pref.'-image" src="$2" alt="$1"/>',$text);
-	$text=preg_replace('/\[tel:((\d+)\-(\d+)\-(\d+))\]/u','<a class="'.$pref.'-tel" href="tel:$2$3$4" target="_brank">$1</a>',$text);
-	$text=preg_replace('/\[mail:(.+?@.+?)\]/u','<a class="'.$pref.'-mailto" href="mailto:$1" target="_brank">$1</a>',$text);
-	$text=preg_replace('/\[\[(.+?)\]\]\((.+?)\)/u','<a class="'.$pref.'-button" href="$2" target="_brank"><span class="'.$pref.'-button__label">$1</span></a>',$text);
-	$text=preg_replace('/\[(https?:\/\/.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link is-link-external" href="$2" target="_brank">$1</a>',$text);
-	$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link" href="$2" target="_brank">$1</a>',$text);
-	$text=preg_replace('/(.{1,8}?) [:：] (.+(\n[　\t].+)*)/u','<dl class="'.$pref.'-dl"><dt class="'.$pref.'-dl__dt">$1</dt><dd class="'.$pref.'-dl__dd">$2</dd></dl>',$text);
-	$text=preg_replace('/^・ (.+(\n[　\t].+)*)$/um','<ul class="'.$pref.'-ul"><li class="'.$pref.'-ul__li">$1</li></ul>',$text);
-	$text=preg_replace('/^\d{1,2}\. (.+(\n[　\t].+)*)$/um','<ol class="'.$pref.'-ol"><li class="'.$pref.'-ol__li">$1</li></ol>',$text);
-	$text=preg_replace('/<\/(dl|ul|ol)>\s*<\1 class="'.$pref.'\-\1">/u','',$text);
-	$text=str_replace(["\n　","  \n","\n\t"],'<br/>',$text);
-	$text=preg_replace('/(<\/\w+>)\n/','$1',$text);
-	$text=rxf($text,$pref);
-	return $text;
+	return RTF::replace($text,$pref);
 }
 function rxf($text,$pref='rxf'){
 	return RXF\RXF::replace($text,$pref);
