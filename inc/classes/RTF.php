@@ -35,15 +35,15 @@ class RTF{
 		$l=$level+4;
 		$p="$2\n";
 		$p2="$3\n";
-		$text=preg_replace($h.'※'.$t,'<span class="'.$pref.'-annotation'.$c.'">'.$p.'</span>',$text);
-		$text=preg_replace($h.'■ '.$t,'<h'.$l.' class="'.$pref.'-title'.$c.'">'.$p.'</h'.$l.'>',$text);
-		$text=preg_replace($h.'・ '.$t,'<ul class="'.$pref.'-ul'.$c.'"><li class="'.$pref.'-ul__li">'.$p.'</li></ul>',$text);
-		$text=preg_replace($h.'\d{1,2}\. '.$t,'<ol class="'.$pref.'-ol'.$c.'"><li class="'.$pref.'-ol__li">'.$p.'</li></ol>',$text);
 		$text=preg_replace(
 			$h.'([^\s　].{0,8}?) [:：] '.$t,
 			'<dl class="'.$pref.'-dl'.$c.'"><dt class="'.$pref.'-dl__dt">$2</dt><dd class="'.$pref.'-dl__dd">'.$p2.'</dd></dl>',
 			$text
 		);
+		$text=preg_replace($h.'※'.$t,'<span class="'.$pref.'-annotation'.$c.'">'.$p.'</span>',$text);
+		$text=preg_replace($h.'■ '.$t,'<h'.$l.' class="'.$pref.'-title'.$c.'">'.$p.'</h'.$l.'>',$text);
+		$text=preg_replace($h.'・ '.$t,'<ul class="'.$pref.'-ul'.$c.'"><li class="'.$pref.'-ul__li">'.$p.'</li></ul>',$text);
+		$text=preg_replace($h.'\d{1,2}\. '.$t,'<ol class="'.$pref.'-ol'.$c.'"><li class="'.$pref.'-ol__li">'.$p.'</li></ol>',$text);
 		$text=preg_replace(
 			$h.'([①-⑳]|[^\s　]\.) '.$t,
 			'<dl class="'.$pref.'-listed'.$c.'"><dt class="'.$pref.'-listed__dt">$2</dt><dd class="'.$pref.'-listed__dd">'.$p2.'</dd></dl><!--/listed-->',
