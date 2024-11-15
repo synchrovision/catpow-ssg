@@ -106,8 +106,9 @@ class Block{
 					}
 					self::_convert($frag,$doc);
 					$html.=mb_decode_numericentity($tmp->saveHTML($tmp->importNode($frag,true)),[0x80,0xffff,0,0xffff],'UTF-8');
-					if(preg_match('/^(\n\s+)/mu',$html,$matches)){
+					if(preg_match('/^(\n\s+)/u',$html,$matches)){
 						$html=str_replace($matches[1],"\n",$html);
+						$html=preg_replace('/\n\s*$/u','',$html);
 					}
 				}
 				$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
