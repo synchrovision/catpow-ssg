@@ -205,6 +205,9 @@ html{
 			@include bnd((oy:a));
 			&__contents{
 				@include bnd((d:b,w:f,h:a));
+				&.is-iframe{
+					@include bnd((h:f));
+				}
 			}
 		}
 	}

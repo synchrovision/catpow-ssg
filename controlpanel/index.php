@@ -19,6 +19,7 @@
 			pages:[],
 			mode:'preview',
 			comparePreviewScale:50,
+			compIsImage:true,
 			compUrl:'',
 			init(){
 				const {pc,sp,comparePreview}=this.$refs;
@@ -105,12 +106,11 @@
 				this.mode=this.mode==='preview'?'compare':'preview';
 			},
 			dropComp(e){
-				console.log(e);
 				e.preventDefault();
 				const file=e.dataTransfer.files[0];
 				const reader=new FileReader;
 				reader.addEventListener('load',(e)=>{
-					console.log(e);
+					this.compIsImage=file.type.slice(0,6)==='image/';
 					this.compUrl=e.target.result;
 				});
 				reader.readAsDataURL(file);
@@ -162,7 +162,12 @@
 						<iframe class="cp-compare-preview__contents" :src="currentPage" frameborder="0" x-ref="comparePreview"></iframe>
 					</div>
 					<div class="cp-compare-comp" @dragover="(e)=>e.preventDefault()" @drop="dropComp">
-						<img class="cp-compare-comp__contents" :src="compUrl"/>
+						<template x-if="compIsImage">
+							<img class="cp-compare-comp__contents is-image" :src="compUrl"/>
+						</template>
+						<template x-if="!compIsImage">
+							<iframe class="cp-compare-comp__contents is-iframe" :src="compUrl"/>
+						</template>
 					</div>
 					<div class="cp-compare-controls">
 						<div class="cp-compare-controls-scale">
