@@ -109,6 +109,7 @@ class Block{
 					if(preg_match('/^(\n\s+)/u',$html,$matches)){
 						$html=str_replace($matches[1],"\n",$html);
 						$html=preg_replace('/\n\s*$/u','',$html);
+						$html=preg_replace('/^\n\s*/u','',$html);
 					}
 				}
 				$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
