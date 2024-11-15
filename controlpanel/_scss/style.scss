@@ -179,6 +179,7 @@ html{
 			@include bnd((p:r));
 			@include bdr((s:s,w:12,c:#222,r:8));
 			@include bdr((p:t l,c:#444));
+			@include bg((c:b));
 			@include shd((b:5));
 		}
 		&-preview{
