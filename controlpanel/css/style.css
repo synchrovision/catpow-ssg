@@ -72,13 +72,6 @@ html {
   font-family: "Helvetica Neue", "游ゴシック Medium", YuGothic, YuGothicM, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
   min-height: 100vh;
   height: auto;
-  background-image: -webkit-linear-gradient(bottom, #fff, #eee);
-  background-image: -moz-linear-gradient(bottom, #fff, #eee);
-  background-image: -ms-linear-gradient(bottom, #fff, #eee);
-  background-image: -o-linear-gradient(bottom, #fff, #eee);
-  background-image: linear-gradient(180deg, #fff, #eee);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
 }
 @media (max-width:960px) {
   html {
@@ -157,7 +150,16 @@ html {
 }
 .cp-main__sidebar {
   overflow-y: auto;
-  background-color: #f3f4f4;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+@media (max-width:960px) {
+  .cp-main__sidebar {
+    display: -webkit-grid;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 7.5rem;
+    grid-template-columns: 1fr 7.5rem;
+  }
 }
 .cp-main__contents {
   position: relative;
@@ -184,8 +186,10 @@ html {
   color: #fcfcfc;
 }
 .cp-search {
-  position: relative;
-  padding: 0.5rem;
+  position: sticky;
+  top: 0rem;
+  padding: 0.5rem 0.75rem;
+  background-color: #fcfcfc;
 }
 .cp-search::before {
   content: "🔎";
@@ -219,12 +223,15 @@ html {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
 }
 .cp-controls {
-  padding: 0.5rem;
+  position: sticky;
+  top: 0rem;
+  padding: 0.75rem;
+  background-color: #fcfcfc;
 }
 .cp-controls-mode {
   position: relative;
   height: 1.25rem;
-  width: 6.25rem;
+  width: 5.625rem;
   overflow: hidden;
   margin: auto;
   background-color: #888e90;
@@ -253,7 +260,11 @@ html {
   transition: 0.3s;
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
+.cp-controls-mode__label.is-label-preview {
+  padding-right: 1.5em;
+}
 .cp-controls-mode__label.is-label-compare {
+  padding-left: 1.5em;
   background-color: #41494d;
 }
 .cp-controls-mode.is-mode-preview .cp-controls-mode__label.is-label-compare {
@@ -280,7 +291,7 @@ html {
   left: 0.0625rem;
 }
 .cp-index {
-  padding: 0.75rem;
+  grid-column: span 2;
   list-style: none;
   display: -webkit-grid;
   display: -ms-grid;
@@ -288,7 +299,7 @@ html {
   grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
 }
 .cp-index-item {
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
   color: #1a1a1a;
   cursor: pointer;
@@ -317,6 +328,7 @@ html {
   border-bottom-width: 1.875rem;
   border-top-color: #444;
   border-left-color: #444;
+  background-color: #fcfcfc;
   box-shadow: 0 5px 11px rgba(0, 0, 0, 0.2);
 }
 .cp-preview-control {
@@ -353,7 +365,6 @@ html {
   -ms-grid-columns: 4fr 1fr;
   grid-template-columns: 4fr 1fr;
   grid-gap: 0.5rem;
-  background-color: #fff;
 }
 .cp-compare {
   position: absolute;
@@ -405,7 +416,7 @@ html {
   text-align: center;
 }
 .cp-compare-controls-scale__range {
-  width: 18.75rem;
+  width: calc(80% - 5rem);
   cursor: pointer;
 }
 .cp-compare-controls-scale__text {

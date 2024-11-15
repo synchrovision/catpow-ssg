@@ -19,7 +19,6 @@ $fonts:(
 html{
 	@include txt((c:t,f:t));
 	@include bnd((h:100vh a));
-	@include bg((g:v #fff #eee,s:f,r:n));
 	@include bp(-960){
 		@include txt((p:1.6vw));
 	}
@@ -55,7 +54,10 @@ html{
 		}
 		&__sidebar{
 			@include bnd((oy:a));
-			@include bg((c:m 5));
+			@include shd((b:2));
+			@include bp(-960){
+				@include grd((tc:1fr 120));
+			}
 		}
 		&__contents{
 			@include bnd((p:r,oy:a));
@@ -70,7 +72,8 @@ html{
 		}
 	}
 	&-search{
-		@include bnd((p:r,pd:8));
+		@include bnd((p:s,t:0,pd:8 12));
+		@include bg((c:b));
 		&::before{
 			content:'🔎';
 			@include bnd((d:b,p:a,i:0,w:1em,h:1em,mg:a,mgl:16));
@@ -84,10 +87,11 @@ html{
 		}
 	}
 	&-controls{
-		@include bnd((pd:8));
+		@include bnd((p:s,t:0,pd:12));
+		@include bg((c:b));
 		&-mode{
 			$block:&;
-			@include bnd((p:r,h:20,w:100,o:h,mg:a));
+			@include bnd((p:r,h:20,w:90,o:h,mg:a));
 			@include bg((c:m 50));
 			@include bdr((r:16));
 			@include usr((c:p));
@@ -96,10 +100,11 @@ html{
 				@include txt((a:c,p:12,h:1em,c:i));
 				@include trn((t:.3s));
 				clip-path: polygon(0% 0%,100% 0%,100% 100%,0% 100%);
-				&.is-label-compare{
-					
+				&.is-label-preview{
+					@include bnd((pdr:1.5em));
 				}
 				&.is-label-compare{
+					@include bnd((pdl:1.5em));
 					@include bg((c:m 80));
 				}
 				#{$block}.is-mode-preview &{
@@ -125,11 +130,11 @@ html{
 		}
 	}
 	&-index{
-		@include bnd((pd:12));
+		@include bnd((gc:span 2));
 		@include txt((l:n));
 		@include grd((rc:300));
 		&-item{
-			@include bnd((pd:4));
+			@include bnd((pd:4 8));
 			@include txt((p:12,c:t));
 			@include usr((c:p));
 			&.is-active{
@@ -153,6 +158,7 @@ html{
 		@include bdr((s:s,w:12,c:#222,r:8));
 		@include bdr((p:b,w:30));
 		@include bdr((p:t l,c:#444));
+		@include bg((c:b));
 		@include shd((b:5));
 		&-control{
 			@include bnd((d:b,p:a,r:0,b:-30,pd:4));
@@ -170,7 +176,6 @@ html{
 	&-previews{
 		@include bnd((pd:8));
 		@include grd((tc:4fr 1fr,g:8));
-		@include bg((c:#fff));
 	}
 	&-compare{
 		@include bnd((p:a,i:10));
@@ -194,7 +199,7 @@ html{
 				@include bnd((mg:a));
 				@include txt((a:c));
 				&__range{
-					@include bnd((w:300));
+					@include bnd((w:calc(80% - 5rem)));
 					@include usr((c:p));
 				}
 				&__text{
