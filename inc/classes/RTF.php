@@ -58,9 +58,8 @@ class RTF{
 		return $text;
 	}
 	private static function replace_linebreak($text){
-		$text=preg_replace('/\s*(<\/\w+?>)\s*/um','$1',$text);
+		$text=preg_replace('/\s*(<\/(h\d|dl|dt|dd|ul|ol|li)+?>)\s*/um','$1',$text);
 		$text=preg_replace('/(  \n[　\t]*|\n[　\t]+)/um','<br/>',$text);
-		$text=preg_replace('/(<\/\w+>)\n/','$1',$text);
 		return $text;
 	}
 	
