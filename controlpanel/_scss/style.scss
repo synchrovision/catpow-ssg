@@ -58,7 +58,7 @@ html{
 			@include bg((c:m 5));
 		}
 		&__contents{
-			@include bnd((oy:a));
+			@include bnd((p:r,oy:a));
 		}
 	}
 	&-footer{
@@ -74,13 +74,54 @@ html{
 		&::before{
 			content:'🔎';
 			@include bnd((d:b,p:a,i:0,w:1em,h:1em,mg:a,mgl:16));
-			@include txt((h:1em));
+			@include txt((p:.8em,h:1em));
 		}
 		&__input{
-			@include bnd((ap:n,d:b,pd:.5em,pdl:2em,w:f,bs:b));
-			@include txt((p:18,c:t));
-			@include bdr((s:n,r:4));
-			@include shd((b:-2));
+			@include bnd((ap:n,d:b,pd:.5em,pdl:2.5em,w:f,bs:b));
+			@include txt((p:14,c:t));
+			@include bdr((s:n,r:1em));
+			@include shd((b:-1));
+		}
+	}
+	&-controls{
+		@include bnd((pd:8));
+		&-mode{
+			$block:&;
+			@include bnd((p:r,h:20,w:100,o:h,mg:a));
+			@include bg((c:m 50));
+			@include bdr((r:16));
+			@include usr((c:p));
+			&__label{
+				@include bnd((d:b,p:a,i:0,mg:a,w:f,h:f,pd:4,z:1,bs:b));
+				@include txt((a:c,p:12,h:1em,c:i));
+				@include trn((t:.3s));
+				clip-path: polygon(0% 0%,100% 0%,100% 100%,0% 100%);
+				&.is-label-compare{
+					
+				}
+				&.is-label-compare{
+					@include bg((c:m 80));
+				}
+				#{$block}.is-mode-preview &{
+					&.is-label-compare{
+						clip-path: polygon(100% 0%,1000% 0%,100% 100%,100% 100%);
+					}
+				}
+				#{$block}.is-mode-compare &{
+					&.is-label-preview{
+						clip-path: polygon(0% 0%,0% 0%,0% 100%,0% 100%);
+					}
+				}
+			}
+			&__handle{
+				@include bnd((d:b,p:a,w:18,h:18,t:1,b:1,l:calc(100% - 1.25rem),z:2));
+				@include bdr((r:50%));
+				@include bg((c:i));
+				@include trn((t:.3s));
+				#{$block}.is-mode-compare &{
+					@include bnd((l:1));
+				}
+			}
 		}
 	}
 	&-index{
@@ -130,5 +171,41 @@ html{
 		@include bnd((pd:8));
 		@include grd((tc:4fr 1fr,g:8));
 		@include bg((c:#fff));
+	}
+	&-compare{
+		@include bnd((p:a,i:10));
+		@include grd((tc:1fr 1fr,tr:1fr 20,g:10));
+		&-preview,&-comp{
+			@include bnd((p:r));
+			@include bdr((s:s,w:12,c:#222,r:8));
+			@include bdr((p:t l,c:#444));
+			@include shd((b:5));
+		}
+		&-preview{
+			&__contents{
+				@include bnd((p:a,l:0,t:0,w:calc(10000% / var(--s)),h:calc(10000% / var(--s)),bs:b));
+				@include trn((to:0 0,s:calc(var(--s,1) / 100)));
+			}
+		}
+		&-controls{
+			@include bnd((f:1 1 f));
+			&-scale{
+				@include bnd((mg:a));
+				@include txt((a:c));
+				&__range{
+					@include bnd((w:300));
+					@include usr((c:p));
+				}
+				&__text{
+					@include bnd((pd:.5em));
+				}
+			}
+		}
+		&-comp{
+			@include bnd((oy:a));
+			&__contents{
+				@include bnd((d:b,w:f,h:a));
+			}
+		}
 	}
 }

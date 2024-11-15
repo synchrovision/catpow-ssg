@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Catpow SSG</title>
 <link rel="stylesheet" href="css/style.css">
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <script>
@@ -17,8 +17,11 @@
 			currentPage:'',
 			keyword:'',
 			pages:[],
+			mode:'preview',
+			comparePreviewScale:50,
+			compUrl:'',
 			init(){
-				const {pc,sp}=this.$refs;
+				const {pc,sp,comparePreview}=this.$refs;
 
 				//scroll sync
 				const coefMap=new Map();
@@ -49,6 +52,11 @@
 						updateScaleProperties(entry.target);
 					}
 				});
+				const resizeCompareObserver=new ResizeObserver((entries)=>{
+					for(const entry of entries){
+						updateSizeProperties(entry.target);
+					}
+				});
 				const setSizeProperties=(el,size)=>{
 					el.style.setProperty('--w',size[0]);
 					el.style.setProperty('--h',size[1]);
@@ -56,6 +64,11 @@
 				const updateScaleProperties=(el)=>{
 					el.style.setProperty('--s',el.clientWidth/el.style.getPropertyValue('--w'));
 				}
+				const updateSizeProperties=(el)=>{
+					const es=el.style.getPropertyValue('--s');
+					el.style.setProperty('--w',el.clientWidth/s);
+					el.style.setProperty('--h',el.clientHeight/s);
+				};
 				setSizeProperties(pc.parentElement,[1920,1080]);
 				setSizeProperties(sp.parentElement,[420,720]);
 				resizeOberver.observe(pc.parentElement);
@@ -85,7 +98,22 @@
 			reload(){
 				this.$refs.pc.contentWindow.location.reload();
 				this.$refs.sp.contentWindow.location.reload();
+				this.$refs.comparePreview.contentWindow.location.reload();
 				console.log('reload page');
+			},
+			toggleMode(){
+				this.mode=this.mode==='preview'?'compare':'preview';
+			},
+			dropComp(e){
+				console.log(e);
+				e.preventDefault();
+				const file=e.dataTransfer.files[0];
+				const reader=new FileReader;
+				reader.addEventListener('load',(e)=>{
+					console.log(e);
+					this.compUrl=e.target.result;
+				});
+				reader.readAsDataURL(file);
 			}
 		};
 	}
@@ -102,6 +130,13 @@
 				<div class="cp-search">
 					<input type="text" class="cp-search__input" x-model="keyword"/>
 				</div>
+				<div class="cp-controls">
+					<div class="cp-controls-mode" :class="'is-mode-' + mode" @click="toggleMode">
+						<div class="cp-controls-mode__label is-label-preview">Preview</div>
+						<div class="cp-controls-mode__handle"></div>
+						<div class="cp-controls-mode__label is-label-compare">Compare</div>
+					</div>
+				</div>
 				<ul class="cp-index">
 					<template x-for="page in pages">
 						<li class="cp-index-item" :class="{'is-active':page==currentPage,'is-visible':!keyword || page.includes(keyword)}">
@@ -112,7 +147,7 @@
 				</ul>
 			</div>
 			<div class="cp-main__contents">
-				<div class="cp-previews">
+				<div class="cp-previews" x-show="mode=='preview'">
 					<?php foreach(['pc','sp'] as $d): ?>
 					<div class="cp-preview is-media-<?=$d?>">
 						<iframe class="cp-preview__contents" :src="currentPage" frameborder="0" x-ref="<?=$d?>"></iframe>
@@ -121,6 +156,20 @@
 						</div>
 					</div>
 					<?php endforeach; ?>
+				</div>
+				<div class="cp-compare" x-show="mode=='compare'">
+					<div class="cp-compare-preview" :style="{'--s':comparePreviewScale}">
+						<iframe class="cp-compare-preview__contents" :src="currentPage" frameborder="0" x-ref="comparePreview"></iframe>
+					</div>
+					<div class="cp-compare-comp" @dragover="(e)=>e.preventDefault()" @drop="dropComp">
+						<img class="cp-compare-comp__contents" :src="compUrl"/>
+					</div>
+					<div class="cp-compare-controls">
+						<div class="cp-compare-controls-scale">
+							<input class="cp-compare-controls-scale__range" type="range" x-model="comparePreviewScale" min="20" max="150"/>
+							<input class="cp-compare-controls-scale__text" type="number" x-model="comparePreviewScale" min="20" max="150"/>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
