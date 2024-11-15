@@ -28,23 +28,26 @@
 				const coefMap=new Map();
 				const updateCoef=(iframe)=>{
 					if(!pc.contentWindow.document || !pc.contentWindow.document.documentElement){return;}
-					const pcd=pc.contentWindow.document.documentElement;
-					const pcsy=Math.max(1,pcd.scrollHeight-pcd.clientHeight);
-					[sp].forEach((f)=>{
-						if(!f.contentWindow.document){coefMap.set(f,1);return;}
-						const d=f.contentWindow.document.documentElement;
+					try{
+						const pcd=pc.contentWindow.document.documentElement;
+						const pcsy=Math.max(1,pcd.scrollHeight-pcd.clientHeight);
+						if(!sp.contentWindow.document){coefMap.set(sp,1);return;}
+						const d=sp.contentWindow.document.documentElement;
 						const sy=Math.max(1,d.scrollHeight-d.clientHeight);
-						coefMap.set(f,sy/pcsy);
-					});
+						coefMap.set(sp,sy/pcsy);
+					}
+					catch(e){console.error(e);}
 				}
 				const syncScroll=()=>{
-					[sp].forEach((f)=>{
-						f.contentWindow.scroll({
-							top:coefMap.get(f)*pc.contentWindow.scrollY,
-							behavior:'instant'
-						});
+					sp.contentWindow.scroll({
+						top:coefMap.get(sp)*pc.contentWindow.scrollY,
+						behavior:'instant'
 					});
 				}
+				pc.addEventListener('load',()=>{
+					pc.contentDocument.addEventListener('scroll',syncScroll);
+				});
+				pc.contentWindow.addEventListener('scroll',syncScroll);
 				const timer=setInterval(updateCoef,100);
 
 				//resize
