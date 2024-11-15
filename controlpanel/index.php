@@ -166,7 +166,7 @@
 							<img class="cp-compare-comp__contents is-image" :src="compUrl"/>
 						</template>
 						<template x-if="!compIsImage">
-							<iframe class="cp-compare-comp__contents is-iframe" :src="compUrl"/>
+							<iframe class="cp-compare-comp__contents is-iframe" :src="compUrl"></iframe>
 						</template>
 					</div>
 					<div class="cp-compare-controls">
