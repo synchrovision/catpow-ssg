@@ -26,19 +26,20 @@
 
 				//scroll sync
 				const coefMap=new Map();
+				let pcd,spd;
 				const updateCoef=(iframe)=>{
-					if(!pc.contentWindow.document || !pc.contentWindow.document.documentElement){return;}
 					try{
-						const pcd=pc.contentWindow.document.documentElement;
+						pcd=pc.contentWindow.document.scrollingElement;
+						spd=sp.contentWindow.document.scrollingElement;
+						if(!pcd || !spd){return;}
 						const pcsy=Math.max(1,pcd.scrollHeight-pcd.clientHeight);
-						if(!sp.contentWindow.document){coefMap.set(sp,1);return;}
-						const d=sp.contentWindow.document.documentElement;
-						const sy=Math.max(1,d.scrollHeight-d.clientHeight);
+						const sy=Math.max(1,spd.scrollHeight-spd.clientHeight);
 						coefMap.set(sp,sy/pcsy);
 					}
 					catch(e){console.error(e);}
 				}
 				const syncScroll=()=>{
+					if(!pcd || !spd){return;}
 					sp.contentWindow.scroll({
 						top:coefMap.get(sp)*pc.contentWindow.scrollY,
 						behavior:'instant'
