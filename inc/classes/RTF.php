@@ -3,13 +3,11 @@ namespace Catpow;
 
 class RTF{
 	public static function replace($text,$pref){
-		$text=self::replace_inline_format($text,$pref);
-		$text=self::replace_block_format($text,$pref,0);
-		$text=self::replace_block_format($text,$pref,1);
-		$text=self::replace_block_format($text,$pref,2);
+		$text=self::replace_block_format($text,$pref);
 		$text=self::join_consective_lists($text,$pref);
-		$text=self::replace_linebreak($text);
 		$text=RXF\RXF::replace($text,$pref);
+		$text=self::replace_inline_format($text,$pref);
+		$text=self::replace_linebreak($text);
 		return $text;
 	}
 	private static function replace_inline_format($text,$pref){
@@ -28,13 +26,14 @@ class RTF{
 		$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link" href="$2" target="_brank">$1</a>',$text);
 		return $text;
 	}
-	private static function replace_block_format($text,$pref,$level){
+	private static function replace_block_format($text,$pref,$level=0){
 		$h='/^'.($level>0?"([　\\t]{{$level}})":'()');
 		$t='(.+((\\n'.($level>0?'\\1':'').'[　\\t]).+)*)$/um';
 		$c=$level>0?" is-level-{$level}":'';
 		$l=$level+4;
 		$p="$2\n";
 		$p2="$3\n";
+		if($level>0 && !preg_match($h.'/um',$text)){return $text;}
 		$text=preg_replace(
 			$h.'([^\s　].{0,8}?) [:：] '.$t,
 			'<dl class="'.$pref.'-dl'.$c.'"><dt class="'.$pref.'-dl__dt">$2</dt><dd class="'.$pref.'-dl__dd">'.$p2.'</dd></dl>',
@@ -49,6 +48,7 @@ class RTF{
 			'<dl class="'.$pref.'-listed'.$c.'"><dt class="'.$pref.'-listed__dt">$2</dt><dd class="'.$pref.'-listed__dd">'.$p2.'</dd></dl><!--/listed-->',
 			$text
 		);
+		if($level<3){return self::replace_block_format($text,$pref,$level+1);}
 		return $text;
 	}
 	private static function join_consective_lists($text,$pref){
