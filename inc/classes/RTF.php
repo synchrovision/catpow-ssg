@@ -35,6 +35,11 @@ class RTF{
 		$p2="$3\n";
 		if($level>0 && !preg_match($h.'/um',$text)){return $text;}
 		$text=preg_replace(
+			$h.'\^([^\s　].{0,8}?) [:：] '.$t,
+			'<dl class="'.$pref.'-notes'.$c.'"><dt class="'.$pref.'-notes__dt">$2</dt><dd class="'.$pref.'-notes__dd">'.$p2.'</dd></dl><!--/notes-->',
+			$text
+		);
+		$text=preg_replace(
 			$h.'([^\s　].{0,8}?) [:：] '.$t,
 			'<dl class="'.$pref.'-dl'.$c.'"><dt class="'.$pref.'-dl__dt">$2</dt><dd class="'.$pref.'-dl__dd">'.$p2.'</dd></dl>',
 			$text
