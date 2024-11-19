@@ -11,6 +11,8 @@
 		"esbuild-plugin-svgr": "*",
 		"js-cookie": "*",
 		"react": "*",
-		"react-dom": "*"
+		"react-dom": "*",
+		"react-error-boundary":"*",
+		"react-use":"*"
 	}
 }
