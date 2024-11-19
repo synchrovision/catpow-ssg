@@ -56,7 +56,7 @@ html{
 			@include bnd((oy:a));
 			@include shd((b:2));
 			@include bp(-960){
-				@include grd((tc:1fr 120));
+				@include grd((tc:1fr 120,tr:a 1fr));
 			}
 		}
 		&__contents{

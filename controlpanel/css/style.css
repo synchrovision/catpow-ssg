@@ -159,6 +159,8 @@ html {
     display: grid;
     -ms-grid-columns: 1fr 7.5rem;
     grid-template-columns: 1fr 7.5rem;
+    -ms-grid-rows: auto 1fr;
+    grid-template-rows: auto 1fr;
   }
 }
 .cp-main__contents {
