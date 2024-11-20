@@ -100,6 +100,7 @@ function table($data,$props=null){
 					}
 				}
 			}
+			$attr['class']=$props['classes'][$tag]??'';
 			if(substr($cell,0,2)==='$ '){
 				if(strpos($cell,"\n")){
 					$tag_data=strstr($cell,"\n",true);
@@ -114,15 +115,17 @@ function table($data,$props=null){
 			$atts[$r][$c]=array_merge($attr,$atts[$r][$c]??[]);
 		}
 	}
-	$cb=$props['cb']??function($str){return $str;};
+	$cb=array_key_exists('cb',$props)?
+		(empty($props['cb'])?function($str){return $str;}:$props['cb']):
+		function($str){return rtf($str);};
 	$r=0;
 	if(!empty($hr)){
 		$rtn.=sprintf('<thead%s>',HTML::get_attr_code(['class'=>$props['classes']['thead']??'']));
 		for(;$r<$hr;$r++){
-			$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??'']));
+			$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??''],compact('r')));
 			foreach($data[$r] as $c=>$cell){
 				if(is_null($cell)){continue;}
-				$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell,$r,$c));
+				$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c],compact('r','c','cell')),$cb($cell,$r,$c));
 			}
 			$rtn.='</tr>';
 		}
@@ -130,10 +133,10 @@ function table($data,$props=null){
 	}
 	$rtn.=sprintf('<tbody%s>',HTML::get_attr_code(['class'=>$props['classes']['tbody']??'']));
 	for($l=count($data);$r<$l;$r++){
-		$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??'']));
+		$rtn.=sprintf('<tr%s>',HTML::get_attr_code(['class'=>$props['classes']['tr']??''],compact('r')));
 		foreach($data[$r] as $c=>$cell){
 			if(is_null($cell)){continue;}
-			$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c]),$cb($cell,$r,$c));
+			$rtn.=sprintf('<%s%s>%s</%1$s>',$atts[$r][$c]['tag'],HTML::get_attr_code($atts[$r][$c],compact('r','c')),$cb($cell,$r,$c));
 		}
 		$rtn.='</tr>';
 	}
