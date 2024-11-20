@@ -117,7 +117,7 @@ function table($data,$props=null){
 	}
 	$cb=array_key_exists('cb',$props)?
 		(empty($props['cb'])?function($str){return $str;}:$props['cb']):
-		function($str){return rtf($str);};
+		function($str){return nl2br(rtf($str));};
 	$r=0;
 	if(!empty($hr)){
 		$rtn.=sprintf('<thead%s>',HTML::get_attr_code(['class'=>$props['classes']['thead']??'']));
