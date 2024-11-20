@@ -73,8 +73,11 @@ function table($data,$props=null){
 	}
 	if(!empty($props['colgroup'])){
 		$rtn.=sprintf('<colgroup%s>',HTML::get_attr_code(['class'=>$props['classes']['colgroup']??'']));
-		foreach($props['colgroup'] as $col){
-			$rtn.=sprintf('<col%s/>',HTML::get_attr_code($col));
+		$c=0;
+		foreach($props['colgroup'] as $i=>$col){
+			$col['class']=$props['classes']['col']??'';
+			$rtn.=sprintf('<col%s/>',HTML::get_attr_code($col,compact('c','i')));
+			$c+=$col['span']??1;
 		}
 		$rtn.='</colgroup>';
 	}
