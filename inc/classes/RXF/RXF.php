@@ -1,12 +1,14 @@
 <?php
 namespace Catpow\RXF;
 abstract class RXF{
+	public static $default_class_prefix='rxf';
 	static $formats,$regsitered=null;
 	protected static function callback($matches,$class,$param){
 		return sprintf('<span class="%s">%s</span>',$class,$matches[0]);
 	}
-	public static function replace($text,$pref){
+	public static function replace($text,$pref=null){
 		if(strpos($text,'{')===false){return $text;}
+		if(empty($pref)){$pref=self::$default_class_prefix;}
 		return preg_replace_callback('/{(.+?)}/',function($matches)use($pref){
 			foreach(self::get_regsitered() as $name){
 				$className="\\Catpow\\RXF\\{$name}";

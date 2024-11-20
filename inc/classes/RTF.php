@@ -2,7 +2,9 @@
 namespace Catpow;
 
 class RTF{
-	public static function replace($text,$pref){
+	public static $default_class_prefix='rtf';
+	public static function replace($text,$pref=null){
+		if(empty($pref)){$pref=self::$default_class_prefix;}
 		$text=self::replace_block_format($text,$pref);
 		$text=self::join_consective_lists($text,$pref);
 		$text=RXF\RXF::replace($text,$pref);

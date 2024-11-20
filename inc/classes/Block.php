@@ -112,7 +112,7 @@ class Block{
 						$html=preg_replace('/^\n\s*/u','',$html);
 					}
 				}
-				$html=('Catpow\\'.$el->tagName)($html,$el->hasAttribute('class')?$el->getAttribute('class'):$el->tagName);
+				$html=('Catpow\\'.$el->tagName)($html,$el->getAttribute('class'));
 				$tmp->loadHTML(
 					mb_encode_numericentity('<tmp>'.$html.'</tmp>',[0x80,0xffff,0,0xffff],'UTF-8'),
 					\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR

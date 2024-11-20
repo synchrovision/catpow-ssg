@@ -168,13 +168,13 @@ function texts($file='texts'){
 function nl2wbr($str){
 	return str_replace("\n",'<wbr/>',str_replace("\n\n",'<br/>',$str));
 }
-function md($text,$class='md'){
+function md($text,$class=null){
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
 		global $page;
 		$text=file_get_contents($page->get_the_file($text));
 	}
-	return sprintf('<div class="%s-">%s</div>',$class,MarkDown::do_markdown($text));
+	return sprintf('<div class="%s-">%s</div>',$class?:MarkDown::$default_class,MarkDown::do_markdown($text));
 }
 function simple_md($text,$classes=[]){
 	$classes=array_merge(
@@ -185,10 +185,10 @@ function simple_md($text,$classes=[]){
 	$text=preg_replace('/\[(.+?)\]\((.+?)\)/','<a class="'.$classes['a'].'" href="$2" target="_brank">$1</a>',$text);
 	return $text;
 }
-function rtf($text,$pref='rtf'){
+function rtf($text,$pref=null){
 	return RTF::replace($text,$pref);
 }
-function rxf($text,$pref='rxf'){
+function rxf($text,$pref=null){
 	return RXF\RXF::replace($text,$pref);
 }
 function do_shortcode($str){
