@@ -2,6 +2,12 @@
 namespace Catpow;
 
 class HTML{
+	static $attribute_delimiters=[
+		'srcset'=>',',
+		'coords'=>',',
+		'accept'=>',',
+		'content'=>';'
+	];
 	public static function parse_tag_data($tag_data){
 		$rtn=[];
 		if(preg_match('/^\w+/',$tag_data,$matches)){$rtn['tag']=$matches[0];}
@@ -15,11 +21,34 @@ class HTML{
 		}
 		return $rtn;
 	}
-	public static function get_attr_code($attr){
+	public static function get_attr_code($attr,$args=null){
 		$rtn='';
 		foreach($attr as $key=>$val){
 			if($key==='tag'){continue;}
+			if(!is_string($val) && !is_numeric($val) && is_callable($val)){$val=$val($attr,$args);}
 			if(empty($val) && $val!=0){continue;}
+			if(is_array($val)){
+				if($key==='style'){
+					$css='';
+					foreach($val as $k=>$v){
+						$css.=sprintf('%s:%s;',$k,$v);
+					}
+					$val=$css;
+				}
+				else{
+					$vals=[];
+					foreach($val as $k=>$v){
+						if(is_numeric($k)){
+							$vals[]=$v;
+						}
+						elseif(!empty($v)){
+							$vals[]=$k;
+						}
+
+					}
+					$val=implode(self::$attribute_delimiters[$key]??' ',$vals);
+				}
+			}
 			$rtn.=sprintf(' %s="%s"',$key,$val);
 		}
 		return $rtn;
