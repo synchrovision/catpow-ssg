@@ -38,7 +38,7 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 		if($size){
 			if(empty($has_alt_image)){
 				foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
-					if($size[0]>$u*4){
+					if(function_exists('imagewebp') && $size[0]>$u*4){
 						$src=sprintf('%s_%s.webp',$matches['name'],$s);
 						$dest_file=$page->get_file_path_for_uri($src);
 						if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){

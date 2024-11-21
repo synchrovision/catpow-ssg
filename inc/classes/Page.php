@@ -103,7 +103,7 @@ class Page{
 	}
 	public function generate_webp_for_image($image){
 		$im=$this->get_gd($image);
-		if(empty($im)){return false;}
+		if(!function_exists('imagewebp') || empty($im)){return false;}
 		imagepalettetotruecolor($im);
 		$file=$this->get_the_latest_file($image);
 		$dest_file=$this->get_file_path_for_uri($image);
