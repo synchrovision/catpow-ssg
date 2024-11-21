@@ -132,7 +132,7 @@ html{
 	&-index{
 		@include bnd((gc:span 2));
 		@include txt((l:n));
-		@include grd((rc:300));
+		@include grd((rc:300,a:s));
 		&-item{
 			@include bnd((pd:4 8));
 			@include txt((p:12,c:t));

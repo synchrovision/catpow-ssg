@@ -299,6 +299,7 @@ html {
   display: -ms-grid;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
+  align-content: start;
 }
 .cp-index-item {
   padding: 0.25rem 0.5rem;
