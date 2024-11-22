@@ -148,7 +148,7 @@ class BEM extends CssRule{
 			elseif(substr($class,0,1)==='-'){
 				//sub block
 				$this->b_stuck[]=[$this->b,$this->e,$this->m,$this->bm,$this->e_stuck];
-				$this->b=array_merge($this->b,explode('-',$class,1));
+				$this->b=array_merge($this->b,explode('-',substr($class,1)));
 				$this->e=$this->m=$this->bm=[];
 				$_b=true;
 			}
