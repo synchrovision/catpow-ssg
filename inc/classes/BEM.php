@@ -2,6 +2,7 @@
 namespace Catpow;
 class BEM extends CssRule{
 	public $s,$b,$e,$m,$bm,$parent,$b_stuck=[],$m_stuck=[],$e_stuck=[],$selectors=[];
+	public static $allow_element_chain=false;
 	protected function __construct($s=null,$b=null,$e=null,$m=null,$bm=null,$parent=null){
 		$this->s=(array)$s;
 		$this->b=(array)$b;
@@ -38,7 +39,7 @@ class BEM extends CssRule{
 			}
 		}
 		if(!empty($this->e)){
-			$class.='__'.implode('-',$this->e);
+			$class.='__'.implode(self::$allow_element_chain?'__':'-',$this->e);
 		}
 		return $class;
 	}
