@@ -24,7 +24,8 @@ class RTF{
 		$text=preg_replace('/\[tel:((\d+)\-(\d+)\-(\d+))\]/u','<a class="'.$pref.'-tel" href="tel:$2$3$4" target="_brank">$1</a>',$text);
 		$text=preg_replace('/\[mail:(.+?@.+?)\]/u','<a class="'.$pref.'-mailto" href="mailto:$1" target="_brank">$1</a>',$text);
 		$text=preg_replace('/\[\[(.+?)\]\]\((.+?)\)/u','<a class="'.$pref.'-button" href="$2" target="_brank"><span class="'.$pref.'-button__label">$1</span></a>',$text);
-		$text=preg_replace('/\[(https?:\/\/.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link is-link-external" href="$2" target="_brank">$1</a>',$text);
+		$text=preg_replace('/\[(.+?)\]\((.+?\.pdf)\)/u','<a class="'.$pref.'-link is-link-pdf" href="$2" target="_brank">$1</a>',$text);
+		$text=preg_replace('/\[(.+?)\]\((https?:\/\/.+?)\)/u','<a class="'.$pref.'-link is-link-external" href="$2" target="_brank">$1</a>',$text);
 		$text=preg_replace('/\[(.+?)\]\((.+?)\)/u','<a class="'.$pref.'-link" href="$2">$1</a>',$text);
 		return $text;
 	}
