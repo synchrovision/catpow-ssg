@@ -95,6 +95,7 @@ class Block{
 				$block_el=$doc->importNode($tmp->childNodes->item(0),true);
 				$el->parentNode->replaceChild($block_el,$el);
 				$el=$block_el;
+				self::_convert($el,$doc);
 			}
 			elseif($el->tagName==='rtf' || $el->tagName==='rxf' || $el->tagName==='md'){
 				$tmp=new \DOMDocument();
