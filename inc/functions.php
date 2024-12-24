@@ -15,9 +15,9 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
 		}
 		if(
-			(strpos($name,'_pc_')!==false && $file=$page->get_the_file($src=str_replace('_pc_',"_{$media}_",$name))) ||
-			(strpos($name,'_pc.')!==false && $file=$page->get_the_file($src=str_replace('_pc.',"_{$media}.",$name))) ||
-			$file=$page->get_the_file($src=sprintf('%s_%s%s',$matches['name'],$media,$matches['ext']))
+			(preg_match('/([_\-])pc([_\-\.])/',$name,$m) && $file=$page->get_the_file($src=str_replace($m[1].'pc'.$m[2],$m[1].$media.$m[2],$name))) ||
+			$file=$page->get_the_file($src=sprintf('%s_%s%s',$matches['name'],$media,$matches['ext'])) || 
+			$file=$page->get_the_file($src=sprintf('%s-%s%s',$matches['name'],$media,$matches['ext']))
 		){
 			if(!empty($webp=$page->generate_webp_for_image($src))){
 				$rtn.=sprintf('<source media="(%s)" srcset="%s" type="image/webp"/>',$mq,$webp);

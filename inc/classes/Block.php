@@ -88,8 +88,9 @@ class Block{
 				$block=new self($block_name,$atts,sprintf('<slot id="%s"/>',$id));
 				$block->init();
 				$tmp=new \DOMDocument();
+				if(empty($html=$block->get_html())){return;}
 				$tmp->loadHTML(
-					mb_encode_numericentity($block->get_html(),[0x80,0xffff,0,0xffff],'UTF-8'),
+					mb_encode_numericentity($html,[0x80,0xffff,0,0xffff],'UTF-8'),
 					\LIBXML_HTML_NOIMPLIED|\LIBXML_HTML_NODEFDTD|\LIBXML_NOERROR
 				);
 				$block_el=$doc->importNode($tmp->childNodes->item(0),true);
