@@ -73,22 +73,33 @@ let inlineCssImporter=inlineImportPlugin({
 	}
 });
 
-await esbuild.build({
+const setttings={
 	entryPoints: [positionals[0]],
 	outfile: positionals[1],
 	bundle:true,
 	minify:!debugMode,
-	external:useGlobalReact?['react','react-dom']:[],
-	define:useGlobalReact?{
-		'React':'window.React',
-		'React.createElement':'window.React.createElement',
-		'React.Fragment':'window.React.Fragment',
-		'ReactDOM':'window.ReactDOM',
-		'ReactDOM.render':'window.ReactDOM.render'
-	}:{},
 	plugins:[
 		inlineCssImporter,
 		pathResolver,
 		svgr(),
 	]
-})
+}
+if(useGlobalReact){
+	Object.assign(setttings,{
+		define:{
+			'React':'window.React',
+			'React.createElement':'window.React.createElement',
+			'React.Fragment':'window.React.Fragment',
+			'ReactDOM':'window.ReactDOM',
+			'ReactDOM.render':'window.ReactDOM.render'
+		},
+		external:['react','react-dom'],
+	});
+}
+else{
+	Object.assign(setttings,{
+		jsx:'automatic',
+		jsxImportSource:'react',
+	});
+}
+esbuild.build(setttings).catch((e)=>console.log(e));
