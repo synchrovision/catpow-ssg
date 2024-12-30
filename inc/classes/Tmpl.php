@@ -106,10 +106,23 @@ class Tmpl{
 	public static function get_tmpl_file_for_file($file){
 		if(file_exists($f=$file.'.tmpl.php')){return $f;}
 		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$file).'.php')){return $f;}
-		$d=dirname($file);
-		$ext=strrchr($file,'.');
-		if(file_exists($f="{$d}/[template]{$ext}.tmpl.php")){return $f;}
-		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$d)."/[template]{$ext}.php")){return $f;}
+		$file_uri=str_replace(ABSPATH,'',$file);
+		if($f=static::get_tmpl_file_for_file_in_dir(ABSPATH,$file_uri,".tmpl.php")){return $f;}
+		if($f=static::get_tmpl_file_for_file_in_dir(TMPL_DIR,$file_uri,".php")){return $f;}
+		return false;
+	}
+	public static function get_tmpl_file_for_file_in_dir($f,$file_uri,$ext){
+		$dnames=explode('/',substr($file_uri,1));
+		$fname=array_pop($dnames);
+		$fext=strrchr($fname,'.');
+		foreach($dnames as $dname){
+			if(file_exists($tmp=$f.'/'.$dname)){$f=$tmp;continue;}
+			if(file_exists($tmp=$f.'/[template]')){$f=$tmp;continue;}
+			return false;
+		}
+		if(file_exists($tmp=$f.'/'.$fname.$ext)){return $tmp;}
+		if(file_exists($tmp=$f.'/[template]'.$fext.$ext)){return $tmp;}
+		error_log(var_export($tmp,1).__FILE__.__LINE__);
 		return false;
 	}
 	public static function get_tmpl_file_for_uri($uri){
