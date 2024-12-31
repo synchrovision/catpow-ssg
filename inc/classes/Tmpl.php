@@ -122,7 +122,6 @@ class Tmpl{
 		}
 		if(file_exists($tmp=$f.'/'.$fname.$ext)){return $tmp;}
 		if(file_exists($tmp=$f.'/[template]'.$fext.$ext)){return $tmp;}
-		error_log(var_export($tmp,1).__FILE__.__LINE__);
 		return false;
 	}
 	public static function get_tmpl_file_for_uri($uri){
