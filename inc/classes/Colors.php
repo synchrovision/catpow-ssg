@@ -37,7 +37,7 @@ class Colors{
 		"cornflowerblue"=>"#6495ed",
 		"cornsilk"=>"#fff8dc",
 		"crimson"=>"#dc143c",
-		"cyan #00ffff",
+		"cyan"=>"#00ffff",
 		"darkblue"=>"#00008b",
 		"darkcyan"=>"#008b8b",
 		"darkgoldenrod"=>"#b8860b",
