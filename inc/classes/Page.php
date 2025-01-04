@@ -180,4 +180,7 @@ class Page{
 		}
 		if(isset($this->info[$name])){return $this->info[$name];}
 	}
+	public function __set($name,$value){
+		$this->info[$name]=$value;
+	}
 }
