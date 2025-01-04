@@ -31,7 +31,6 @@ class Scss{
 		$scssc->addImportPath(CONF_DIR.'/');
 		$scssc->addImportPath(ABSPATH.'/_scss/');
 		$scssc->addImportPath(INC_DIR.'/scss/');
-		$scssc->setSourceMap(Compiler::SOURCE_MAP_FILE);
 		$scssc->setIgnoreErrors(true);
 		$scssc->registerFunction('debug',function($args){
 			error_log(var_export($args,1));
@@ -163,7 +162,7 @@ class Scss{
 		}
 		return false;
 	}
-	public static function compile($scss_file,$css_file){
+	public static function compile($scss_file,$css_file,$source_map=true){
 		if(version_compare(PHP_VERSION, '5.4')<0)return;
 		$scssc=self::get_scssc();
 		$modified_time=filemtime($scss_file);
@@ -191,13 +190,19 @@ class Scss{
 		){
 			try{
 				self::$current_scss_file=$scss_file;
-				$scssc->setSourceMapOptions([
-					'sourceMapWriteTo'=>$css_file.'.map',
-					'sourceMapURL'=>'./'.basename($css_file).'.map',
-					'sourceMapFilename'=>basename($css_file).'.map',
-					'sourceMapBasepath'=>$_SERVER['DOCUMENT_ROOT'],
-					'sourceRoot'=>'/'
-				]);
+				if($source_map){
+					$scssc->setSourceMap(Compiler::SOURCE_MAP_FILE);
+					$scssc->setSourceMapOptions([
+						'sourceMapWriteTo'=>$css_file.'.map',
+						'sourceMapURL'=>'./'.basename($css_file).'.map',
+						'sourceMapFilename'=>basename($css_file).'.map',
+						'sourceMapBasepath'=>$_SERVER['DOCUMENT_ROOT'],
+						'sourceRoot'=>'/'
+					]);
+				}
+				else{
+					$scssc->setSourceMap(Compiler::SOURCE_MAP_NONE);
+				}
 				$css=$scssc->compile(file_get_contents($scss_file),$scss_file);
 				self::$current_scss_file=null;
 			}catch(Exception $e){
