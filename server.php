@@ -91,13 +91,6 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 				copy($tmpl_file,$file);
 			}
 		}
-		else{
-			if(!file_exists($file)){
-				$result=Catpow\Tmpl::attempt_routing($uri);
-				if($result!==0){return $result;}
-				Catpow\Site::copy_file_from_remote_if_not_exists($uri);
-			}
-		}
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ')){
