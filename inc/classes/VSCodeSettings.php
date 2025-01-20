@@ -132,14 +132,14 @@ class VSCodeSettings{
 			$data=['name'=>$tag];
 			if(file_exists($schema_file=$dir.'/schema.json')){
 				$schema=json_decode(file_get_contents($schema_file),true);
-				$data=array_merge($data,self::getHTMLDataOfBlock($schema));
+				$data=array_merge($data,self::getHTMLDataFromSchema($schema));
 				if(isset($schema['description'])){$data['description']=$schema['description'];}
 			}
 			$datas[]=$data;
 		}
 		return $datas;
 	}
-	private static function getHTMLDataOfBlock($schema){
+	private static function getHTMLDataFromSchema($schema){
 		$data=[];
 		$children=[];
 		if(isset($schema['properties'])){
