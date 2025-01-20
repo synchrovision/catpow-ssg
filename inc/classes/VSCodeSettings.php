@@ -74,7 +74,7 @@ class VSCodeSettings{
 		if(isset($schema['properties'])){
 			foreach($schema['properties'] as $name=>$prop_schema){
 				if(isset($prop_schema['items'])){continue;}
-				if(isset($prop_schema['type']) && in_array($prop_schema['type'],['boolean','intger','number','string'])){
+				if(isset($prop_schema['type']) && in_array($prop_schema['type'],['boolean','integer','number','string'])){
 					if($prop_schema['type']==='boolean'){
 						$atts.=sprintf(' ${%d:%s}',$ctx->count++,$name);
 					}
@@ -146,7 +146,7 @@ class VSCodeSettings{
 			foreach($schema['properties'] as $name=>$prop_schema){
 				if(isset($prop_schema['items'])){continue;}
 				if(isset($prop_schema['type'])){
-					if(in_array($prop_schema['type'],['boolean','intger','number','string'])){
+					if(in_array($prop_schema['type'],['boolean','integer','number','string'])){
 						$attr=['name'=>$name];
 						if(isset($prop_schema['enum'])){
 							foreach($prop_schema['enum'] as $val){

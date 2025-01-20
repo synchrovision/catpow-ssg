@@ -205,11 +205,11 @@ class Block{
 			}
 			return $items;
 		}
-		if(isset($schema['type']) && in_array($schema['type'],['boolean','intger','number','string'])){
+		if(isset($schema['type']) && in_array($schema['type'],['boolean','integer','number','string'])){
 			$value=$el->hasAttribute('value')?$el->getAttribute('value'):$el->textContent;
 			switch($schema['type']){
 				case 'boolean':return !in_array(strtolower(trim($value)),['0','false','no']);
-				case 'intger':return (int)$value;
+				case 'integer':return (int)$value;
 				case 'number':return (float)$value;
 				default: $value;
 			}
