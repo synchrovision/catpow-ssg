@@ -35,71 +35,6 @@ class VSCodeSettings{
 	private static function getSettingsFile(){
 		return ABSPATH.'/'.self::SETTINGS_JSON_FILE;
 	}
-	//emmet
-	public static function initEmmetSnippets(){
-		$data=self::getEmmetSnippets();
-		$data['html']['snippets']=array_merge($data['html']['snippets']??[],self::getEmmetSnippetsOfBlocks());
-		self::setEmmetSnippets($data);
-	}
-	public static function getEmmetSnippets(){
-		$file=self::getEmmetSnippetsFile();
-		if(!file_exists($file)){return [];}
-		return json_decode(file_get_contents($file),true);
-	}
-	public static function setEmmetSnippets($data){
-		$file=self::getEmmetSnippetsFile();
-		if(!is_dir($dir=dirname($file))){mkdir($dir,0755,true);}
-		file_put_contents($file,json_encode($data,0700));
-	}
-	private static function getEmmetSnippetsFile(){
-		return ABSPATH.'/'.self::EMMET_EXTENTIONS_PATH.'/snippets.json';
-	}
-	public static function getEmmetSnippetsOfBlocks(){
-		$datas=[];
-		foreach(glob(TMPL_DIR.'/blocks/*/schema.json') as $schema_file){
-			$dir=dirname($schema_file);
-			$tag='block-'.basename($dir);
-			$datas[$tag]=self::getEmmetCodeFromSchema($tag,json_decode(file_get_contents($schema_file),true));
-		}
-		return $datas;
-	}
-	private static function getEmmetCodeFromSchema($tag,$schema,$ctx=null){
-		$code=$tag;
-		if(empty($ctx)){$ctx=(object)['count'=>1];}
-		if(isset($schema['properties'])){
-			$children=[];
-			foreach($schema['properties'] as $name=>$prop_schema){
-				if(isset($prop_schema['items'])){continue;}
-				if(isset($prop_schema['type']) && in_array($prop_schema['type'],['boolean','intger','number','string'])){
-					if($prop_schema['type']==='boolean'){
-						$code.=sprintf('[${%d:%s}]',$ctx->count++,$name);
-					}
-					else{
-						$val=$prop_schema['default']??$prop_schema['enum'][0]??null;
-						$code.=sprintf('[%s="${%d%s%s}"]',$name,$ctx->count++,isset($val)?':':'',$val);
-					}
-				}
-				else{
-					$children[$name]=$prop_schema;
-				}
-			}
-			if(!empty($children)){
-				foreach($children as $name=>$child){
-					$children[$name]=self::getEmmetCodeFromSchema($name,$child,$ctx);
-				}
-				$code=sprintf('(%s>%s)',$code,implode('+',array_values($children)));
-			}
-			else{
-				$val=$schema['default']??$schema['enum'][0]??null;
-				$code.=sprintf('{${%d%s%s}}',$ctx->count++,isset($val)?':':'',$val);
-			}
-		}
-		else{
-			$val=$schema['default']??$schema['enum'][0]??null;
-			$code.=sprintf('{${%d%s%s}}',$ctx->count++,isset($val)?':':'',$val);
-		}
-		return $code;
-	}
 	//snippets
 	public static function initSnippets(){
 		self::setSnippets(array_merge(self::getSnippets(),self::getSnippetsOfBlocks()));
@@ -169,7 +104,6 @@ class VSCodeSettings{
 		if(isset($schema['default'])){return sprintf('${%d:%s}',$count,$schema['default']);}
 		return sprintf('${%d}',$count);
 	}
-
 	//customHTMLData
 	public static function initCustomHTMLData(){
 		$data=self::getCustomHTMLData();
