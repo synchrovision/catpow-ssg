@@ -13,6 +13,9 @@ class VSCodeSettings{
 		if(empty($data['html.customData']) || !in_array(self::CUSTOM_HTML_DATA_FILE,$data['html.customData'])){
 			$data['html.customData'][]=self::CUSTOM_HTML_DATA_FILE;
 		}
+		if(empty($data['emmet.includeLanguages']['php'])){
+			$data['emmet.includeLanguages']['php']='html';
+		}
 		if(empty($data['emmet.extensionsPath']) || !in_array(self::EMMET_EXTENTIONS_PATH,$data['emmet.extensionsPath'])){
 			$data['emmet.extensionsPath'][]=self::EMMET_EXTENTIONS_PATH;
 		}
