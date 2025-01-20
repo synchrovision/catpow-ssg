@@ -5,7 +5,8 @@ class VSCodeSettings{
 	const
 		SETTINGS_JSON_FILE='.vscode/settings.json',
 		EMMET_EXTENTIONS_PATH='_config/emmet',
-		CUSTOM_HTML_DATA_FILE='_config/customHTMLData.json';
+		CUSTOM_HTML_DATA_FILE='_config/customHTMLData.json',
+		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets';
 
 	//settings
 	public static function initSettingsData(){
@@ -41,16 +42,16 @@ class VSCodeSettings{
 		self::setEmmetSnippets($data);
 	}
 	public static function getEmmetSnippets(){
-		$file=self::geEmmetSnippetsFile();
+		$file=self::getEmmetSnippetsFile();
 		if(!file_exists($file)){return [];}
 		return json_decode(file_get_contents($file),true);
 	}
 	public static function setEmmetSnippets($data){
-		$file=self::geEmmetSnippetsFile();
+		$file=self::getEmmetSnippetsFile();
 		if(!is_dir($dir=dirname($file))){mkdir($dir,0755,true);}
 		file_put_contents($file,json_encode($data,0700));
 	}
-	private static function geEmmetSnippetsFile(){
+	private static function getEmmetSnippetsFile(){
 		return ABSPATH.'/'.self::EMMET_EXTENTIONS_PATH.'/snippets.json';
 	}
 	public static function getEmmetSnippetsOfBlocks(){
@@ -71,7 +72,7 @@ class VSCodeSettings{
 				if(isset($prop_schema['items'])){continue;}
 				if(isset($prop_schema['type']) && in_array($prop_schema['type'],['boolean','intger','number','string'])){
 					if($prop_schema['type']==='boolean'){
-						$code.=sprintf('${%d:[%s]}',$ctx->count++,$name);
+						$code.=sprintf('[${%d:%s}]',$ctx->count++,$name);
 					}
 					else{
 						$val=$prop_schema['default']??$prop_schema['enum'][0]??null;
@@ -99,6 +100,76 @@ class VSCodeSettings{
 		}
 		return $code;
 	}
+	//snippets
+	public static function initSnippets(){
+		self::setSnippets(array_merge(self::getSnippets(),self::getSnippetsOfBlocks()));
+	}
+	public static function getSnippets(){
+		$file=self::getSnippetsFile();
+		if(!file_exists($file)){return [];}
+		return json_decode(file_get_contents($file),true);
+	}
+	public static function setSnippets($data){
+		$file=self::getSnippetsFile();
+		if(!is_dir($dir=dirname($file))){mkdir($dir,0755,true);}
+		file_put_contents($file,json_encode($data,0700));
+	}
+	private static function getSnippetsFile(){
+		return ABSPATH.'/'.self::BLOCK_SNIPPETS_FILE;
+	}
+	public static function getSnippetsOfBlocks(){
+		$datas=[];
+		foreach(glob(TMPL_DIR.'/blocks/*/schema.json') as $schema_file){
+			$dir=dirname($schema_file);
+			$tag='block-'.basename($dir);
+			$datas[$tag]=[
+				"scope"=>"html",
+				'prefix'=>$tag,
+				'body'=>self::getSnippetBodyFromSchema($tag,json_decode(file_get_contents($schema_file),true))
+			];
+		}
+		return $datas;
+	}
+	private static function getSnippetBodyFromSchema($tag,$schema,$level=0,$ctx=null){
+		if(empty($ctx)){$ctx=(object)['count'=>1];}
+		$lines=[];
+		$atts='';
+		$children=[];
+		$indent=str_repeat("\t",$level);
+		if(isset($schema['properties'])){
+			foreach($schema['properties'] as $name=>$prop_schema){
+				if(isset($prop_schema['items'])){continue;}
+				if(isset($prop_schema['type']) && in_array($prop_schema['type'],['boolean','intger','number','string'])){
+					if($prop_schema['type']==='boolean'){
+						$atts.=sprintf(' ${%d:%s}',$ctx->count++,$name);
+					}
+					else{
+						$atts.=sprintf(' %s="%s"',$name,self::getSnippetPlaceholderFromSchema($ctx->count++,$prop_schema));
+					}
+				}
+				else{
+					$children[$name]=$prop_schema;
+				}
+			}
+		}
+		if(!empty($children)){
+			$lines[]=sprintf('%s<%s%s>',$indent,$tag,$atts);
+			foreach($children as $name=>$child){
+				$lines=array_merge($lines,self::getSnippetBodyFromSchema($name,$child,$level+1,$ctx));
+			}
+			$lines[]=sprintf('%s</%s>',$indent,$tag);
+		}
+		else{
+			$lines[]=sprintf('%s<%s%s>%s</%2$s>',$indent,$tag,$atts,self::getSnippetPlaceholderFromSchema($ctx->count++,$schema));
+		}
+		return $lines;
+	}
+	private static function getSnippetPlaceholderFromSchema($count,$schema){
+		if(isset($schema['enum'])){return sprintf('${%d|%s|}',$count,implode(',',$schema['enum']));}
+		if(isset($schema['default'])){return sprintf('${%d:%s}',$count,$schema['default']);}
+		return sprintf('${%d}',$count);
+	}
+
 	//customHTMLData
 	public static function initCustomHTMLData(){
 		$data=self::getCustomHTMLData();

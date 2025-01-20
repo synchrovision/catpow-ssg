@@ -7,6 +7,7 @@ class VSCode{
 		VSCS::initSettingsData();
 		VSCS::initCustomHTMLData();
 		VSCS::initEmmetSnippets();
+		VSCS::initSnippets();
 		return ['message'=>'init VSCode Settings'];
 	}
 }
