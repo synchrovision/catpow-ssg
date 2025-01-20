@@ -88,9 +88,10 @@ class Tmpl{
 			file_exists(ABSPATH.$uri.'.tmpl.php') ||
 			file_exists(TMPL_DIR.$uri.'.php')
 		){return false;}
-		$dir=dirname($uri);
+		$dir=substr($uri,-1)==='/'?substr($uri,0,-1):dirname($uri);
 		while($dir!=='/'){
 			if(isset($sitemap[$dir.'/*'])){
+				error_log(var_export($sitemap[$dir.'/*'],1));
 				foreach(['router.php','router.html','index.php','index.html'] as $file_name){
 					if(
 						file_exists(ABSPATH.$dir.'/'.$file_name) ||
