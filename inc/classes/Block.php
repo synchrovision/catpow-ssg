@@ -6,7 +6,7 @@ class Block{
 	public function __construct($block,$props=[],$children=[]){
 		list($this->block,$this->part)=explode('/',$block.'/');
 		$this->props=$props;
-		$this->children=$children;
+		$this->children=$props['children']??$children;
 		$this->dir=ABSPATH.'/blocks/'.$this->block;
 	}
 	public function init(){
