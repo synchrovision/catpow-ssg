@@ -86,6 +86,11 @@
 				es.addEventListener('update',(e)=>{
 					if(isLoading){return;}
 					const updatedFiles=JSON.parse(e.data);
+					console.log({updatedFiles});
+					if(Object.entries(updatedFiles).some(([file,mtime])=>mtime>lastLoad && file.includes('/_tmpl/blocks/'))){
+						con.get('vscode');
+						console.log('update vscode settings');s
+					}
 					if(Object.values(updatedFiles).some(mtime=>mtime>lastLoad)){
 						this.reload();
 						isLoading=true;
