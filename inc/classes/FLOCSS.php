@@ -78,6 +78,11 @@ class FLOCSS extends CssRule{
 			}
 			if($_s||$_b||$__e|$_e){
 				$classes[$i]=$this->get_class();
+				foreach($classes as $j=>$class){
+					if(substr($class,0,2)==='--'){
+						$classes[$j]=$classes[$i].$class;
+					}
+				}
 				$el->setAttribute('class',implode(' ',$classes));
 				break;
 			}
