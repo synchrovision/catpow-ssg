@@ -102,9 +102,9 @@ class VSCodeSettings{
 	private static function getSnippetPlaceholderFromSchema($schema,$ctx){
 		if(isset($schema['enum'])){return sprintf('${%d|%s|}',$ctx->count++,implode(',',$schema['enum']));}
 		if(isset($schema['pattern'])){
-			if(preg_match('/^\^([\w\s\-,#:;]*(\([\w\-\|\\\.\+\*]+\)[\w\s\-,#:;]*)+)\$$/',$schema['pattern'],$matches)){
-				return preg_replace_callback('/\(([\w\-\|\\\.\+\*]+)\)/',function($matches)use($ctx){
-					if(preg_match('/[\\\.\+\*]/',$matches[1])){return sprintf('${%d}',$ctx->count++);}
+			if(preg_match('/^\^([\w\s\-,#:;]*(\([#\w\-\|\\\.\+\*\{\},]+\)[\w\s\-,#:;]*)+)\$$/',$schema['pattern'],$matches)){
+				return preg_replace_callback('/\(([#\w\-\|\\\.\+\*\{\},]+)\)/',function($matches)use($ctx){
+					if(preg_match('/[\\\.\+\*\{\},]/',$matches[1])){return sprintf('${%d}',$ctx->count++);}
 					return sprintf('${%d|%s|}',$ctx->count++,str_replace('|',',',$matches[1]));
 				},$matches[1]);
 			}
