@@ -4,6 +4,7 @@ namespace Catpow;
 class VSCodeSettings{
 	const
 		SETTINGS_JSON_FILE='.vscode/settings.json',
+		CUSTOM_HTML_DATA_FILE='.vscode/block-tags.json',
 		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets';
 
 	//settings
