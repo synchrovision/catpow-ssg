@@ -79,7 +79,7 @@ class VSCodeSettings{
 						$atts.=sprintf(' ${%d:%s}',$ctx->count++,$name);
 					}
 					else{
-						$atts.=sprintf(' %s="%s"',$name,self::getSnippetPlaceholderFromSchema($ctx->count++,$prop_schema));
+						$atts.=sprintf(' %s="%s"',$name,self::getSnippetPlaceholderFromSchema($prop_schema,$ctx));
 					}
 				}
 				else{
@@ -95,14 +95,22 @@ class VSCodeSettings{
 			$lines[]=sprintf('%s</%s>',$indent,$tag);
 		}
 		else{
-			$lines[]=sprintf('%s<%s%s>%s</%2$s>',$indent,$tag,$atts,self::getSnippetPlaceholderFromSchema($ctx->count++,$schema));
+			$lines[]=sprintf('%s<%s%s>%s</%2$s>',$indent,$tag,$atts,self::getSnippetPlaceholderFromSchema($schema,$ctx));
 		}
 		return $lines;
 	}
-	private static function getSnippetPlaceholderFromSchema($count,$schema){
-		if(isset($schema['enum'])){return sprintf('${%d|%s|}',$count,implode(',',$schema['enum']));}
-		if(isset($schema['default'])){return sprintf('${%d:%s}',$count,$schema['default']);}
-		return sprintf('${%d}',$count);
+	private static function getSnippetPlaceholderFromSchema($schema,$ctx){
+		if(isset($schema['enum'])){return sprintf('${%d|%s|}',$ctx->count++,implode(',',$schema['enum']));}
+		if(isset($schema['pattern'])){
+			if(preg_match('/^\^([\w\s\-,#:;]*(\([\w\-\|\\\.\+\*]+\)[\w\s\-,#:;]*)+)\$$/',$schema['pattern'],$matches)){
+				return preg_replace_callback('/\(([\w\-\|\\\.\+\*]+)\)/',function($matches)use($ctx){
+					if(preg_match('/[\\\.\+\*]/',$matches[1])){return sprintf('${%d}',$ctx->count++);}
+					return sprintf('${%d|%s|}',$ctx->count++,str_replace('|',',',$matches[1]));
+				},$matches[1]);
+			}
+		}
+		if(isset($schema['default'])){return sprintf('${%d:%s}',$ctx->count++,$schema['default']);}
+		return sprintf('${%d}',$ctx->count++);
 	}
 	//customHTMLData
 	public static function initCustomHTMLData(){
