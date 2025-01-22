@@ -4,8 +4,6 @@ namespace Catpow;
 class VSCodeSettings{
 	const
 		SETTINGS_JSON_FILE='.vscode/settings.json',
-		EMMET_EXTENTIONS_PATH='_config/emmet',
-		CUSTOM_HTML_DATA_FILE='_config/customHTMLData.json',
 		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets';
 
 	//settings
@@ -13,12 +11,6 @@ class VSCodeSettings{
 		$data=self::getSettingsData();
 		if(empty($data['html.customData']) || !in_array(self::CUSTOM_HTML_DATA_FILE,$data['html.customData'])){
 			$data['html.customData'][]=self::CUSTOM_HTML_DATA_FILE;
-		}
-		if(empty($data['emmet.includeLanguages']['php'])){
-			$data['emmet.includeLanguages']['php']='html';
-		}
-		if(empty($data['emmet.extensionsPath']) || !in_array(self::EMMET_EXTENTIONS_PATH,$data['emmet.extensionsPath'])){
-			$data['emmet.extensionsPath'][]=self::EMMET_EXTENTIONS_PATH;
 		}
 		self::setSettingsData($data);
 	}
