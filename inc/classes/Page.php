@@ -43,6 +43,7 @@ class Page{
 		if(file_exists($f=TMPL_DIR.$this->dir.$file)){return $f;}
 		if(file_exists($f=ABSPATH.'/'.$file)){return $f;}
 		if(file_exists($f=TMPL_DIR.'/'.$file)){return $f;}
+		if(file_exists($f=CONF_DIR.'/'.$file)){return $f;}
 		if(file_exists($f=INC_DIR.'/'.$file)){return $f;}
 	}
 	public function get_the_tmpl_file($file){
