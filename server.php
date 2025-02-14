@@ -94,7 +94,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ')){
-				echo preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)" \-\->/',function($matches){
+				echo preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)"\s*\-\->/',function($matches){
 					switch($matches[1]){
 						case 'virtual':return file_get_contents(ABSPATH.$matches[2]);
 						case 'file':return file_get_contents(PAGE_DIR.'/'.$matches[2]);
