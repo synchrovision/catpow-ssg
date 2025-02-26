@@ -111,7 +111,7 @@ class Tmpl{
 		if($f=static::get_tmpl_file_for_file_in_dir(TMPL_DIR,$file_uri,".php")){return $f;}
 		return false;
 	}
-	public static function get_tmpl_file_for_file_in_dir($f,$file_uri,$ext){
+	public static function get_tmpl_file_for_file_in_dir($f,$file_uri,$ext=''){
 		$dnames=explode('/',substr($file_uri,1));
 		$fname=array_pop($dnames);
 		$fext=strrchr($fname,'.');
