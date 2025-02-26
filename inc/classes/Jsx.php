@@ -19,24 +19,33 @@ class Jsx{
 		$jsx_file=substr($file,0,-2).'jsx';
 		if(file_exists($jsx_file)){return $jsx_file;}
 		if(file_exists($f=str_replace('/js/','/_jsx/',$jsx_file))){return $f;}
-		if(file_exists($f=str_replace(\ABSPATH,\TMPL_DIR,$jsx_file))){return $f;}
-		if(file_exists($f=str_replace([\ABSPATH,'/js/'],[\TMPL_DIR,'/_jsx/'],$jsx_file))){return $f;}
+		$jsx_file_uri=str_replace(\ABSPATH,'',$jsx_file);
+		if(file_exists($f=\TMPL_DIR.$jsx_file_uri)){return $f;}
+		if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$jsx_file_uri)){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
 		return false;
 	}
 	public static function get_entry_jsx_file_for_file($file){
 		$entry_jsx_file=substr($file,0,-3).'/index.jsx';
 		if(file_exists($entry_jsx_file)){return $entry_jsx_file;}
 		if(file_exists($f=str_replace('/js/','/_jsx/',$entry_jsx_file))){return $f;}
-		if(file_exists($f=str_replace(\ABSPATH,\TMPL_DIR,$entry_jsx_file))){return $f;}
-		if(file_exists($f=str_replace([\ABSPATH,'/js/'],[\TMPL_DIR,'/_jsx/'],$entry_jsx_file))){return $f;}
+		$jsx_file_uri=str_replace(\ABSPATH,'',$entry_jsx_file);
+		if(file_exists($f=\TMPL_DIR.$jsx_file_uri)){return $f;}
+		if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$jsx_file_uri)){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
 		return false;
 	}
 	public static function get_entry_tsx_file_for_file($file){
 		$entry_tsx_file=substr($file,0,-3).'/index.tsx';
 		if(file_exists($entry_tsx_file)){return $entry_tsx_file;}
 		if(file_exists($f=str_replace('/js/','/_tsx/',$entry_tsx_file))){return $f;}
-		if(file_exists($f=str_replace(\ABSPATH,\TMPL_DIR,$entry_tsx_file))){return $f;}
-		if(file_exists($f=str_replace([\ABSPATH,'/js/'],[\TMPL_DIR,'/_tsx/'],$entry_tsx_file))){return $f;}
+		$jsx_file_uri=str_replace(\ABSPATH,'',$entry_tsx_file);
+		if(file_exists($f=\TMPL_DIR.$jsx_file_uri)){return $f;}
+		if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$jsx_file_uri)){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
 		return false;
 	}
 	public static function bundle($entry_file,$bundle_js_file){
