@@ -19,18 +19,22 @@ class Scss{
 		if(file_exists($scss_file)){return $scss_file;}
 		if(file_exists($f=str_replace('/css/','/_scss/',$scss_file))){return $f;}
 		if(file_exists($f=str_replace('/css/','/scss/',$scss_file))){return $f;}
-		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$scss_file))){return $f;}
-		if(file_exists($f=str_replace([ABSPATH,'/css/'],[TMPL_DIR,'/_scss/'],$scss_file))){return $f;}
-		if(file_exists($f=str_replace([ABSPATH,'/css/'],[TMPL_DIR,'/scss/'],$scss_file))){return $f;}
+		$scss_file_uri=str_replace(\ABSPATH,'',$scss_file);
+		if(file_exists($f=\TMPL_DIR.$scss_file_uri)){return $f;}
+		if(file_exists($f=\TMPL_DIR.str_replace('/css/','/_scss/',$scss_file_uri))){return $f;}
+		if(file_exists($f=\TMPL_DIR.str_replace('/css/','/scss/',$scss_file_uri))){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$scss_file_uri)){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/css/','/scss/',$scss_file_uri))){return $f;}
+		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/css/','/_scss/',$scss_file_uri))){return $f;}
 		return false;
 	}
 	public static function get_scssc(){
 		if(isset(static::$scssc)){return static::$scssc;}
 		$scssc = new Compiler();
-		$scssc->addImportPath(ABSPATH.'/');
-		$scssc->addImportPath(CONF_DIR.'/');
-		$scssc->addImportPath(ABSPATH.'/_scss/');
-		$scssc->addImportPath(INC_DIR.'/scss/');
+		$scssc->addImportPath(\ABSPATH.'/');
+		$scssc->addImportPath(\CONF_DIR.'/');
+		$scssc->addImportPath(\ABSPATH.'/_scss/');
+		$scssc->addImportPath(\INC_DIR.'/scss/');
 		$scssc->setIgnoreErrors(true);
 		$scssc->registerFunction('debug',function($args){
 			error_log(var_export($args,1));
