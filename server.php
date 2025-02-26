@@ -59,8 +59,16 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 			}
 		}
 		else{
+			init();
+			if($tmpl_file=Catpow\Tmpl::get_tmpl_file_for_file_in_dir(TMPL_DIR,$uri)){
+				if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
+					if(!is_dir(dirname($file))){
+						mkdir(dirname($file),0755,true);
+					}
+					copy($tmpl_file,$file);
+				}
+			}
 			if(!file_exists($file)){
-				init();
 				$result=Catpow\Tmpl::attempt_routing($uri);
 				if($result!==0){return $result;}
 				Catpow\Site::copy_file_from_remote_if_not_exists($uri);
