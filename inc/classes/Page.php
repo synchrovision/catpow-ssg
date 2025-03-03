@@ -10,7 +10,7 @@ class Page{
 		$this->path_to_root=str_repeat('../',substr_count(ltrim($uri,'/'),'/'));
 		if($this->path_to_root===''){$this->path_to_root='./';}
 		$this->filename=(substr($uri,-1)==='/')?'index':pathinfo($uri)['filename'];
-		$this->dir=(substr($uri,-1)==='/')?$uri:dirname($uri).'/';
+		$this->dir=(substr($uri,-1)==='/')?$uri:rtrim(dirname($uri),'/').'/';
 		$this->scripts=new Deps('js');
 		$this->styles=new Deps('css');
 		
