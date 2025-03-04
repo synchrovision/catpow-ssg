@@ -16,7 +16,7 @@ class Deps{
 					['src'=>'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js','attr'=>'crossorigin']
 				]
 			],
-			'alpine'=>['src'=>'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js','attr'=>'defer'],
+			'alpine'=>['src'=>'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.8/cdn.min.js','attr'=>'defer'],
 			'alpine2'=>[
 				'set'=>[
 					['src'=>'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js','attr'=>'type="module"'],
