@@ -108,18 +108,18 @@ class Deps{
 		if(empty($source)){return false;}
 		switch($this->type){
 			case 'js':
-				if(!empty($source['src'])){printf('<script src="%s" %s></script>',$source['src'],$source['attr']??'');}
+				if(!empty($source['src'])){printf('<script src="%s" %s></script>'."\n",$source['src'],$source['attr']??'');}
 				if(!empty($source['set'])){
 					foreach($source['set'] as $item){
-						printf('<script src="%s" %s></script>',$item['src'],$item['attr']??'');
+						printf('<script src="%s" %s></script>'."\n",$item['src'],$item['attr']??'');
 					}
 				}
 				break;
 			case 'css':
-				if(!empty($source['src'])){printf('<link rel="stylesheet" type="text/css" href="%s" %s/>',$source['src'],$source['attr']??'');}
+				if(!empty($source['src'])){printf('<link rel="stylesheet" type="text/css" href="%s" %s/>'."\n",$source['src'],$source['attr']??'');}
 				if(!empty($source['set'])){
 					foreach($source['set'] as $item){
-						printf('<link rel="stylesheet" type="text/css" href="%s" %s/>',$item['src'],$item['attr']??'');
+						printf('<link rel="stylesheet" type="text/css" href="%s" %s/>'."\n",$item['src'],$item['attr']??'');
 					}
 				}
 				break;
