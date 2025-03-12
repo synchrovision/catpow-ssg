@@ -114,6 +114,14 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		if(!file_exists($file)){
 			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		}
+		
+		if($ext==='html'){
+			$site=Catpow\Site::get_instance();
+			if($site->runHtmlAsPhp){
+				include $file;
+				return true;
+			}
+		}
 		return $should_output;
 	default:
 		if(!file_exists($file)){
