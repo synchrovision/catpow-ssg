@@ -188,8 +188,13 @@ class Block{
 				}
 			}
 			foreach($atts as $key=>$val){
-				if(!empty($schema['properties'][$key]['items']) && is_string($val)){
+				if(empty($schema['properties'][$key])){continue;}
+				$sub_schema=$schema['properties'][$key];
+				if(!empty($sub_schema['items']) && is_string($val)){
 					$atts[$key]=csv($val)->items;
+				}
+				else{
+					$atts[$key]=self::translate_value($val,$sub_schema['type']??null);
 				}
 			}
 			return $atts;
@@ -206,13 +211,7 @@ class Block{
 			return $items;
 		}
 		if(isset($schema['type']) && in_array($schema['type'],['boolean','integer','number','string'])){
-			$value=$el->hasAttribute('value')?$el->getAttribute('value'):$el->textContent;
-			switch($schema['type']){
-				case 'boolean':return !in_array(strtolower(trim($value)),['0','false','no']);
-				case 'integer':return (int)$value;
-				case 'number':return (float)$value;
-				default: $value;
-			}
+			return self::translate_value($el->hasAttribute('value')?$el->getAttribute('value'):$el->textContent,$schema['type']);
 		}
 		$id=uniqid();
 		$slot=$doc->createDocumentFragment();
@@ -223,6 +222,14 @@ class Block{
 		}
 		self::$slots[$id]=$slot;
 		return sprintf('<slot id="%s"/>',$id);
+	}
+	private static function translate_value($value,$type){
+		switch($type){
+			case 'boolean':return !in_array(strtolower(trim($value)),['0','false','no']);
+			case 'integer':return (int)$value;
+			case 'number':return (float)$value;
+			default: return $value;
+		}
 	}
 	protected static function array_set_value(&$array,$key,$value){
 		if(strpos($key,'[')===false){$array[$key]=$value;}
