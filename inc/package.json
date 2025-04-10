@@ -5,14 +5,13 @@
 		"watch": "php compiler.php"
 	},
 	"dependencies": {
-		"acorn": "^8.12.1",
-		"acorn-jsx": "^5.3.2",
+		"@babel/parser": "^7.27.0",
 		"esbuild-plugin-inline-import": "*",
 		"esbuild-plugin-svgr": "*",
 		"js-cookie": "*",
 		"react": "*",
 		"react-dom": "*",
-		"react-error-boundary":"*",
-		"react-use":"*"
+		"react-error-boundary": "*",
+		"react-use": "*"
 	}
 }

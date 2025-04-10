@@ -10,7 +10,7 @@ class Modules{
 				$files[]='modules/src/'.$fname.'/index.js';
 			}
 		}
-		exec('node modules/src/script/declaration.mjs -t module -v 2020 '.implode(' ',$files),$output);
+		exec('node modules/src/script/declaration.mjs -t module '.implode(' ',$files),$output);
 		return json_decode(implode("\n",$output));
 	}
 }
