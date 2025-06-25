@@ -50,6 +50,7 @@ html{
 			@include grd((tr:160 1fr));
 		}
 		@include bp(960){
+			@include bnd((h:calc(100vh - 5rem)));
 			@include grd((tc:240 1fr));
 		}
 		&__sidebar{

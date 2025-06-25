@@ -141,6 +141,7 @@ html {
 }
 @media (min-width:960px) {
   .cp-main {
+    height: calc(100vh - 5rem);
     display: -webkit-grid;
     display: -ms-grid;
     display: grid;
