@@ -1,0 +1,23 @@
+{
+    "name": "wongyip/html-beautify",
+    "description": "Pretty Print HTML Tags",
+    "license": "MIT",
+    "homepage": "https://github.com/wongyip/html-beautify",
+    "authors": [
+        {
+            "name": "Wongyip",
+            "email": "wongyip@outlook.com",
+            "homepage": "https://github.com/wongyip"
+        }
+    ],
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wongyip\\HTML\\": "src"
+        }
+    },
+    "minimum-stability": "dev",
+	"prefer-stable" : true
+}

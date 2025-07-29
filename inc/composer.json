@@ -1,13 +1,17 @@
 {
-    "require": {
-        "vlucas/phpdotenv": "^5.3",
-        "michelf/php-markdown": "^1.9",
-        "scssphp/scssphp": "^1.10",
-        "spatie/color": "*"
-    },
-	"autoload": {
-		"psr-4": {
-			"Catpow\\":["../../_config/classes","classes"]
-		}
-	}
+  "require": {
+    "vlucas/phpdotenv": "^5.3",
+    "michelf/php-markdown": "^1.9",
+    "scssphp/scssphp": "^1.10",
+    "spatie/color": "*",
+    "wongyip/html-beautify": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Catpow\\": [
+        "../../_config/classes",
+        "classes"
+      ]
+    }
+  }
 }
