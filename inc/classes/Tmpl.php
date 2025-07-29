@@ -30,16 +30,13 @@ class Tmpl{
 	public static function lint_file($file){
 		switch(strrchr($file,'.')){
 			case '.html':{
-				if(file_exists($tidy_conf_file=CONF_DIR.'/tidy.conf')){
-					$tidy = new \tidy();
-					$html=file_get_contents($file);
-					$html=preg_replace('/ @([\w\.\-:]+=)/',' x-on:$1',$html);
-					$html=preg_replace('/ :([\w\.\-:]+=)/',' x-bind:$1',$html);
-					$html=$tidy->repairString($html,$tidy_conf_file);
-					$html=preg_replace('/ x-on:([\w\.\-:]+=)/',' @$1',$html);
-					$html=preg_replace('/ x-bind:([\w\.\-:]+=)/',' :$1',$html);
-					file_put_contents($file,$html);
-				}
+				$bf=new \Wongyip\HTML\Beautify([
+				'indent_char'=>"\t",
+				'indent_size'=>1
+				]);
+				$html=preg_replace('((?<=>)\s+|\s+(?=<))',"",file_get_contents($file));
+				$html=$bf->beautify($html);
+				file_put_contents($file,$html);
 				break;
 			}
 		}
