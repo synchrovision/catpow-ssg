@@ -131,13 +131,13 @@ class Page{
 		return false;
 	}
 	public function use_block($block){
-		if(Block::get_block_file($block,'app/index.jsx')){
+		if($this->file_should_exists('/blocks/'.$block.'/app.js')){
 			$this->scripts->enqueue('/blocks/'.$block.'/app.js');
 		}
-		if(Block::get_block_file($block,'script.jsx') || Block::get_block_file($block,'script.js')){
+		if($this->file_should_exists('/blocks/'.$block.'/script.js')){
 			$this->scripts->enqueue('/blocks/'.$block.'/script.js');
 		}
-		if(Block::get_block_file($block,'style.scss') || Block::get_block_file($block,'style.css')){
+		if($this->file_should_exists('/blocks/'.$block.'/style.css')){
 			$this->styles->enqueue('/blocks/'.$block.'/style.css');
 		}
 	}
