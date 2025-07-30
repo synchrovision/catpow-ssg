@@ -1,12 +1,15 @@
 <?php
+if(file_exists($settings_file=dirname(__DIR__).'/_config/settings.php')){
+	include $settings_file;
+}
 require 'inc/settings.php';
 if(php_sapi_name()==='cli'){
 	chdir(APP_DIR);
 	passthru('git submodule update --init --recursive');
 	chdir(ABSPATH);
 	$descriptor=[['pipe','r'],['file','php://stdout','w'],['file','php://stdout','w']];
-	$main_proc=proc_open('php -S localhost:8000 '.APP_NAME.'/server.php & open '.CP_URL.'/',$descriptor,$pipes);
-	$sub_proc=proc_open('php -S localhost:8001 '.APP_NAME.'/inc/sse.php',$descriptor,$pipes);
+	$main_proc=proc_open(sprintf('php -S %s %s/server.php -t %s/ & open %s/',BASE_HOST,APP_DIR,ABSPATH,CP_URL),$descriptor,$pipes);
+	$sub_proc=proc_open(sprintf('php -S %s %s/inc/sse.php',SSE_HOST,APP_DIR),$descriptor,$pipes);
 	while(!feof(STDIN)){sleep(10);}
 	proc_close($main_proc);
 	proc_close($sub_proc);
@@ -14,16 +17,32 @@ if(php_sapi_name()==='cli'){
 }
 
 $uri=explode('?',$_SERVER["REQUEST_URI"])[0];
-if(strpos($uri,'/'.APP_NAME.'/api/')===0){
-	init();
-	Catpow\API::request(substr($uri,strpos($uri,'/api/')+5),$_REQUEST);
-	return;
-}
-if(substr($uri,-1)==='/'){
-	if(strpos($uri,'/'.APP_NAME.'/controlpanel/')===0){
+
+if(strpos($uri,'/'.APP_NAME.'/')===0){
+	if(strpos($uri,'/'.APP_NAME.'/api/')===0){
+		init();
+		Catpow\API::request(substr($uri,strpos($uri,'/api/')+5),$_REQUEST);
+		return;
+	}
+	if($uri==='/'.APP_NAME.'/controlpanel/'){
 		include CP_DIR.'/index.php';
 		return;
 	}
+	if(file_exists($file=dirname(APP_DIR).$uri)){
+		$mime=mime_content_type($file);
+		if($mime==='text/plain'){
+			$mime=[
+				'.js'=>'text/javascript',
+				'.json'=>'application/json',
+				'.css'=>'text/css',
+			][strrchr($file,'.')]??$mime;
+		}
+		header('Content-Type:'.$mime);
+		readfile($file);
+	}
+	return;
+}
+if(substr($uri,-1)==='/'){
 	$file=ABSPATH.$uri.'index.html';
 	$fname='index.html';
 }
