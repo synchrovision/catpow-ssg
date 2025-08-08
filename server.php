@@ -99,6 +99,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		Catpow\Scss::compile_for_file($file);
 		$result=Catpow\Tmpl::attempt_routing($uri);
 		if($result!==0){return $result;}
+		Catpow\Site::copy_file_from_template_if_not_exists_or_updated($uri);
 		Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		return false;
 	case 'html':
@@ -110,14 +111,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		init();
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
-		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
-			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
-				if(!is_dir(dirname($file))){
-					mkdir(dirname($file),0755,true);
-				}
-				copy($tmpl_file,$file);
-			}
-		}
+		Catpow\Site::copy_file_from_template_if_not_exists_or_updated($uri);
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ')){

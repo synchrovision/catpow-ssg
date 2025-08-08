@@ -38,6 +38,17 @@ class Site{
 		if(empty(static::$instance)){static::init();}
 		return static::$instance;
 	}
+	public static function copy_file_from_template_if_not_exists_or_updated($uri){
+		$file=ABSPATH.$uri;
+		if(file_exists($tmpl_file=TMPL_DIR.$uri) || file_exists($tmpl_file=INC_DIR.$uri)){
+			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
+				if(!is_dir(dirname($file))){
+					mkdir(dirname($file),0755,true);
+				}
+				copy($tmpl_file,$file);
+			}
+		}
+	}
 	public static function copy_file_from_remote_if_not_exists($uri){
 		if(
 			file_exists(ABSPATH.$uri) || 
