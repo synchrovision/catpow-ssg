@@ -114,13 +114,16 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		Catpow\Site::copy_file_from_template_if_not_exists_or_updated($uri);
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
-			if(strpos($contents,'<!--#include ')){
-				echo preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)"\s*\-\->/',function($matches){
-					switch($matches[1]){
-						case 'virtual':return file_get_contents(ABSPATH.$matches[2]);
-						case 'file':return file_get_contents(PAGE_DIR.'/'.$matches[2]);
-					}
-				},$contents);
+			if(strpos($contents,'<!--#include ') !== false){
+				while(strpos($contents,'<!--#include ') !== false){
+					$contents=preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)"\s*\-\->/',function($matches){
+						switch($matches[1]){
+							case 'virtual':return file_get_contents(ABSPATH.$matches[2]);
+							case 'file':return file_get_contents(PAGE_DIR.'/'.$matches[2]);
+						}
+					},$contents);
+				}
+				echo $contents;
 				$should_output=true;
 			}
 		}
