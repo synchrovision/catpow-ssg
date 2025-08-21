@@ -45,7 +45,7 @@ class Site{
 				if(!is_dir(dirname($file))){
 					mkdir(dirname($file),0755,true);
 				}
-				copy($tmpl_file,$file);
+				if(!is_dir($tmpl_file)){copy($tmpl_file,$file);}
 			}
 		}
 	}
