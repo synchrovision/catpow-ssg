@@ -28,7 +28,6 @@ class Block{
 					}
 				}
 			}
-			mkdir($this->dir,0755,1);
 		}
 	}
 	public function get_html(){
