@@ -6,7 +6,18 @@ class VSCodeSettings{
 		SETTINGS_JSON_FILE='.vscode/settings.json',
 		CUSTOM_HTML_DATA_FILE='.vscode/block-tags.json',
 		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets';
-
+	public static function update(){
+		$last_mtime=0;
+		$snippets_file=self::getSnippetsFile();
+		foreach(glob(TMPL_DIR.'/blocks/*/schema.json') as $schema_file){
+			$last_mtime=max($last_mtime,filemtime($schema_file));
+		}
+		if($last_mtime!==0 && !file_exists($snippets_file) || filemtime($snippets_file)<$last_mtime){
+			self::initSettingsData();
+			self::initCustomHTMLData();
+			self::initSnippets();
+		}
+	}
 	//settings
 	public static function initSettingsData(){
 		$data=self::getSettingsData();

@@ -112,6 +112,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
 		Catpow\Site::copy_file_from_template_if_not_exists_or_updated($uri);
+		Catpow\VSCodeSettings::update();
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ') !== false){
