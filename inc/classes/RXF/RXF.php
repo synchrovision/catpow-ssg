@@ -31,7 +31,7 @@ abstract class RXF{
 	private static function get_regsitered(){
 		if(isset(static::$regsitered)){return static::$regsitered;}
 		$flags=[];
-		foreach([\ABSPATH,\TMPL_DIR,\INC_DIR] as $dir){
+		foreach([\CONF_DIR,\TMPL_DIR,\INC_DIR] as $dir){
 			if(is_dir($d=$dir.'/classes/RXF')){
 				foreach(scandir($d) as $fname){
 					if(substr($fname,-4)==='.php'){
