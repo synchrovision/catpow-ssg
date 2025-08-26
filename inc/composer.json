@@ -10,6 +10,7 @@
     "psr-4": {
       "Catpow\\": [
         "../../_config/classes",
+        "../../_tmpl/classes",
         "classes"
       ]
     }
