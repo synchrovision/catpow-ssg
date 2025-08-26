@@ -17,5 +17,6 @@ define('CP_URL',APP_URL.'/controlpanel');
 
 define('API_URL',APP_URL.'/api');
 define('INC_DIR',APP_DIR.'/inc');
+define('ROOT_DIR',dirname(APP_DIR));
 define('CONF_DIR',dirname(APP_DIR).'/_config');
 define('TMPL_DIR',dirname(APP_DIR).'/_tmpl');
