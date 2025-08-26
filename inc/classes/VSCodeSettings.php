@@ -26,7 +26,7 @@ class VSCodeSettings{
 		file_put_contents($file,json_encode($data,0700));
 	}
 	private static function getSettingsFile(){
-		return ABSPATH.'/'.self::SETTINGS_JSON_FILE;
+		return ROOT_DIR.'/'.self::SETTINGS_JSON_FILE;
 	}
 	//snippets
 	public static function initSnippets(){
@@ -43,7 +43,7 @@ class VSCodeSettings{
 		file_put_contents($file,json_encode($data,0700));
 	}
 	private static function getSnippetsFile(){
-		return ABSPATH.'/'.self::BLOCK_SNIPPETS_FILE;
+		return ROOT_DIR.'/'.self::BLOCK_SNIPPETS_FILE;
 	}
 	public static function getSnippetsOfBlocks(){
 		$datas=[];
@@ -122,7 +122,7 @@ class VSCodeSettings{
 		file_put_contents($file,json_encode($data,0700));
 	}
 	private static function getCustomHTMLDataFile(){
-		return ABSPATH.'/'.self::CUSTOM_HTML_DATA_FILE;
+		return ROOT_DIR.'/'.self::CUSTOM_HTML_DATA_FILE;
 	}
 	//blockHTMLData
 	public static function getHTMLDataOfBlocks(){
