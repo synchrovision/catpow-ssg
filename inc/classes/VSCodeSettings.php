@@ -99,7 +99,12 @@ class VSCodeSettings{
 			$lines[]=sprintf('%s</%s>',$indent,$tag);
 		}
 		else{
-			$lines[]=sprintf('%s<%s%s>%s</%2$s>',$indent,$tag,$atts,self::getSnippetPlaceholderFromSchema($schema,$ctx));
+			if($schema['emptyElement']){
+				$lines[]=sprintf('%s<%s%s/>',$indent,$tag,$atts);
+			}
+			else{
+				$lines[]=sprintf('%s<%s%s>%s</%2$s>',$indent,$tag,$atts,self::getSnippetPlaceholderFromSchema($schema,$ctx));
+			}
 		}
 		return $lines;
 	}
