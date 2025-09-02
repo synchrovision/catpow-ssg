@@ -20,7 +20,7 @@ class Site{
 			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $info;}
 		}
 		$pathinfo=pathinfo($uri);
-		if(['filenam']==='index'){
+		if($pathinfo['filename']==='index'){
 			if(!empty($info=$sitemap[$pathinfo['dirname'].'/']??null)){return $info;}
 		}
 		$dir=$pathinfo['dirname'];
