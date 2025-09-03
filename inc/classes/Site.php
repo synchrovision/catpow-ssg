@@ -27,18 +27,15 @@ class Site{
 		if($pathinfo['filename']==='index'){
 			if(!empty($info=$sitemap[$pathinfo['dirname'].'/']??null)){return $cache[$uri]=$info;}
 		}
-		$dir=$pathinfo['dirname'];
-		do{
-			if(!empty($info=$sitemap[$dir.'/*']??null)){return $info;}
-			$dir=dirname($dir);
 		
 		if($info_file=self::get_config_file_for_uri($uri,'info')){
 			if(substr($uri,-1)!=='/' && !preg_match('/\.[a-z]+$/',$uri)){$uri.='/';}
 			return $cache[$uri]=array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
 		}
 		
+		foreach($this->patterns as $pattern=>$info){
+			if(fnmatch($pattern,$uri)){return $cache[$uri]=$info;}
 		}
-		while(!empty($dir) && $dir!=='.' && $dir!=='/');
 		return null;
 	}
 	public static function get_config_file_for_uri($uri,$name){
