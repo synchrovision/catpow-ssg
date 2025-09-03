@@ -18,14 +18,13 @@ class Site{
 		$sitemap=$this->sitemap;
 		if(isset($sitemap[$uri])){return $sitemap[$uri];}
 		if(isset($cache[$uri])){return $cache[$uri];}
+
+		$normalized_uri=self::normalize_uri($uri);
+		if(isset($sitemap[$normalized_uri])){return $cache[$uri]=$sitemap[$normalized_uri];}
 		
 		if(substr($uri,-1)==='/'){
 			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $cache[$uri]=$info;}
 			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $cache[$uri]=$info;}
-		}
-		$pathinfo=pathinfo($uri);
-		if($pathinfo['filename']==='index'){
-			if(!empty($info=$sitemap[$pathinfo['dirname'].'/']??null)){return $cache[$uri]=$info;}
 		}
 		
 		if($info_file=self::get_config_file_for_uri($uri,'info')){
