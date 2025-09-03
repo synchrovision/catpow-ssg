@@ -2,6 +2,7 @@
 namespace Catpow;
 class Site{
 	public $info,$sitemap;
+	private $patterns;
 	private static $instance;
 	private function __construct($info,$sitemap){
 		$this->info=$info;
@@ -61,7 +62,16 @@ class Site{
 		if(file_exists($config_file=$d.'/['.$name.'].php')){return $config_file;}
 		return false;
 	}
+	public function get_patterns(){
+		static $cache;
+		if(isset($cache)){return $cache;}
+		return $cache=array_filter($this->sitemap,fn($val,$key)=>strpos($key,'*')!==false);
+	}
 	public function __get($name){
+		if($name==='patterns'){
+			if(isset($this->patterns)){return $this->patterns;}
+			return $this->patterns=$this->get_patterns();
+		}
 		if(isset($this->info[$name])){return $this->info[$name];}
 	}
 	public static function get_instance(){
