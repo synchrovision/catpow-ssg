@@ -32,8 +32,18 @@ class Site{
 			return $cache[$uri]=array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
 		}
 		
-		foreach($this->patterns as $pattern=>$info){
-			if(fnmatch($pattern,$uri)){return $cache[$uri]=$info;}
+		foreach($this->get_patterns() as $pattern=>$info){
+			if(fnmatch($pattern,$uri)){
+				$dir=dirname($uri);
+				if(substr($pattern,-1)==='*' && $index_file=self::get_config_file_for_uri($dir,'index')){
+					$index=(function()use($index_file,$uri){return include $index_file;})();
+					$basename=basename($normalized_uri);
+					if(isset($index[$basename])){
+						$info=array_merge($info,['uri'=>$normalized_uri],$index[$basename]);
+					}
+				}
+				return $cache[$uri]=$info;
+			}
 		}
 		return null;
 	}
