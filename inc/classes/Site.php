@@ -61,6 +61,10 @@ class Site{
 		if(file_exists($config_file=$d.'/['.$name.'].php')){return $config_file;}
 		return false;
 	}
+	public static function normalize_uri($uri){
+		if(substr($uri,-1)==='/'){return $uri;}
+		return preg_replace('/\/index\.[html?|php]$/','/',$uri);
+	}
 	public function get_patterns(){
 		static $cache;
 		if(isset($cache)){return $cache;}
