@@ -14,16 +14,18 @@ class Site{
 		return $GLOBALS['site']=static::$instance=new static($info,$sitemap);
 	}
 	public function get_page_info($uri){
+		static $cache=[];
 		$sitemap=$this->sitemap;
 		if(isset($sitemap[$uri])){return $sitemap[$uri];}
+		if(isset($cache[$uri])){return $cache[$uri];}
 		
 		if(substr($uri,-1)==='/'){
-			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $info;}
-			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $info;}
+			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $cache[$uri]=$info;}
+			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $cache[$uri]=$info;}
 		}
 		$pathinfo=pathinfo($uri);
 		if($pathinfo['filename']==='index'){
-			if(!empty($info=$sitemap[$pathinfo['dirname'].'/']??null)){return $info;}
+			if(!empty($info=$sitemap[$pathinfo['dirname'].'/']??null)){return $cache[$uri]=$info;}
 		}
 		$dir=$pathinfo['dirname'];
 		do{
@@ -32,7 +34,7 @@ class Site{
 		
 		if($info_file=self::get_config_file_for_uri($uri,'info')){
 			if(substr($uri,-1)!=='/' && !preg_match('/\.[a-z]+$/',$uri)){$uri.='/';}
-			return array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
+			return $cache[$uri]=array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
 		}
 		
 		}
