@@ -62,6 +62,7 @@ class Site{
 	}
 	public static function normalize_uri($uri){
 		if(substr($uri,-1)==='/'){return $uri;}
+		if(strpos(basename($uri),'.')===false){return $uri.'/';}
 		return preg_replace('/\/index\.[html?|php]$/','/',$uri);
 	}
 	public function get_patterns(){
