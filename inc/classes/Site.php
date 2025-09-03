@@ -67,7 +67,7 @@ class Site{
 	public function get_patterns(){
 		static $cache;
 		if(isset($cache)){return $cache;}
-		return $cache=array_filter($this->sitemap,fn($val,$key)=>strpos($key,'*')!==false);
+		return $cache=array_filter($this->sitemap,fn($key)=>strpos($key,'*')!==false,\ARRAY_FILTER_USE_KEY);
 	}
 	public function __get($name){
 		if($name==='patterns'){
