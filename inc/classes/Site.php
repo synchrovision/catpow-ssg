@@ -15,13 +15,13 @@ class Site{
 	public function get_page_info($uri){
 		$sitemap=$this->sitemap;
 		if(isset($sitemap[$uri])){return $sitemap[$uri];}
-		if($info_file=self::get_page_info_file_for_uri($uri)){
-			if(substr($uri,-1)!=='/' && !preg_match('/\.[a-z]+$/',$uri)){$uri.='/';}
-			return array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
-		}
 		if(substr($uri,-1)==='/'){
 			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $info;}
 			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $info;}
+		}
+		if($info_file=self::get_config_file_for_uri($uri,'info')){
+			if(substr($uri,-1)!=='/' && !preg_match('/\.[a-z]+$/',$uri)){$uri.='/';}
+			return array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
 		}
 		$pathinfo=pathinfo($uri);
 		if($pathinfo['filename']==='index'){
@@ -35,19 +35,27 @@ class Site{
 		while(!empty($dir) && $dir!=='.' && $dir!=='/');
 		return null;
 	}
-	public static function get_page_info_file_for_uri($uri){
-		if(substr($uri,-1)!=='/' && preg_match('/\.[a-z]+$/',$uri)){
-			$uri=dirname($uri);
+	public static function get_config_file_for_uri($uri,$name){
+		static $cache=[];
+		if(isset($cache[$uri])){
+			$d=$cache[$uri];
 		}
-		$dnames=explode('/',trim($uri,'/'));
-		foreach([ABSPATH,TMPL_DIR] as $d){
-			foreach($dnames as $dname){
-				if(file_exists($tmp=$d.'/'.$dname)){$d=$tmp;continue;}
-				if(file_exists($tmp=$d.'/[template]')){$d=$tmp;continue;}
-				return false;
+		else{
+			if(substr($uri,-1)!=='/' && preg_match('/\.[a-z]+$/',$uri)){
+				$uri=dirname($uri);
+			}
+			$dnames=explode('/',trim($uri,'/'));
+			foreach([ABSPATH,TMPL_DIR] as $d){
+				foreach($dnames as $dname){
+					if(file_exists($tmp=$d.'/'.$dname)){$d=$tmp;continue;}
+					if(file_exists($tmp=$d.'/[template]')){$d=$tmp;continue;}
+					$d=false;
+					continue 2;
+				}
 			}
 		}
-		if(file_exists($info_file=$d.'/[info].php')){return $info_file;}
+		if(empty($d)){return false;}
+		if(file_exists($config_file=$d.'/['.$name.'].php')){return $config_file;}
 		return false;
 	}
 	public function __get($name){
