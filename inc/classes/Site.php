@@ -15,13 +15,10 @@ class Site{
 	public function get_page_info($uri){
 		$sitemap=$this->sitemap;
 		if(isset($sitemap[$uri])){return $sitemap[$uri];}
+		
 		if(substr($uri,-1)==='/'){
 			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $info;}
 			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $info;}
-		}
-		if($info_file=self::get_config_file_for_uri($uri,'info')){
-			if(substr($uri,-1)!=='/' && !preg_match('/\.[a-z]+$/',$uri)){$uri.='/';}
-			return array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
 		}
 		$pathinfo=pathinfo($uri);
 		if($pathinfo['filename']==='index'){
@@ -31,6 +28,12 @@ class Site{
 		do{
 			if(!empty($info=$sitemap[$dir.'/*']??null)){return $info;}
 			$dir=dirname($dir);
+		
+		if($info_file=self::get_config_file_for_uri($uri,'info')){
+			if(substr($uri,-1)!=='/' && !preg_match('/\.[a-z]+$/',$uri)){$uri.='/';}
+			return array_merge(['uri'=>$uri],(function($uri)use($info_file){return include $info_file;})($uri));
+		}
+		
 		}
 		while(!empty($dir) && $dir!=='.' && $dir!=='/');
 		return null;
