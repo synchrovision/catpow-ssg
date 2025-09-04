@@ -91,6 +91,18 @@ class Site{
 		if(strpos(basename($uri),'.')===false){return $uri.'/';}
 		return preg_replace('/\/index\.[html?|php]$/','/',$uri);
 	}
+	public function init_relation(){
+		static $done=false;
+		if($done){return;}
+		foreach($this->sitemap as $uri=>$info){
+			$parent_uri=$this->get_parent_uri($uri);
+			if(!isset($info['parent'])){$this->sitemap[$uri]['parent']=$parent_uri;}
+			if(isset($parent_uri) && isset($this->sitemap[$parent_uri])){
+				$this->sitemap[$parent_uri]['children'][]=$uri;
+			}
+		}
+		$done=true;
+	}
 	public function get_patterns(){
 		static $cache;
 		if(isset($cache)){return $cache;}
