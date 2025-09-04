@@ -35,7 +35,7 @@ class Site{
 		foreach($this->get_patterns() as $pattern=>$info){
 			if(fnmatch($pattern,$uri)){
 				$dir=dirname($uri);
-				if(substr($pattern,-1)==='*' && $index_file=self::get_config_file_for_uri($dir,'index')){
+				if(basename($pattern)==='*' && $index_file=self::get_config_file_for_uri($dir,'index')){
 					$index=(function()use($index_file,$uri){return include $index_file;})();
 					$basename=basename($normalized_uri);
 					if(isset($index[$basename])){
@@ -107,6 +107,54 @@ class Site{
 		static $cache;
 		if(isset($cache)){return $cache;}
 		return $cache=array_filter($this->sitemap,fn($key)=>strpos($key,'*')!==false,\ARRAY_FILTER_USE_KEY);
+	}
+	public function get_tree($root_uri){
+		static $cache=[];
+		if(isset($cache[$root_uri])){return $cache[$root_uri];}
+		$this->init_relation();
+		$normalized_root_uri=self::normalize_uri($root_uri);
+		$tree=$this->get_raw_page_info($normalized_root_uri);
+		$tree['uri']=$normalized_root_uri;
+		$root_dir=substr($normalized_root_uri,-1)==='/'?rtrim($normalized_root_uri,'/'):dirname($normalized_root_uri);
+		if(!empty($tree['children'])){
+			$children=[];
+			foreach($tree['children'] as $child_uri){
+				if(basename($child_uri)==='*'){
+					$dir=fnmatch(dirname($child_uri),$root_dir)?$root_dir:dirname($child_uri);
+					if(strpos($dir,'*')===false){
+						if($index_file=self::get_config_file_for_uri($dir,'index')){
+							$index=(function($uri)use($index_file){return include $index_file;})($dir);
+							foreach($index as $fname=>$info){
+								$children[]=array_merge($this->get_tree($dir.'/'.$fname),$info);
+							}
+						}
+					}
+					else{
+						$chunks=explode('/*',$dir);
+						$tmp=[[$chunks[0]]];
+						foreach($chunks as $i=>$chunk){
+							$tmp[$i+1]=[];
+							foreach($tmp[$i] as $chunk_uri){
+								if($index_file=self::get_config_file_for_uri($chunk_uri,'index')){
+									$index=(function($uri)use($index_file){return include $index_file;})($chunk_uri);
+									foreach($index as $fname=>$info){
+										$tmp[$i+1][]=$chunk_uri.'/'.$fname;
+									}
+								}
+							}
+						}
+						foreach(end($tmp) as $result_uri){
+							$chidlren[]=$this->get_tree($result_uri);
+						}
+					}
+				}
+				else{
+					$children[]=$this->get_tree($child_uri);
+				}
+			}
+			$tree['children']=$children;
+		}
+		return $cache[$root_uri]=$cache[$normalized_root_uri]=$tree;
 	}
 	public function get_parent_uri($uri){
 		static $cache=[];
