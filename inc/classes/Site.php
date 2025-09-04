@@ -47,6 +47,22 @@ class Site{
 		}
 		return null;
 	}
+	public function get_raw_page_info($uri){
+		$sitemap=$this->sitemap;
+		if(isset($sitemap[$uri])){return $sitemap[$uri];}
+
+		$normalized_uri=self::normalize_uri($uri);
+		if(isset($sitemap[$normalized_uri])){return $sitemap[$normalized_uri];}
+		
+		if(substr($uri,-1)==='/'){
+			if(!empty($info=$sitemap[$uri.'index.html']??null)){return $info;}
+			if(!empty($info=$sitemap[$uri.'index.php']??null)){return $info;}
+		}
+		foreach($this->get_patterns() as $pattern=>$info){
+			if(fnmatch($pattern,$uri)){return $sitemap[$pattern];}
+		}
+		return null;
+	}
 	public static function get_config_file_for_uri($uri,$name){
 		static $cache=[];
 		if(isset($cache[$uri])){
