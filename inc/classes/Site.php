@@ -108,6 +108,21 @@ class Site{
 		if(isset($cache)){return $cache;}
 		return $cache=array_filter($this->sitemap,fn($key)=>strpos($key,'*')!==false,\ARRAY_FILTER_USE_KEY);
 	}
+	public function get_parent_uri($uri){
+		static $cache=[];
+		if(isset($cache[$uri])){return $cache[$uri];}
+		if(isset($this->sitemap[$uri]['parent'])){return $cache[$uri]=$this->sitemap[$uri]['parent'];}
+
+		$parent_uri=dirname($uri);
+		do{
+			if(isset($this->sitemap[$parent_uri])){return $cache[$uri]=$parent_uri;}
+			if(isset($this->sitemap[$parent_uri.'/'])){return $cache[$uri]=$parent_uri.'/';}
+			$parent_uri=dirname($parent_uri);
+		}
+		while(!empty($parent_uri) && $parent_uri!=='.' && $parent_uri!=='/');
+		if($parent_uri==='/'){return $cache[$uri]=$parent_uri;}
+		return null;
+	}
 	public function __get($name){
 		if($name==='patterns'){
 			if(isset($this->patterns)){return $this->patterns;}
