@@ -12,7 +12,7 @@ class VSCodeSettings{
 		foreach(glob(TMPL_DIR.'/blocks/*/schema.json') as $schema_file){
 			$last_mtime=max($last_mtime,filemtime($schema_file));
 		}
-		if($last_mtime!==0 && !file_exists($snippets_file) || filemtime($snippets_file)<$last_mtime){
+		if($last_mtime!==0 && !file_exists($snippets_file) || @filemtime($snippets_file)<$last_mtime){
 			self::initSettingsData();
 			self::initCustomHTMLData();
 			self::initSnippets();

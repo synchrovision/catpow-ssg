@@ -85,7 +85,7 @@ class Tmpl{
 			file_exists(TMPL_DIR.$uri.'.php')
 		){return false;}
 		$dir=substr($uri,-1)==='/'?substr($uri,0,-1):dirname($uri);
-		while($dir[0]==='/' && $dir!=='/'){
+		while($dir[0]??''==='/' && $dir!=='/'){
 			if(isset($sitemap[$dir.'/*'])){
 				foreach(['router.php','router.html','index.php','index.html'] as $file_name){
 					if(
