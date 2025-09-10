@@ -110,6 +110,7 @@ class Site{
 	}
 	public function get_tree($root_uri){
 		static $cache=[];
+		if(empty($root_uri)){return null;}
 		if(isset($cache[$root_uri])){return $cache[$root_uri];}
 		$this->init_relation();
 		$normalized_root_uri=self::normalize_uri($root_uri);
