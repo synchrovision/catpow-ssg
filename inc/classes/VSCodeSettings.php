@@ -5,7 +5,9 @@ class VSCodeSettings{
 	const
 		SETTINGS_JSON_FILE='.vscode/settings.json',
 		CUSTOM_HTML_DATA_FILE='.vscode/block-tags.json',
-		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets';
+		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets',
+		BLOCK_SCHEMA_FILE='/'.\APP_NAME.'/inc/schema/block.json',
+		BLOCK_SCHEMA_FILE_PATTERN="**/blocks/*/schema.json";
 	public static function update(){
 		$last_mtime=0;
 		$snippets_file=self::getSnippetsFile();
@@ -23,6 +25,17 @@ class VSCodeSettings{
 		$data=self::getSettingsData();
 		if(empty($data['html.customData']) || !in_array(self::CUSTOM_HTML_DATA_FILE,$data['html.customData'])){
 			$data['html.customData'][]=self::CUSTOM_HTML_DATA_FILE;
+		}
+		if(
+			empty($data['json.schemas']) || 
+			empty(array_filter($data['json.schemas'],function($item){
+				return in_array(self::BLOCK_SCHEMA_FILE_PATTERN,$item['fileMatch']);
+			}))
+		){
+			$data['json.schemas'][]=[
+				'fileMatch'=>[self::BLOCK_SCHEMA_FILE_PATTERN],
+				'url'=>self::BLOCK_SCHEMA_FILE
+			];
 		}
 		self::setSettingsData($data);
 	}

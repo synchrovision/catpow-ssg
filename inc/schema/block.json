@@ -1,0 +1,31 @@
+{
+	"$defs": {
+		"blockAttributes": {
+			"properties": {
+				"type": { "type": "string", "enum": ["string", "html", "number", "integer", "array", "boolean"] },
+				"key": { "type": "string", "default": "items[]" },
+				"emptyElement": { "type": "boolean", "default": true },
+				"properties": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#/$defs/blockAttributes" }
+				},
+				"items": {
+					"$ref": "#/$defs/blockAttributes"
+				},
+				"enum": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"default": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"properties": {
+		"properties": {
+			"type": "object",
+			"additionalProperties": { "$ref": "#/$defs/blockAttributes" }
+		}
+	}
+}
