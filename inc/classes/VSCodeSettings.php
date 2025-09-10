@@ -99,7 +99,7 @@ class VSCodeSettings{
 			$lines[]=sprintf('%s</%s>',$indent,$tag);
 		}
 		else{
-			if($schema['emptyElement']){
+			if(!empty($schema['emptyElement'])){
 				$lines[]=sprintf('%s<%s%s/>',$indent,$tag,$atts);
 			}
 			else{
