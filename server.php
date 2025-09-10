@@ -124,9 +124,9 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 						}
 					},$contents);
 				}
-				echo $contents;
-				$should_output=true;
 			}
+			echo $contents;
+			$should_output=true;
 		}
 		if(!file_exists($file)){
 			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
