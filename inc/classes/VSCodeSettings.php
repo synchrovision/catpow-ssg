@@ -37,6 +37,10 @@ class VSCodeSettings{
 				'url'=>self::BLOCK_SCHEMA_FILE
 			];
 		}
+		if(empty($data['css.styleSheets'])){
+			$data['css.styleSheets'][]=ltrim(DIST_NAME.'/**/common.css','/');
+			$data['css.styleSheets'][]=ltrim(DIST_NAME.'/**/common/*.css','/');
+		}
 		self::setSettingsData($data);
 	}
 	public static function getSettingsData(){
