@@ -11,6 +11,7 @@ class Index{
 				if(strpos($uri,'*')!==false){
 					$chunks=explode('/*',$uri);
 					$tmp=[[$chunks[0]]];
+					$tail=array_pop($chunks);
 					foreach($chunks as $i=>$chunk){
 						$tmp[$i+1]=[];
 						foreach($tmp[$i] as $chunk_uri){
@@ -23,7 +24,7 @@ class Index{
 						}
 					}
 					foreach(end($tmp) as $result_uri){
-						$results[$result_uri]=true;
+						$results[$result_uri.$tail]=true;
 					}
 				}
 				else{
