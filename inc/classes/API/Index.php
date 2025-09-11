@@ -10,21 +10,20 @@ class Index{
 			foreach($uris as $uri){
 				if(strpos($uri,'*')!==false){
 					$chunks=explode('/*',$uri);
-					$tmp=[[$chunks[0]]];
-					$tail=array_pop($chunks);
+					$tmp=[[array_shift($chunks)]];
 					foreach($chunks as $i=>$chunk){
 						$tmp[$i+1]=[];
 						foreach($tmp[$i] as $chunk_uri){
 							if($index_file=Site::get_config_file_for_uri($chunk_uri,'index')){
 								$index=(function($uri)use($index_file){return include $index_file;})($chunk_uri);
 								foreach($index as $fname=>$info){
-									$tmp[$i+1][]=$chunk_uri.'/'.$fname;
+									$tmp[$i+1][]=$chunk_uri.'/'.$fname.$chunk;
 								}
 							}
 						}
 					}
 					foreach(end($tmp) as $result_uri){
-						$results[$result_uri.$tail]=true;
+						$results[$result_uri]=true;
 					}
 				}
 				else{
