@@ -2,7 +2,7 @@
 if(file_exists($settings_file=dirname(__DIR__).'/_config/settings.php')){
 	include $settings_file;
 }
-require 'inc/settings.php';
+require __DIR__.'/inc/settings.php';
 if(php_sapi_name()==='cli'){
 	chdir(APP_DIR);
 	passthru('git submodule update --init --recursive');
