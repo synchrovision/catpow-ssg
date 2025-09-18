@@ -230,7 +230,7 @@ function enqueue_script($handler,$src=null,$deps=[]){
 	$page->scripts->enqueue($handler,$src,$deps);
 }
 
-function get_template_part($name,$slug=null){
+function get_template_part($name,$slug=null,$args=null){
 	if(!empty($slug)){
 		if(file_exists($f=TMPL_DIR.'/'.$name.'-'.$slug.'.php')){
 			return include $f;
@@ -238,14 +238,14 @@ function get_template_part($name,$slug=null){
 	}
 	return include TMPL_DIR.'/'.$name.'.php';
 }
-function get_header($slug=null){
-	get_template_part('header',$slug);
+function get_header($slug=null,$args=null){
+	get_template_part('header',$slug,$args);
 }
-function get_sidebar($slug=null){
-	get_template_part('sidebar',$slug);
+function get_sidebar($slug=null,$args=null){
+	get_template_part('sidebar',$slug,$args);
 }
-function get_footer($slug=null){
-	get_template_part('footer',$slug);
+function get_footer($slug=null,$args=null){
+	get_template_part('footer',$slug,$args);
 }
 
 function block($block,$props=[],$children=[]){
