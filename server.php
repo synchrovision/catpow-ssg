@@ -117,7 +117,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
 			if(strpos($contents,'<!--#include ') !== false){
 				while(strpos($contents,'<!--#include ') !== false){
-					$contents=preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)"\s*\-\->/',function($matches){
+					$contents=preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)(\?.+)?"\s*\-\->/',function($matches){
 						switch($matches[1]){
 							case 'virtual':return file_get_contents(ABSPATH.$matches[2]);
 							case 'file':return file_get_contents(PAGE_DIR.'/'.$matches[2]);
