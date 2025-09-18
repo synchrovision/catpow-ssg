@@ -23,6 +23,7 @@
 		}
 	},
 	"properties": {
+		"emptyElement": { "type": "boolean", "default": true },
 		"properties": {
 			"type": "object",
 			"additionalProperties": { "$ref": "#/$defs/blockAttributes" }
