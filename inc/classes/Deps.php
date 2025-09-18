@@ -116,10 +116,10 @@ class Deps{
 				}
 				break;
 			case 'css':
-				if(!empty($source['src'])){printf('<link rel="stylesheet" type="text/css" href="%s" %s/>'."\n",$source['src'],$source['attr']??'');}
+				if(!empty($source['src'])){printf('<link rel="stylesheet" href="%s" %s/>'."\n",$source['src'],$source['attr']??'');}
 				if(!empty($source['set'])){
 					foreach($source['set'] as $item){
-						printf('<link rel="stylesheet" type="text/css" href="%s" %s/>'."\n",$item['src'],$item['attr']??'');
+						printf('<link rel="stylesheet" href="%s" %s/>'."\n",$item['src'],$item['attr']??'');
 					}
 				}
 				break;
