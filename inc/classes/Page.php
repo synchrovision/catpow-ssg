@@ -90,6 +90,9 @@ class Page{
 			){return true;}
 		}
 		$ext=strrchr($f,'.');
+		if($ext==='.html'){
+			if(Tmpl::get_tmpl_file_for_file($f)){return true;}
+		}
 		if($ext==='.js'){
 			if(
 				Jsx::get_jsx_file_for_file($f) ||
