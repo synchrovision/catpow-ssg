@@ -30,11 +30,11 @@ class Tmpl{
 	public static function lint_file($file){
 		switch(strrchr($file,'.')){
 			case '.html':{
-				$bf=new \Wongyip\HTML\Beautify([
-				'indent_char'=>"\t",
-				'indent_size'=>1
-				]);
-				$html=preg_replace('((?<=>)\s+|\s+(?=<))',"",file_get_contents($file));
+				$html=file_get_contents($file);
+				$bf=new \MallardDuck\HtmlFormatter\Formatter();
+				$config=$bf->getConfig();
+				$config->set("tab","\t");
+				$bf->setConfig($config);
 				$html=$bf->beautify($html);
 				file_put_contents($file,$html);
 				break;
