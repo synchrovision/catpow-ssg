@@ -1,0 +1,62 @@
+{
+    "name": "mallardduck/html-formatter",
+    "description": "HTML beautifier and minifier library for development and testing.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "beautify",
+        "format",
+        "HTML",
+        "indent",
+        "minify"
+    ],
+    "authors": [
+        {
+            "name": "Dan Pock",
+            "email": "self@danpock.me",
+            "homepage": "https://danpock.me",
+            "role": "Developer"
+        },
+        {
+            "name": "Miklos Karpati",
+            "email": "mk@navindex.com.au",
+            "homepage": "https://www.navindex.com.au",
+            "role": "OG Developer"
+        }
+    ],
+    "homepage": "https://github.com/mallardduck/html-formatter",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "php-coveralls/php-coveralls": "^2.5",
+        "phpstan/phpstan": "^1.2.0",
+        "phpunit/phpunit": "^9.5.16",
+        "spatie/phpunit-snapshot-assertions": "^4.2.10",
+        "symfony/var-dumper": "^5.0 || ^6.0"
+    },
+    "replace": {
+        "navindex/html-formatter": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MallardDuck\\HtmlFormatter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MallardDuck\\HtmlFormatter\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "check": "phpstan analyse",
+        "test": "phpunit",
+        "testonly": "phpunit --filter"
+    },
+    "scripts-descriptions": {
+        "check": "Run static analysis",
+        "test": "Run unit tests",
+        "testonly": "Run a single test"
+    }
+}
