@@ -32,6 +32,7 @@ class ComposerStaticInitbdaa13433854a414ccabc97e0b459133
         'M' => 
         array (
             'Michelf\\' => 8,
+            'MallardDuck\\HtmlFormatter\\' => 26,
         ),
         'G' => 
         array (
@@ -80,6 +81,10 @@ class ComposerStaticInitbdaa13433854a414ccabc97e0b459133
         array (
             0 => __DIR__ . '/..' . '/michelf/php-markdown/Michelf',
         ),
+        'MallardDuck\\HtmlFormatter\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/vendor-included/html-formatter/src',
+        ),
         'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
@@ -91,7 +96,8 @@ class ComposerStaticInitbdaa13433854a414ccabc97e0b459133
         'Catpow\\' => 
         array (
             0 => __DIR__ . '/../..' . '/../../_config/classes',
-            1 => __DIR__ . '/../..' . '/classes',
+            1 => __DIR__ . '/../..' . '/../../_tmpl/classes',
+            2 => __DIR__ . '/../..' . '/classes',
         ),
     );
 

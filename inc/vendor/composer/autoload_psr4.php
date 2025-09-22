@@ -14,7 +14,8 @@ return array(
     'ScssPhp\\ScssPhp\\' => array($vendorDir . '/scssphp/scssphp/src'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'Michelf\\' => array($vendorDir . '/michelf/php-markdown/Michelf'),
+    'MallardDuck\\HtmlFormatter\\' => array($baseDir . '/vendor-included/html-formatter/src'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
-    'Catpow\\' => array($baseDir . '/../../_config/classes', $baseDir . '/classes'),
+    'Catpow\\' => array($baseDir . '/../../_config/classes', $baseDir . '/../../_tmpl/classes', $baseDir . '/classes'),
 );
