@@ -58,6 +58,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		init();
 		['js'=>'Catpow\\Jsx','json'=>'Catpow\\Json'][$ext]::compile_for_file($file);
 	case 'png':
+	case 'apng':
 	case 'jpg':
 	case 'jpeg':
 	case 'gif':
