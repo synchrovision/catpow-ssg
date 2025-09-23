@@ -112,10 +112,11 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 		init();
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
+		$use_router=!empty($result&Catpow\Tmpl::USE_ROUTER);
 		Catpow\Site::copy_file_from_template_if_not_exists_or_updated($uri);
 		Catpow\VSCodeSettings::update();
 		if(substr($file,-5)==='.html' || substr($file,-6)==='.shtml'){
-			$contents=file_get_contents(($result&Catpow\Tmpl::USE_ROUTER)?(Catpow\Tmpl::get_router_file_for_uri($uri)):$file);
+			$contents=$use_router?ob_get_clean():file_get_contents($file);
 			if(strpos($contents,'<!--#include ') !== false){
 				while(strpos($contents,'<!--#include ') !== false){
 					$contents=preg_replace_callback('/<\!\-\-#include (virtual|file)="(.+?)(\?.+)?"\s*\-\->/',function($matches){
@@ -129,7 +130,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 			echo $contents;
 			$should_output=true;
 		}
-		if(!file_exists($file)){
+		if(!$use_router && !file_exists($file)){
 			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		}
 		
