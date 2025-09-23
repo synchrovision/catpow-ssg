@@ -2,7 +2,7 @@
 namespace Catpow;
 use Michelf\MarkdownExtra;
 class MarkDown{
-	public static $default_class='md';
+	public static $default_class='md',$prism_theme='tomorrow';
 	public static function do_markdown($str){
 		if(strpos($str,'```')!==false){self::use_code_block();}
 		$parser=new MarkdownExtra;
@@ -16,9 +16,10 @@ class MarkDown{
 		return $str;
 	}
 	public static function use_code_block(){
+		$theme=self::$prism_theme;
 		enqueue_script('prism-core','https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js');
 		enqueue_script('prism-autoloader','https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js');
-		enqueue_style('prism','https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css');
+		enqueue_style('prism',"https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-{$theme}.min.css");
 	}
 	public static function render($file){
 		echo self::do_markdown(file_get_contents($file));
