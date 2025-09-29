@@ -195,14 +195,18 @@ class Site{
 		}
 	}
 	public static function copy_file_from_remote_if_not_exists($uri){
+		static $done=[];
 		if(
+			!empty($done[$uri]) ||
 			file_exists(ABSPATH.$uri) || 
 			file_exists(TMPL_DIR.$uri)
 		){return false;}
 		$site=self::get_instance();
 		if(!is_null($site->url)){
+			$done[$uri]=true;
 			$url=$site->url.$uri;
 			$ch=curl_init($url);
+			curl_setopt($ch,CURLOPT_TIMEOUT,5);
 			curl_setopt($ch,CURLOPT_NOBODY,true);
 			curl_exec($ch);
 			$responseCode=curl_getinfo($ch,CURLINFO_HTTP_CODE);
