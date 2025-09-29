@@ -110,6 +110,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'rdf':
 	case 'xml':
 		init();
+		$site=Catpow\Site::get_instance();
 		$result=Catpow\Tmpl::compile_for_file($file);
 		$should_output=!empty($result&Catpow\Tmpl::SHOULD_OUTPUT);
 		$use_router=!empty($result&Catpow\Tmpl::USE_ROUTER);
@@ -127,19 +128,16 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 					},$contents);
 				}
 			}
-			echo $contents;
+			if(!$site->runHtmlAsPhp){echo $contents;}
 			$should_output=true;
 		}
 		if(!$use_router && !file_exists($file)){
 			Catpow\Site::copy_file_from_remote_if_not_exists($uri);
 		}
 		
-		if($ext==='html'){
-			$site=Catpow\Site::get_instance();
-			if($site->runHtmlAsPhp){
-				include $file;
-				return true;
-			}
+		if($ext==='html' && $site->runHtmlAsPhp){
+			include $file;
+			return true;
 		}
 		return $should_output;
 	default:
