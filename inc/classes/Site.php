@@ -11,7 +11,7 @@ class Site{
 	public static function init($info=null,$sitemap=null){
 		if(is_string($info)){$info=csv($info)[0];}
 		if(is_string($sitemap)){$sitemap=csv($sitemap)->dict('uri');}
-		return $GLOBALS['site']=static::$instance=new static($info,$sitemap);
+		return $GLOBALS['site']=static::$instance=new static($info??[],$sitemap??[]);
 	}
 	public function get_page_info($uri){
 		static $cache=[];
