@@ -53,12 +53,12 @@ class CSV implements \Iterator,\ArrayAccess{
 			$this->file=$csv;
 			$csv=fopen($csv,'r');
 			if(empty($fill_column)){
-				while($row=fgetcsv($csv)){
+				while($row=fgetcsv($csv,escape:"\\")){
 					array_push($this->data,self::cast_values($row,$flags));
 				}
 			}
 			else{
-				$keys=fgetcsv($csv);
+				$keys=fgetcsv($csv,escape:"\\");
 				array_push($this->data,$keys);
 				if($fill_column===true){$fill_column=count($keys);}
 				if(is_numeric($fill_column)){$fill_column=range(0,$fill_column);}
@@ -69,7 +69,7 @@ class CSV implements \Iterator,\ArrayAccess{
 					}
 				}
 				$current_values=[];
-				while($row=fgetcsv($csv)){
+				while($row=fgetcsv($csv,escape:"\\")){
 					foreach($fill_column as $index){
 						if(empty($row[$index])){$row[$index]=$current_values[$index]??null;}
 						else{$current_values[$index]=$row[$index];}
