@@ -15,7 +15,7 @@ if(php_sapi_name()==='cli'){
 	proc_close($sub_proc);
 	return;
 }
-
+ini_set('display_errors','no');
 $uri=explode('?',$_SERVER["REQUEST_URI"])[0];
 
 if(strpos($uri,'/'.APP_NAME.'/')===0){
