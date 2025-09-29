@@ -28,8 +28,10 @@ class Tmpl{
 		return self::attempt_routing($uri);
 	}
 	public static function lint_file($file){
+		$site=Site::get_instance();
 		switch(strrchr($file,'.')){
 			case '.html':{
+				if($site->runHtmlAsPhp){break;}
 				$html=file_get_contents($file);
 				$bf=new \MallardDuck\HtmlFormatter\Formatter();
 				$config=$bf->getConfig();
