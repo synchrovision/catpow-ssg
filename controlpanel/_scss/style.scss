@@ -196,8 +196,8 @@ html{
 		}
 		&-controls{
 			@include bnd((f:1 1 f));
+			@include grd((tc:1fr 1.25em));
 			&-scale{
-				@include bnd((mg:a));
 				@include txt((a:c));
 				&__range{
 					@include bnd((w:calc(80% - 5rem)));
@@ -206,6 +206,10 @@ html{
 				&__text{
 					@include bnd((pd:.5em));
 				}
+			}
+			&__reload{
+				@include txt((f:i));
+				@include usr((c:p));
 			}
 		}
 		&-comp{

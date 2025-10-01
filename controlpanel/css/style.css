@@ -299,7 +299,7 @@ html {
   display: -webkit-grid;
   display: -ms-grid;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(18.75rem, 100%), 1fr));
   align-content: start;
 }
 .cp-index-item {
@@ -414,9 +414,13 @@ html {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 100%;
+  display: -webkit-grid;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1.25em;
+  grid-template-columns: 1fr 1.25em;
 }
 .cp-compare-controls-scale {
-  margin: auto;
   text-align: center;
 }
 .cp-compare-controls-scale__range {
@@ -425,6 +429,10 @@ html {
 }
 .cp-compare-controls-scale__text {
   padding: 0.5em;
+}
+.cp-compare-controls__reload {
+  font-family: "Material Icons";
+  cursor: pointer;
 }
 .cp-compare-comp {
   overflow-y: auto;

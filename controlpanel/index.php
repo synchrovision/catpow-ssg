@@ -183,6 +183,7 @@
 							<input class="cp-compare-controls-scale__range" type="range" x-model="comparePreviewScale" min="20" max="150"/>
 							<input class="cp-compare-controls-scale__text" type="number" x-model="comparePreviewScale" min="20" max="150"/>
 						</div>
+						<div class="cp-compare-controls__reload" @click="$refs.comparePreview.contentWindow.location.reload()">replay</div>
 					</div>
 				</div>
 			</div>
