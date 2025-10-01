@@ -28,7 +28,7 @@ class Element{
 		return false;
 	}
 	public static function enqueue_elements_in_html($html){
-		global $page;
+		$page=Page::get_instance();
 		foreach(self::get_all_elements() as $element){
 			if(strpos($html,'<'.$element)!==false){
 				self::compile($element);

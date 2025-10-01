@@ -31,7 +31,7 @@ class Block{
 		}
 	}
 	public function get_html(){
-		global $page;
+		$page=Page::get_instance();
 		ob_start();
 		extract($this->props);
 		if(!empty($page)){$page->use_block($this->block);}

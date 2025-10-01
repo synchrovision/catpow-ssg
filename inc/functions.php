@@ -6,7 +6,7 @@ function _d($data){
 }
 
 function picture($name,$alt,$className=null,$attr=null,$bp=null){
-	global $page;
+	$page=Page::get_instance();
 	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1600,'fhd'=>-1920,'hd'=>-1280,'xga'=>-1024,'vga'=>-640];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
 	$rtn=sprintf('<picture%s>',HTML::get_attr_code(array_merge(['class'=>$className],(array)$attr)));
@@ -147,7 +147,7 @@ function table($data,$props=null){
 	return $rtn;
 }
 function texts($file='texts'){
-	global $page;
+	$page=Page::get_instance();
 	static $cache=[];
 	$file.='.txt';
 	if(!empty($page)){
@@ -171,7 +171,7 @@ function nl2wbr($str){
 function md($text,$class=null){
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
-		global $page;
+		$page=Page::get_instance();
 		$text=file_get_contents($page->get_the_file($text));
 	}
 	return sprintf('<div class="%s-">%s</div>',$class?:MarkDown::$default_class,MarkDown::do_markdown($text));
@@ -199,7 +199,7 @@ function add_shortcode($name,$function){
 }
 
 function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL){
-	global $page;
+	$page=Page::get_instance();
 	if(substr($csv,-4)!=='.csv'){$csv='csv/'.$csv.'.csv';}
 	if(!empty($page)){
 		return new CSV($page->get_the_file($csv),$flags);
@@ -210,7 +210,7 @@ function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL){
 	return false;
 }
 function json($json){
-	global $page;
+	$page=Page::get_instance();
 	if(substr($json,-5)!=='.json'){$json='json/'.$json.'.json';}
 	if(!empty($page)){
 		return json_decode(file_get_contents($page->get_the_file($json)),true);
@@ -222,11 +222,11 @@ function json($json){
 }
 
 function enqueue_style($handler,$src=null,$deps=[]){
-	global $page;
+	$page=Page::get_instance();
 	$page->styles->enqueue($handler,$src,$deps);
 }
 function enqueue_script($handler,$src=null,$deps=[]){
-	global $page;
+	$page=Page::get_instance();
 	$page->scripts->enqueue($handler,$src,$deps);
 }
 
@@ -254,7 +254,7 @@ function block($block,$props=[],$children=[]){
 	return $block_obj->get_html();
 }
 function contents($contents,$vars=[],$children=[]){
-	global $page;
+	$page=Page::get_instance();
 	extract($vars);
 	$children=is_array($children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($children)),false)):$children;
 	if(is_a($children,\Closure::class)){
