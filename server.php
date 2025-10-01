@@ -39,8 +39,8 @@ if(strpos($uri,'/'.APP_NAME.'/')===0){
 		}
 		header('Content-Type:'.$mime);
 		readfile($file);
+		return;
 	}
-	return;
 }
 if(substr($uri,-1)==='/'){
 	$file=ABSPATH.$uri.'index.html';
