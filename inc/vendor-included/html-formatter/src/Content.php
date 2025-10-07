@@ -349,7 +349,10 @@ class Content
         $this->restore(static::PRE);
 
         $tags = array_keys($this->config->get('formatted.tag', []));
-        $this->content = preg_replace(sprintf(Pattern::MOVE_TO_LEFT, implode('|', $tags)), '\1', $this->content) ?? $this->content;
+		$tab=$this->config->get('tab','');
+        $this->content = preg_replace_callback(sprintf(Pattern::MOVE_TO_RIGHT, implode('|', $tags)), function($matches)use($tab){
+            return $matches[1].implode("\n".$matches[1].$tab,explode("\n",trim($matches[2])))."\n".$matches[1].trim($matches[4]);
+        }, $this->content) ?? $this->content;
 
         return $this;
     }
