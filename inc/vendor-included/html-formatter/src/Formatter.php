@@ -30,7 +30,7 @@ class Formatter
             'tag' => [
                 'script' => [],
                 'style' => [],
-                'pre' => [],
+                'pre' => ['move-left'=>true],
                 'textarea' => [],
             ],
             'cleanup-empty' => true,

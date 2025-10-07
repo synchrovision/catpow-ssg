@@ -348,9 +348,20 @@ class Content
     {
         $this->restore(static::PRE);
 
-        $tags = array_keys($this->config->get('formatted.tag', []));
+        $formattedTags = $this->config->get('formatted.tag', []);
+		$leftTags=[];
+		$rightTags=[];
+		foreach($formattedTags as $tag=>$config){
+			if(empty($config['move-left'])){
+				$rightTags[]=$tag;
+			}
+			else{
+				$leftTags[]=$tag;
+			}
+		}
 		$tab=$this->config->get('tab','');
-        $this->content = preg_replace_callback(sprintf(Pattern::MOVE_TO_RIGHT, implode('|', $tags)), function($matches)use($tab){
+		$this->content = preg_replace(sprintf(Pattern::MOVE_TO_LEFT, implode('|', $leftTags)), '\1', $this->content) ?? $this->content;
+        $this->content = preg_replace_callback(sprintf(Pattern::MOVE_TO_RIGHT, implode('|', $rightTags)), function($matches)use($tab){
             return $matches[1].implode("\n".$matches[1].$tab,explode("\n",trim($matches[2])))."\n".$matches[1].trim($matches[4]);
         }, $this->content) ?? $this->content;
 
