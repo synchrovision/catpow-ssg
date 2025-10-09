@@ -8,8 +8,14 @@ if(php_sapi_name()==='cli'){
 	passthru('git submodule update --init --recursive');
 	chdir(ABSPATH);
 	$descriptor=[['pipe','r'],['file','php://stdout','w'],['file','php://stdout','w']];
-	$main_proc=proc_open(sprintf('php -S %s %s/server.php -t %s/ & open %s/',BASE_HOST,APP_DIR,ABSPATH,CP_URL),$descriptor,$pipes);
-	$sub_proc=proc_open(sprintf('php -S %s %s/inc/sse.php',SSE_HOST,APP_DIR),$descriptor,$pipes);
+	if(getenv('RUNNING_IN_DOCKER')){
+		$main_proc=proc_open(sprintf('php -S 0.0.0.0:8000 %s/server.php -t %s/',APP_DIR,ABSPATH),$descriptor,$pipes);
+		$sub_proc=proc_open(sprintf('php -S 0.0.0.0:8001 %s/inc/sse.php',APP_DIR),$descriptor,$pipes);
+	}
+	else{
+		$main_proc=proc_open(sprintf('php -S %s %s/server.php -t %s/ & open %s/',BASE_HOST,APP_DIR,ABSPATH,CP_URL),$descriptor,$pipes);
+		$sub_proc=proc_open(sprintf('php -S %s %s/inc/sse.php',SSE_HOST,APP_DIR),$descriptor,$pipes);
+	}
 	while(!feof(STDIN)){sleep(10);}
 	proc_close($main_proc);
 	proc_close($sub_proc);
