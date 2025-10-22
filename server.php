@@ -134,7 +134,10 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 					},$contents);
 				}
 			}
-			if(!$site->runHtmlAsPhp){echo $contents;}
+			if(!$site->runHtmlAsPhp){
+				ob_clean();
+				echo $contents;
+			}
 			$should_output=true;
 		}
 		if(!$use_router && !file_exists($file)){
