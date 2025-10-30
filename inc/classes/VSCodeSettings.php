@@ -84,6 +84,15 @@ class VSCodeSettings{
 				'body'=>self::getSnippetBodyFromSchema($tag,json_decode(file_get_contents($schema_file),true))
 			];
 		}
+		foreach(glob(TMPL_DIR.'/blocks/*/*/schema.json') as $schema_file){
+			$dir=dirname($schema_file);
+			$tag='block-'.basename(dirname($dir)).'-'.basename($dir);
+			$datas[$tag]=[
+				"scope"=>"html",
+				'prefix'=>$tag,
+				'body'=>self::getSnippetBodyFromSchema($tag,json_decode(file_get_contents($schema_file),true))
+			];
+		}
 		return $datas;
 	}
 	private static function getSnippetBodyFromSchema($tag,$schema,$level=0,$ctx=null){
