@@ -47,7 +47,7 @@ class Block{
 		}
 		else{
 			$className.='-'.$this->part;
-			include self::get_block_file($this->block,'block-'.$this->part.'.php');
+			include self::get_block_file($this->block.'/'.$this->part,'block.php');
 		}
 		return ob_get_clean();
 	}
@@ -70,7 +70,7 @@ class Block{
 		if(!is_a($el,\DOMElement::class) && !is_a($el,\DOMDocumentFragment::class)){return;}
 		if(is_a($el,\DOMElement::class)){
 			if(substr($el->tagName,0,6)==='block-'){
-				$block_name=substr($el->tagName,6);
+				$block_name=str_replace('--','/',substr($el->tagName,6));
 				if(!isset(self::$schemas[$block_name])){
 					self::$schemas[$block_name]=empty($schema_file=self::get_block_file($block_name,'schema.json'))?false:json_decode(file_get_contents($schema_file),true);
 				}
