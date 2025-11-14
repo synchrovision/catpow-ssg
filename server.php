@@ -67,6 +67,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'apng':
 	case 'jpg':
 	case 'jpeg':
+	case 'webp':
 	case 'gif':
 	case 'eot':
 	case 'woff':
