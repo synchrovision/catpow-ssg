@@ -86,7 +86,7 @@ class VSCodeSettings{
 		}
 		foreach(glob(TMPL_DIR.'/blocks/*/*/schema.json') as $schema_file){
 			$dir=dirname($schema_file);
-			$tag='block-'.basename(dirname($dir)).'-'.basename($dir);
+			$tag='block-'.basename(dirname($dir)).'--'.basename($dir);
 			$datas[$tag]=[
 				"scope"=>"html",
 				'prefix'=>$tag,
