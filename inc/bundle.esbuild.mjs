@@ -56,7 +56,7 @@ let pathResolver = {
 			build.onLoad({ filter: /.*/, namespace: "react-global" }, async (args) => {
 				if (args.path === "react-dom") {
 					return {
-						contents: "export default window.ReactDOM;\n" + ["createPortal", "flushSync"].map((h) => `export const ${h}=window.ReactDOM.${h};`).join("\n"),
+						contents: "export default window.ReactDOM;\n" + ["createRoot", "createPortal", "flushSync"].map((h) => `export const ${h}=window.ReactDOM.${h};`).join("\n"),
 						loader: "js",
 					};
 				}
