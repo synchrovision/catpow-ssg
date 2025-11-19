@@ -49,8 +49,9 @@ if(strpos($uri,'/'.APP_NAME.'/')===0){
 	}
 }
 if(substr($uri,-1)==='/'){
-	$file=ABSPATH.$uri.'index.html';
-	$fname='index.html';
+	foreach(['index.php','index.html'] as $fname){
+		if(file_exists($file=ABSPATH.$uri.$fname)){break;}
+	}
 }
 else{
 	$file=ABSPATH.$uri;
