@@ -1,6 +1,7 @@
 import * as esbuild from "esbuild";
 import svgr from "esbuild-plugin-svgr";
 import inlineImportPlugin from "esbuild-plugin-inline-import";
+import * as sass from "sass";
 
 import { parseArgs } from "node:util";
 
@@ -28,7 +29,7 @@ let pathResolver = {
 		build.onResolve({ filter: /^catpow/ }, async (args) => {
 			const result = await build.resolve("./" + args.path.slice(6), {
 				kind: "import-statement",
-				resolveDir: "./modules/src",
+				resolveDir: "./modules/catpow/src",
 			});
 			if (result.errors.length === 0) {
 				return { path: result.path };
@@ -91,9 +92,18 @@ let pathResolver = {
 	},
 };
 let inlineCssImporter = inlineImportPlugin({
-	filter: /css:/,
+	filter: /^css:/,
 	transform: async (contents, args) => {
 		return contents;
+	},
+});
+let scssImporter = inlineImportPlugin({
+	filter: /^scss:/,
+	transform: async (contents, args) => {
+		let { css } = sass.compileString(contents, {
+			loadPaths: ["./", "./modules/", "../../_config/", "../../_tmpl/"],
+		});
+		return css;
 	},
 });
 
@@ -102,7 +112,7 @@ const setttings = {
 	outfile: positionals[1],
 	bundle: true,
 	minify: !debugMode,
-	plugins: [inlineCssImporter, pathResolver, svgr()],
+	plugins: [inlineCssImporter, scssImporter, pathResolver, svgr()],
 };
 if (useGlobalReact) {
 	Object.assign(setttings, {
