@@ -1,6 +1,6 @@
 [submodule "inc/scss"]
 	path = inc/scss
 	url = https://github.com/synchrovision/catpow-scss.git
-[submodule "inc/modules/catpow"]
-	path = inc/modules/catpow
+[submodule "inc/node_modules-included/catpow"]
+	path = inc/node_modules-included/catpow
 	url = https://github.com/synchrovision/catpow-esm.git
