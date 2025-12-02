@@ -29,14 +29,14 @@ let pathResolver = {
 		build.onResolve({ filter: /^catpow/ }, async (args) => {
 			const result = await build.resolve("./" + args.path.slice(6), {
 				kind: "import-statement",
-				resolveDir: "./modules/catpow/src",
+				resolveDir: "./node_modules-included/catpow/src",
 			});
 			if (result.errors.length === 0) {
 				return { path: result.path };
 			}
 		});
 		build.onResolve({ filter: /^@?\w/ }, async (args) => {
-			if (useGlobalReact && (args.path === "react" || args.path === "react-dom")) {
+			if (useGlobalReact && (args.path === "react" || args.path === "react-dom" || args.path === "react-dom/client")) {
 				return {
 					path: args.path,
 					namespace: "react-global",
@@ -55,9 +55,9 @@ let pathResolver = {
 		});
 		if (useGlobalReact) {
 			build.onLoad({ filter: /.*/, namespace: "react-global" }, async (args) => {
-				if (args.path === "react-dom") {
+				if (args.path === "react-dom" || args.path === "react-dom/client") {
 					return {
-						contents: "export default window.ReactDOM;\n" + ["createRoot", "createPortal", "flushSync"].map((h) => `export const ${h}=window.ReactDOM.${h};`).join("\n"),
+						contents: "export default window.ReactDOM;\n" + ["createRoot", "createPortal", "flushSync", "hydrateRoot"].map((h) => `export const ${h}=window.ReactDOM.${h};`).join("\n"),
 						loader: "js",
 					};
 				}
@@ -123,7 +123,7 @@ if (useGlobalReact) {
 			ReactDOM: "window.ReactDOM",
 			"ReactDOM.render": "window.ReactDOM.render",
 		},
-		external: ["react", "react-dom"],
+		external: ["react", "react-dom", "react-dom/client"],
 	});
 } else {
 	Object.assign(setttings, {
