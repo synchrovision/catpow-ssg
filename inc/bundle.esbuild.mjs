@@ -101,7 +101,7 @@ let scssImporter = inlineImportPlugin({
 	filter: /^scss:/,
 	transform: async (contents, args) => {
 		let { css } = sass.compileString(contents, {
-			loadPaths: ["./", "./modules/", "../../_config/", "../../_tmpl/"],
+			loadPaths: ["./", "./node_modules-included/", "../../_config/", "../../_tmpl/"],
 		});
 		return css;
 	},
