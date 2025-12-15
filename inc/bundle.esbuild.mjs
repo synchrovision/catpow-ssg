@@ -35,6 +35,7 @@ let pathResolver = {
 				return { path: result.path };
 			}
 		});
+		build.onResolve({ filter: /^mjs:/ }, (args) => ({ path: args.path.slice(4), external: true }));
 		build.onResolve({ filter: /^@?\w/ }, async (args) => {
 			if (useGlobalReact && (args.path === "react" || args.path === "react-dom" || args.path === "react-dom/client")) {
 				return {
@@ -110,7 +111,9 @@ let scssImporter = inlineImportPlugin({
 const setttings = {
 	entryPoints: [positionals[0]],
 	outfile: positionals[1],
+	format: positionals[1].slice(-4) === ".mjs" ? "esm" : "iife",
 	bundle: true,
+	treeShaking: true,
 	minify: !debugMode,
 	plugins: [inlineCssImporter, scssImporter, pathResolver, svgr()],
 };

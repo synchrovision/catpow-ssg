@@ -61,9 +61,10 @@ define('PAGE_DIR',dirname($file));
 define('PAGE_TMPL_DIR',str_replace(ABSPATH,TMPL_DIR,PAGE_DIR));
 switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'js':
+	case 'mjs';
 	case 'json':
 		init();
-		['js'=>'Catpow\\Jsx','json'=>'Catpow\\Json'][$ext]::compile_for_file($file);
+		['js'=>'Catpow\\Jsx','mjs'=>'Catpow\\Jsx','json'=>'Catpow\\Json'][$ext]::compile_for_file($file);
 	case 'png':
 	case 'apng':
 	case 'jpg':

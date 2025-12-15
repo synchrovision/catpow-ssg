@@ -2,10 +2,10 @@
 namespace Catpow;
 class Jsx{
 	public static function compile_for_file($file){
-		if($jsx_file=self::get_jsx_file_for_file($file)){
-			return self::bundle($jsx_file,$file);
+		if($source_file=self::get_source_file_for_file($file)){
+			return self::bundle($source_file,$file);
 		}
-		if(($entry_file=self::get_entry_jsx_file_for_file($file)) || ($entry_file=self::get_entry_tsx_file_for_file($file))){
+		if(($entry_file=self::get_entry_file_for_file($file))){
 			return self::bundle($entry_file,$file);
 		}
 	}
@@ -15,37 +15,28 @@ class Jsx{
 		putenv('NODE_PATH='.getenv('NODE_PATH').':'.\INC_DIR.'/node_modules');
 		if(!file_exists(\INC_DIR.'/node_modules')){passthru('npm update -i');}
 	}
-	public static function get_jsx_file_for_file($file){
-		$jsx_file=substr($file,0,-2).'jsx';
-		if(file_exists($jsx_file)){return $jsx_file;}
-		if(file_exists($f=str_replace('/js/','/_jsx/',$jsx_file))){return $f;}
-		$jsx_file_uri=str_replace(\ABSPATH,'',$jsx_file);
-		if(file_exists($f=\TMPL_DIR.$jsx_file_uri)){return $f;}
-		if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
-		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$jsx_file_uri)){return $f;}
-		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
+	public static function get_source_file_for_file($file){
+		$uri=str_replace(\ABSPATH,'',preg_replace('/\.m?js$/','',$file));
+		foreach(['tsx','ts','jsx'] as $ext){
+			if(file_exists($f=\ABSPATH.$uri.'.'.$ext)){return $f;}
+			if(file_exists($f=\ABSPATH.str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
+			if(file_exists($f=\TMPL_DIR.$uri.'.'.$ext)){return $f;}
+			if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
+			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$uri.'.'.$ext)){return $f;}
+			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
+		}
 		return false;
 	}
-	public static function get_entry_jsx_file_for_file($file){
-		$entry_jsx_file=substr($file,0,-3).'/index.jsx';
-		if(file_exists($entry_jsx_file)){return $entry_jsx_file;}
-		if(file_exists($f=str_replace('/js/','/_jsx/',$entry_jsx_file))){return $f;}
-		$jsx_file_uri=str_replace(\ABSPATH,'',$entry_jsx_file);
-		if(file_exists($f=\TMPL_DIR.$jsx_file_uri)){return $f;}
-		if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
-		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$jsx_file_uri)){return $f;}
-		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
-		return false;
-	}
-	public static function get_entry_tsx_file_for_file($file){
-		$entry_tsx_file=substr($file,0,-3).'/index.tsx';
-		if(file_exists($entry_tsx_file)){return $entry_tsx_file;}
-		if(file_exists($f=str_replace('/js/','/_tsx/',$entry_tsx_file))){return $f;}
-		$jsx_file_uri=str_replace(\ABSPATH,'',$entry_tsx_file);
-		if(file_exists($f=\TMPL_DIR.$jsx_file_uri)){return $f;}
-		if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
-		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$jsx_file_uri)){return $f;}
-		if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_jsx/',$jsx_file_uri))){return $f;}
+	public static function get_entry_file_for_file($file){
+		$uri=str_replace(\ABSPATH,'',preg_replace('/\.m?js$/','',$file));
+		foreach(['tsx','ts','jsx','js'] as $ext){
+			if(file_exists($f=\ABSPATH.$uri.'/index.'.$ext)){return $f;}
+			if(file_exists($f=\ABSPATH.str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}
+			if(file_exists($f=\TMPL_DIR.$uri.'/index.'.$ext)){return $f;}
+			if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}
+			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$uri.'/index.'.$ext)){return $f;}
+			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}
+		}
 		return false;
 	}
 	public static function bundle($entry_file,$bundle_js_file){
