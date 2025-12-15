@@ -22,6 +22,8 @@ class Jsx{
 			if(file_exists($f=\ABSPATH.str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
 			if(file_exists($f=\TMPL_DIR.$uri.'.'.$ext)){return $f;}
 			if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
+		}
+		foreach(['tsx','ts','jsx'] as $ext){
 			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$uri.'.'.$ext)){return $f;}
 			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
 		}
@@ -34,6 +36,8 @@ class Jsx{
 			if(file_exists($f=\ABSPATH.str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}
 			if(file_exists($f=\TMPL_DIR.$uri.'/index.'.$ext)){return $f;}
 			if(file_exists($f=\TMPL_DIR.str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}
+		}
+		foreach(['tsx','ts','jsx','js'] as $ext){
 			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,$uri.'/index.'.$ext)){return $f;}
 			if($f=Tmpl::get_tmpl_file_for_file_in_dir(\TMPL_DIR,str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}
 		}
