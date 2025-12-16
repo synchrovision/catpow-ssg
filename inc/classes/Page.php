@@ -93,11 +93,10 @@ class Page{
 		if($ext==='.html'){
 			if(Tmpl::get_tmpl_file_for_file($f)){return true;}
 		}
-		if($ext==='.js'){
+		if($ext==='.js' || $ext==='.mjs'){
 			if(
-				Jsx::get_jsx_file_for_file($f) ||
-				Jsx::get_entry_jsx_file_for_file($f) || 
-				Jsx::get_entry_tsx_file_for_file($f)
+				Jsx::get_source_file_for_file($f) ||
+				Jsx::get_entry_file_for_file($f)
 			){return true;}
 		}
 		if($ext==='.css'){
