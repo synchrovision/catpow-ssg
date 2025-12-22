@@ -3,7 +3,7 @@ namespace Catpow;
 class Tmpl{
 	const SHOULD_OUTPUT=1,UPDATED_FILE=2,USE_ROUTER=4;
 	public static function compile_for_file($file){
-		$uri=preg_replace('/\/index\.(html?|php)$/','/',str_replace(ABSPATH,'',$file));
+		$uri=preg_replace('/\/index\.(html?|php)$/','/',substr($file,strlen(ABSPATH)));
 		if(($tmpl_file=self::get_tmpl_file_for_file($file)) || ($tmpl_file=self::get_tmpl_file_for_uri($uri))){
 			ob_start();
 			Page::init($uri);
@@ -103,8 +103,8 @@ class Tmpl{
 	}
 	public static function get_tmpl_file_for_file($file){
 		if(file_exists($f=$file.'.tmpl.php')){return $f;}
-		if(file_exists($f=str_replace(ABSPATH,TMPL_DIR,$file).'.php')){return $f;}
-		$file_uri=str_replace(ABSPATH,'',$file);
+		$file_uri=substr($file,strlen(ABSPATH));
+		if(file_exists($f=TMPL_DIR.$file_uri.'.php')){return $f;}
 		if($f=static::get_tmpl_file_for_file_in_dir(ABSPATH,$file_uri,".tmpl.php")){return $f;}
 		if($f=static::get_tmpl_file_for_file_in_dir(TMPL_DIR,$file_uri,".php")){return $f;}
 		return false;
