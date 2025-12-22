@@ -45,7 +45,7 @@ class Tmpl{
 	}
 	public static function attempt_routing($uri){
 		if($router_file=self::get_router_file_for_uri($uri)){
-			$router_uri=str_replace(ABSPATH,'',dirname($router_file)).'/*';
+			$router_uri=substr(dirname($router_file),strlen(ABSPATH)).'/*';
 			if(!file_exists($f=dirname($router_file).'/.htaccess')){
 				file_put_contents($f,"RewriteEngine on\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".basename($router_file)." [L]");
 			}

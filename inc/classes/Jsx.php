@@ -16,7 +16,7 @@ class Jsx{
 		if(!file_exists(\INC_DIR.'/node_modules')){passthru('npm update -i');}
 	}
 	public static function get_source_file_for_file($file){
-		$uri=str_replace(\ABSPATH,'',preg_replace('/\.m?js$/','',$file));
+		$uri=preg_replace('/\.m?js$/','',substr($file,strlen(\ABSPATH)));
 		foreach(['tsx','ts','jsx'] as $ext){
 			if(file_exists($f=\ABSPATH.$uri.'.'.$ext)){return $f;}
 			if(file_exists($f=\ABSPATH.str_replace('/js/','/_'.$ext.'/',$uri).'.'.$ext)){return $f;}
@@ -30,7 +30,7 @@ class Jsx{
 		return false;
 	}
 	public static function get_entry_file_for_file($file){
-		$uri=str_replace(\ABSPATH,'',preg_replace('/\.m?js$/','',$file));
+		$uri=preg_replace('/\.m?js$/','',substr($file,strlen(\ABSPATH)));
 		foreach(['tsx','ts','jsx','js'] as $ext){
 			if(file_exists($f=\ABSPATH.$uri.'/index.'.$ext)){return $f;}
 			if(file_exists($f=\ABSPATH.str_replace('/js/','/_'.$ext.'/',$uri).'/index.'.$ext)){return $f;}

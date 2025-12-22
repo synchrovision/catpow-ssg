@@ -58,7 +58,7 @@ else{
 	$fname=basename($uri);
 }
 define('PAGE_DIR',dirname($file));
-define('PAGE_TMPL_DIR',str_replace(ABSPATH,TMPL_DIR,PAGE_DIR));
+define('PAGE_TMPL_DIR',TMPL_DIR.substr(PAGE_DIR,strlen(ABSPATH)));
 switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'js':
 	case 'mjs';
@@ -79,7 +79,7 @@ switch($ext=substr($fname,strrpos($fname,'.')+1)){
 	case 'pdf':
 	case 'mp3':
 	case 'mp4':
-		if(file_exists($tmpl_file=str_replace(ABSPATH,TMPL_DIR,$file)) || file_exists($tmpl_file=str_replace(ABSPATH,INC_DIR,$file))){
+		if(file_exists($tmpl_file=TMPL_DIR.substr($file,strlen(ABSPATH))) || file_exists($tmpl_file=INC_DIR.substr($file,strlen(ABSPATH)))){
 			if(!file_exists($file) || filemtime($file)<filemtime($tmpl_file)){
 				if(!is_dir(dirname($file))){
 					mkdir(dirname($file),0755,true);
