@@ -113,10 +113,17 @@ class Tmpl{
 		$dnames=explode('/',substr($file_uri,1));
 		$fname=array_pop($dnames);
 		$fext=strrchr($fname,'.');
+		$fbasename=preg_replace('/\.\w+$/','',$fname);
+		$chunks=[];
 		foreach($dnames as $dname){
 			if(file_exists($tmp=$f.'/'.$dname)){$f=$tmp;continue;}
-			if(file_exists($tmp=$f.'/[template]')){$f=$tmp;continue;}
+			if(file_exists($tmp=$f.'/[template]')){$chunks[]=$dname;$f=$tmp;continue;}
 			return false;
+		}
+		if(!empty($chunks)){
+			for($i=count($chunks)-1;$i>=0;$chunks[$i--]='*'){
+				if(file_exists($tmp=$f.'/'.$fbasename.'['.implode('][',$chunks).']'.$fext.$ext)){return $tmp;}
+			}
 		}
 		if(file_exists($tmp=$f.'/'.$fname.$ext)){return $tmp;}
 		if(file_exists($tmp=$f.'/[template]'.$fext.$ext)){return $tmp;}
