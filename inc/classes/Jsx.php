@@ -16,6 +16,7 @@ class Jsx{
 		if(!file_exists(\INC_DIR.'/node_modules')){passthru('npm update -i');}
 	}
 	public static function get_source_file_for_file($file){
+		if(($tmpl_file=Tmpl::get_tmpl_file_for_file($file)) && ($f=include $tmpl_file)){return $f;}
 		$uri=preg_replace('/\.m?js$/','',substr($file,strlen(\ABSPATH)));
 		foreach(['tsx','ts','jsx'] as $ext){
 			if(file_exists($f=\ABSPATH.$uri.'.'.$ext)){return $f;}
