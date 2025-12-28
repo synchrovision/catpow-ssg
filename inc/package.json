@@ -2,11 +2,13 @@
 	"name": "catpow-jsx-compiler",
 	"version": "1.0.0",
 	"scripts": {
-		"watch": "php compiler.php"
+		"init": "npx playwright install && npm install @playwright/test ",
+		"watch": "php compiler.php",
+		"crawl": "npx playwright test tests/crawl.spec.js"
 	},
 	"dependencies": {
 		"@babel/parser": "^7.27.0",
-		"@playwright/test": "^1.55.0",
+		"@playwright/test": "^1.57.0",
 		"clsx": "^2.1.1",
 		"esbuild-plugin-inline-import": "*",
 		"esbuild-plugin-svgr": "*",
