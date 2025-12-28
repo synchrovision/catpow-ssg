@@ -33,10 +33,10 @@ class Site{
 		}
 		
 		foreach($this->get_patterns() as $pattern=>$info){
-			if(fnmatch($pattern,$uri)){
+			if(fnmatch($pattern,$uri,\FNM_PATHNAME)){
 				$dir=dirname($uri);
 				if(basename($pattern)==='*' && $index_file=self::get_config_file_for_uri($dir,'index')){
-					$index=(function()use($index_file,$uri){return include $index_file;})();
+					$index=(function($uri)use($index_file){return include $index_file;})(dirname($uri));
 					$basename=basename($normalized_uri);
 					if(isset($index[$basename])){
 						$info=array_merge($info,['uri'=>$normalized_uri],$index[$basename]);
