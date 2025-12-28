@@ -1,11 +1,11 @@
 <?php
 namespace Catpow;
 
-function _d($data){
+function _d($data):void{
 	Debug::dump($data);
 }
 
-function picture($name,$alt,$className=null,$attr=null,$bp=null){
+function picture($name,$alt,$className=null,$attr=null,$bp=null):string{
 	$page=Page::get_instance();
 	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1600,'fhd'=>-1920,'hd'=>-1280,'xga'=>-1024,'vga'=>-640];}
 	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
@@ -60,7 +60,7 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null){
 	$rtn.='</picture>';
 	return $rtn;
 }
-function table($data,$props=null){
+function table($data,$props=null):string{
 	if(is_string($data)){$data=csv($data)->data;}
 	if(empty($props)){$props=[];}
 	if(is_string($props)){$props=['class'=>$props];}
@@ -146,7 +146,7 @@ function table($data,$props=null){
 	$rtn.='</tbody></table>';
 	return $rtn;
 }
-function texts($file='texts'){
+function texts($file='texts'):array{
 	$page=Page::get_instance();
 	static $cache=[];
 	$file.='.txt';
@@ -165,10 +165,10 @@ function texts($file='texts'){
 	}
 	return $cache[$file]=$data;
 }
-function nl2wbr($str){
+function nl2wbr($str):string{
 	return str_replace("\n",'<wbr/>',str_replace("\n\n",'<br/>',$str));
 }
-function md($text,$class=null){
+function md($text,$class=null):string{
 	if(is_null($text)){return '';}
 	if(substr($text,-3)==='.md'){
 		$page=Page::get_instance();
@@ -176,7 +176,7 @@ function md($text,$class=null){
 	}
 	return sprintf('<div class="%s-">%s</div>',$class?:MarkDown::$default_class,MarkDown::do_markdown($text));
 }
-function simple_md($text,$classes=[]){
+function simple_md($text,$classes=[]):string{
 	$classes=array_merge(
 		['a'=>'_link','img'=>'_image'],
 		$classes
@@ -185,20 +185,20 @@ function simple_md($text,$classes=[]){
 	$text=preg_replace('/\[(.+?)\]\((.+?)\)/','<a class="'.$classes['a'].'" href="$2" target="_brank">$1</a>',$text);
 	return $text;
 }
-function rtf($text,$pref=null){
+function rtf($text,$pref=null):string{
 	return RTF::replace($text,$pref);
 }
-function rxf($text,$pref=null){
+function rxf($text,$pref=null):string{
 	return RXF\RXF::replace($text,$pref);
 }
-function do_shortcode($str){
+function do_shortcode($str):string{
 	return ShortCode::do_shortcode($str);
 }
-function add_shortcode($name,$function){
+function add_shortcode($name,$function):string{
 	return ShortCode::add_shortcode($name,$function);
 }
 
-function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL){
+function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL):CSV|false{
 	$page=Page::get_instance();
 	if(substr($csv,-4)!=='.csv'){$csv='csv/'.$csv.'.csv';}
 	if(!empty($page)){
@@ -209,7 +209,7 @@ function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL){
 	}
 	return false;
 }
-function json($json){
+function json($json):string|false{
 	$page=Page::get_instance();
 	if(substr($json,-5)!=='.json'){$json='json/'.$json.'.json';}
 	if(!empty($page)){
@@ -221,16 +221,16 @@ function json($json){
 	return false;
 }
 
-function enqueue_style($handler,$src=null,$deps=[]){
+function enqueue_style($handler,$src=null,$deps=[]):void{
 	$page=Page::get_instance();
 	$page->styles->enqueue($handler,$src,$deps);
 }
-function enqueue_script($handler,$src=null,$deps=[]){
+function enqueue_script($handler,$src=null,$deps=[]):void{
 	$page=Page::get_instance();
 	$page->scripts->enqueue($handler,$src,$deps);
 }
 
-function get_template_part($name,$slug=null,$args=null){
+function get_template_part($name,$slug=null,$args=null):string{
 	if(!empty($slug)){
 		if(file_exists($f=TMPL_DIR.'/'.$name.'-'.$slug.'.php')){
 			return include $f;
@@ -238,22 +238,22 @@ function get_template_part($name,$slug=null,$args=null){
 	}
 	return include TMPL_DIR.'/'.$name.'.php';
 }
-function get_header($slug=null,$args=null){
+function get_header($slug=null,$args=null):void{
 	get_template_part('header',$slug,$args);
 }
-function get_sidebar($slug=null,$args=null){
+function get_sidebar($slug=null,$args=null):void{
 	get_template_part('sidebar',$slug,$args);
 }
-function get_footer($slug=null,$args=null){
+function get_footer($slug=null,$args=null):void{
 	get_template_part('footer',$slug,$args);
 }
 
-function block($block,$props=[],$children=[]){
+function block($block,$props=[],$children=[]):string{
 	$block_obj=new Block($block,$props,$children);
 	$block_obj->init();
 	return $block_obj->get_html();
 }
-function contents($contents,$vars=[],$children=[]){
+function contents($contents,$vars=[],$children=[]):string{
 	$page=Page::get_instance();
 	extract($vars);
 	$children=is_array($children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($children)),false)):$children;
@@ -267,7 +267,7 @@ function contents($contents,$vars=[],$children=[]){
 	return ob_get_clean();
 }
 
-function svg($props,$children=[]){
+function svg($props,$children=[]):string{
 	$svg=new SVG\SVG($props,$children);
 	ob_start();
 	$svg->render();
