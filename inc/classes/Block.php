@@ -225,7 +225,7 @@ class Block{
 	private static function translate_value($value,$type){
 		switch($type){
 			case 'boolean':return !in_array(strtolower(trim($value)),['0','false','no']);
-			case 'integer':return (int)$value;
+			case 'integer':return intval($value,0);
 			case 'number':return (float)$value;
 			default: return $value;
 		}
