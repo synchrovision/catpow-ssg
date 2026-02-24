@@ -194,8 +194,8 @@ function rxf($text,$pref=null):string{
 function do_shortcode($str):string{
 	return ShortCode::do_shortcode($str);
 }
-function add_shortcode($name,$function):string{
-	return ShortCode::add_shortcode($name,$function);
+function add_shortcode($name,$function):void{
+	ShortCode::add_shortcode($name,$function);
 }
 
 function csv($csv,$flags=CSV::CAST_NUMERIC|CSV::CAST_BOOL):CSV|false{
