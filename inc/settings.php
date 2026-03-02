@@ -20,6 +20,9 @@ define('ROOT_DIR',dirname(APP_DIR));
 define('CONF_DIR',dirname(APP_DIR).'/_config');
 define('TMPL_DIR',dirname(APP_DIR).'/_tmpl');
 
+if(!defined('HTML_INDENT')){
+	define('HTML_INDENT',"\t");
+}
 
 if(defined('ABSPATH')){
 	if(!defined('DIST_NAME')){

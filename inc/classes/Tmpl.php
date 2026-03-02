@@ -35,7 +35,7 @@ class Tmpl{
 				$html=file_get_contents($file);
 				$bf=new \MallardDuck\HtmlFormatter\Formatter();
 				$config=$bf->getConfig();
-				$config->set("tab","\t");
+				$config->set("tab",\HTML_INDENT);
 				$bf->setConfig($config);
 				$html=$bf->beautify($html);
 				file_put_contents($file,$html);
