@@ -8,7 +8,7 @@
 	},
 	"dependencies": {
 		"@babel/parser": "^7.27.0",
-		"@playwright/test": "^1.57.0",
+		"@playwright/test": "^1.58.2",
 		"clsx": "^2.1.1",
 		"esbuild-plugin-inline-import": "*",
 		"esbuild-plugin-svgr": "*",
