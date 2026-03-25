@@ -17,6 +17,7 @@ class RTF{
 		$text=preg_replace('/\*\*\*\*(.+?)\*\*\*\*/u','<strong class="'.$pref.'-strongest">$1</strong>',$text);
 		$text=preg_replace('/\*\*\*(.+?)\*\*\*/u','<strong class="'.$pref.'-stronger">$1</strong>',$text);
 		$text=preg_replace('/\*\*(.+?)\*\*/u','<strong class="'.$pref.'-strong">$1</strong>',$text);
+		$text=preg_replace('/＿(.+?)＿/u','<u class="'.$pref.'-u">$1</u>',$text);
 		$text=preg_replace('/##(.+?)##/u','<em class="'.$pref.'-em">$1</em>',$text);
 		$text=preg_replace('/~~(.+?)~~/u','<del class="'.$pref.'-del">$1</del>',$text);
 		$text=preg_replace('/``(.+?)``/u','<code class="'.$pref.'-code">$1</code>',$text);
