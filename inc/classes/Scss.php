@@ -5,7 +5,6 @@ use ScssPhp\ScssPhp\Type;
 use ScssPhp\ScssPhp\ValueConverter;
 use ScssPhp\ScssPhp\Node\Number;
 use ScssPhp\ScssPhp\Exception\CompilerException;
-use Spatie\Color\Hsl;
 
 class Scss{
 	public static $scssc,$current_scss_file;
@@ -102,24 +101,20 @@ class Scss{
 			$vars=[];
 			foreach(static::parse_map_data($args[0]) as $key=>$val){
 				if(preg_match('/\d/',$key)){continue;}
-				if(in_array($key,['hr','hs'])){$$key=$val;}
+				if(in_array($key,['hr','hs'])){$$key=$val;continue;}
 				if($val==='transparent'){continue;}
-				$color=\Spatie\Color\Factory::fromString($val);
-				$alpha=method_exists($color,'alpha')?$color->alpha():1;
-				if(is_string($alpha)){$alpha=hexdec($alpha)/255;}
-				$hsla=$color->toHsla($alpha);
-				foreach(['h'=>'hue','s'=>'saturation','l'=>'lightness','a'=>'alpha'] as $p=>$prop){
-					$$p=round($hsla->{$prop}(),2);
+				$lch=Colors::to_oklch($val);
+				foreach($lch as $p=>$v){
 					if($p==='h'){
-						$vars["--root-tones-{$key}-h"]=$h;
-						$vars["--container-tones-{$key}-h"]=$h;
+						$vars["--cp-root-tones-{$key}-h"]=$v;
+						$vars["--cp-container-tones-{$key}-h"]=$v;
 					}
-					$vars["--tones-{$key}-{$p}"]=($p==='h' || $p==='a')?$$p:$$p.'%';
+					$vars["--cp-tones-{$key}-{$p}"]=$v;
 				}
-				$vars["--tones-{$key}-t"]=(1-$l/100).'%';
+				$vars["--cp-tones-{$key}-t"]=(1-$lch['l'])/100;
 			}
-			$vars["--tones-hr"]=$hr??20;
-			$vars["--tones-hs"]=$hs??0;
+			$vars["--cp-tones-hr"]=$hr??20;
+			$vars["--cp-tones-hs"]=$hs??0;
 			return self::create_map_data($vars);
 		});
 		$scssc->registerFunction('get-color-classes',function($args){
@@ -128,9 +123,9 @@ class Scss{
 				foreach(static::parse_map_data($args[0]) as $key=>$val){
 					if(preg_match('/\d/',$key) || in_array($key,['hr','hs']) || $val==='transparent'){continue;}
 					foreach(range(-6,6) as $n){
-						$classes['.is-color'.$n]["--tones-{$key}-h"]="calc(var(--root-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
-						$classes['.is-color'.$n]["--container-tones-{$key}-h"]="var(--tones-{$key}-h)";
-						$classes['.is-color_'.$n]["--tones-{$key}-h"]="calc(var(--container-tones-{$key}-h) + var(--tones-hr,20) * {$n} + var(--tones-hs,0))";
+						$classes['.is-color'.$n]["--cp-tones-{$key}-h"]="calc(var(--cp-root-tones-{$key}-h) + var(--cp-tones-hr,20) * {$n} + var(--cp-tones-hs,0))";
+						$classes['.is-color'.$n]["--cp-container-tones-{$key}-h"]="var(--cp-tones-{$key}-h)";
+						$classes['.is-color_'.$n]["--cp-tones-{$key}-h"]="calc(var(--cp-container-tones-{$key}-h) + var(--cp-tones-hr,20) * {$n} + var(--cp-tones-hs,0))";
 					}
 				}
 			}
@@ -139,32 +134,50 @@ class Scss{
 		return static::$scssc=$scssc;
 	}
 	public static function translate_color($color,$tint=100,$alpha=1){
-		if($color==='none' || $color==='inherit' || !empty(Colors::NAMED_COLORS[$color])){return false;}
-		if(preg_match('/^([a-z]+)?(_|\-\-)?(\-?\d+)?$/',$color,$matches)){
+		if(preg_match('/^([a-z]{1,3})?(_|\-\-)?(\-?\d+)?$/',$color,$matches)){
 			$key=$matches[1]?:'m';
 			$sep=$matches[2]??null;
 			$staticHue=$sep==='--';
 			$relativeHue=$sep==='_';
 			$num=$matches[3]??null;
-			$f='var(--tones-'.$key.'-%s)';
-			$rf='var(--root-tones-'.$key.'-%s)';
-			return sprintf(
-				'hsla(%s,%s,%s,%s)',
+			$f='var(--cp-tones-'.$key.'-%s)';
+			$cf='var(--cp-container-tones-'.$key.'-%s)';
+			$rf='var(--cp-root-tones-'.$key.'-%s)';
+			$color=sprintf(
+				'oklch(%s %s %s / %s)',
+				$args[1]==='false'?sprintf($f,'l'):sprintf('calc(1 - '.$f.' * %s)','t',$tint),
+				sprintf($f,'c'),
 				is_null($num)?
 				sprintf($f,'h'):
 				($staticHue?
-					$num:
-					(($num==='0')?
-						sprintf($relativeHue?$f:$rf,'h'):
-						sprintf('calc('.($relativeHue?$f:$rf).' + var(--tones-hr,20) * %s + var(--tones-hs,0))','h',$num)
+				 	$num:
+				 	(($num==='0' || $num==='6')?
+					 	sprintf($relativeHue?$cf:$rf,'h'):
+					 	sprintf('calc('.($relativeHue?$cf:$rf).' + var(--cp-tones-hr) * %s + var(--cp-tones-hs))','h',(int)$num-6)
 					)
 				),
-				sprintf($f,'s'),
-				(empty($tint) || $tint==100)?sprintf($f,'l'):sprintf('calc(100%% - '.$f.' * %s)','t',$tint),
-				(empty($alpha) || $alpha>=1)?'var(--tones-'.$key.'-a)':'calc(var(--tones-'.$key.'-a) * '.$alpha.')'
+				$args[2]==='false'?'var(--cp-tones-'.$key.'-a,1)':'calc(var(--cp-tones-'.$key.'-a,1) * '.$alpha.')'
 			);
 		}
-		return false;
+		elseif(preg_match('/^([a-z]{1,3})\-([a-z]+)$/',$color,$matches)){
+			$key1=$matches[1];
+			$key2=$matches[2];
+			$t=$args[1]?:50;
+			$t/=100;
+			$f='calc(var(--cp-tones-%2$s-%1$s) * '.$t.' + var(--cp-tones-%3$s-%1$s) * '.(1-$t).')';
+			$a=sprintf($f,'a',$key1,$key2);
+			if($args[2]!=='false'){
+				$a=sprintf('calc(%s * %s)',$a,$args[2]);
+			}
+			$color=sprintf(
+				'oklch(%s %s %s / %s)',
+				sprintf($f,'l',$key1,$key2),
+				sprintf($f,'c',$key1,$key2),
+				sprintf($f,'h',$key1,$key2),
+				$a
+			);
+		}
+		return $color;
 	}
 	public static function compile($scss_file,$css_file,$source_map=true){
 		if(version_compare(PHP_VERSION, '5.4')<0)return;
