@@ -152,38 +152,78 @@ class Colors{
 		"whitesmoke"=>"#f5f5f5",
 		"yellowgreen"=>"#9acd32"
 	];
-	public static function hex_to_oklch(string $hex): array {
-		// # を除去
-		$hex = ltrim($hex, '#');
-
-		if (strlen($hex) !== 6) {
-			throw new InvalidArgumentException('Invalid hex color');
+	public static function hex_to_rgb($hex){
+		if(preg_match('/^#(\w)(\w)(\w)(\w)?$/',$hex,$matches)){
+			list($r,$g,$b,$a)=array_map(fn($v)=>hexdec($v.$v),array_slice($matches,1));
 		}
-
-		// HEX → sRGB (0–1)
-		$r = hexdec(substr($hex, 0, 2)) / 255;
-		$g = hexdec(substr($hex, 2, 2)) / 255;
-		$b = hexdec(substr($hex, 4, 2)) / 255;
-
-		// sRGB → Linear RGB
+		else if(preg_match('/^#(\w{2})(\w{2})(\w{2})(\w{2})?$/',$hex,$matches)){
+			list($r,$g,$b,$a)=array_map(fn($v)=>hexdec($v),array_slice($matches,1));
+		}
+		$a=($a??255)/255;
+		return compact('r','g','b','a');
+	}
+	public static function hsl_to_rgb($hsl){
+		if(is_string($hsl)){$hsl=hsl_to_rgb($hsl);}
+		$l = min(100, $hsl['l']) / 100;
+		$a = min(100, $hsl['s']) * min($l, 1 - $l) / 100;
+		$f = function($n)use($hsl,$l,$a){
+			$k = ($n + $hsl['h'] / 30) % 12;
+			$c = $l - $a * max(min($k - 3, 9 - $k, 1), -1);
+			return round(255 * $c);
+		};
+		return [
+			'r'=>$f(0),
+			'g'=>$f(8),
+			'b'=>$f(4),
+			'a'=>($hsl['a']??1) * 255
+		];
+	}
+	//parse color string
+	public static function parse_rgb_string($rgb){
+		if(preg_match('/^rgba?\((\d+)[\s,](\d+)[\s,](\d+)(\s*[\/,]\s*([\d\.]+)(%?))?\)$/',$color,$matches)){
+			return [
+				'r'=>(int) $matches[1],
+				'g'=>(int) $matches[2],
+				'b'=>(int) $matches[3],
+				'a'=>empty($matches[4])?255:(empty($matches[6])?$matches[5]*255:$matches[5]*2.55)
+			];
+		}
+	}
+	public static function parse_hsl_string($hsl){
+		if(preg_match('/^hsla?\((\d+)(deg)?[\s,](\d+)%?[\s,](\d+)%?(\s*[\/,]\s*([\d\.]+)(%?))?\)$/',$color,$matches)){
+			return [
+				'h'=>(int) $matches[1],
+				's'=>(int) $matches[3],
+				'l'=>(int) $matches[4],
+				'a'=>empty($matches[5])?255:(empty($matches[7])?$matches[6]*255:$matches[6]*2.55)
+			];
+		}
+	}
+	//oklch
+	public static function to_oklch(string $color): array{
+		if(isset(self::NAMED_COLORS[$color])){return self::hex_to_oklch(self::NAMED_COLORS[$color]);}
+		if(substr($color,0,1)==='#'){return self::hex_to_oklch($color);}
+		if(substr($color,0,3)==='rgb'){return self::rgb_to_oklch($color);}
+	}
+	public static function rgb_to_oklch($rgb){
+		if(is_string($rgb)){$rgb=self::parse_rgb_string($rgb);}
 		$linear = function ($c) {
 			return ($c <= 0.04045)
 				? $c / 12.92
 				: pow(($c + 0.055) / 1.055, 2.4);
 		};
-
-		$r = $linear($r);
-		$g = $linear($g);
-		$b = $linear($b);
+		$r = $linear($rgb['r'] / 255);
+		$g = $linear($rgb['g'] / 255);
+		$b = $linear($rgb['b'] / 255);
 
 		// Linear RGB → OKLab
 		$l = 0.4122214708 * $r + 0.5363325363 * $g + 0.0514459929 * $b;
 		$m = 0.2119034982 * $r + 0.6806995451 * $g + 0.1073969566 * $b;
 		$s = 0.0883024619 * $r + 0.2817188376 * $g + 0.6299787005 * $b;
 
-		$l_ = cbrt($l);
-		$m_ = cbrt($m);
-		$s_ = cbrt($s);
+		$l_ = pow($l,1/3);
+		$m_ = pow($m,1/3);
+		$s_ = pow($s,1/3);
 
 		$L = 0.2104542553 * $l_ + 0.7936177850 * $m_ - 0.0040720468 * $s_;
 		$a = 1.9779984951 * $l_ - 2.4285922050 * $m_ + 0.4505937099 * $s_;
@@ -197,10 +237,14 @@ class Colors{
 		}
 
 		return [
-			'l' => $L,     // 0–1
-			'c' => $C,     // 通常 0–0.4 程度
-			'h' => $H,     // 0–360
+			'l' => $L, 
+			'c' => $C,
+			'h' => $H,
+			'a' => $rgb['a']
 		];
+	}
+	public static function hex_to_oklch(string $hex): array {
+		return self::rgb_to_oklch(self::hex_to_rgb($hex));
 	}
 	public static function oklch_to_hex(Array $lch): string {
 		$L=$lch['l'];
@@ -245,10 +289,11 @@ class Colors{
 
 		// sRGB → HEX
 		return sprintf(
-			'#%02X%02X%02X',
+			'#%02X%02X%02X%02X',
 			(int) round($r * 255),
 			(int) round($g * 255),
-			(int) round($b * 255)
+			(int) round($b * 255),
+			(int) round(($lch['a']??1) * 255)
 		);
 	}
 }
