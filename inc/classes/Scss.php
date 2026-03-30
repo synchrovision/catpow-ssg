@@ -40,11 +40,11 @@ class Scss{
 			error_log(var_export($args,1));
 			return false;
 		});
-		$scssc->registerFunction('get_real_type',function($args){
+		$scssc->registerFunction('get-real-type',function($args){
 			error_log(var_export($args[0][0],1));
 			return [TYPE::T_KEYWORD,$args[0][0]];
 		});
-		$scssc->registerFunction('list_elements',function($args)use($scssc){
+		$scssc->registerFunction('list-elements',function($args)use($scssc){
 			if(empty($args[0][2][0]) || empty($args[1][2][0])){return Compiler::$emptyList;}
 			try{
 				$file=self::get_source_file($args[0][2][0]);
@@ -68,7 +68,7 @@ class Scss{
 				return Compiler::$emptyList;
 			}
 		});
-		$scssc->registerFunction('list_csv',function($args)use($scssc){
+		$scssc->registerFunction('list-csv',function($args)use($scssc){
 			if(empty($args[0][2][0])){return Compiler::$emptyList;}
 			try{
 				$file=self::get_source_file($args[0][2][0]);
@@ -92,13 +92,13 @@ class Scss{
 				return Compiler::$emptyList;
 			}
 		});
-		$scssc->registerFunction('translate_color',function($args){
+		$scssc->registerFunction('translate-color',function($args){
 			$args=array_map([static::$scssc,'compileValue'],$args);
 			$color=self::translate_color($args[0],$args[1]==='false'?100:(int)$args[1],$args[2]==='false'?1:(float)$args[2]);
 			if(empty($color)){return Compiler::$false;}
 			return [TYPE::T_KEYWORD,$color];
 		});
-		$scssc->registerFunction('get_color_vars',function($args){
+		$scssc->registerFunction('get-color-vars',function($args){
 			$vars=[];
 			foreach(static::parse_map_data($args[0]) as $key=>$val){
 				if(preg_match('/\d/',$key)){continue;}
@@ -122,7 +122,7 @@ class Scss{
 			$vars["--tones-hs"]=$hs??0;
 			return self::create_map_data($vars);
 		});
-		$scssc->registerFunction('get_color_classes',function($args){
+		$scssc->registerFunction('get-color-classes',function($args){
 			$classes=[];
 			if(!empty($args[0])){
 				foreach(static::parse_map_data($args[0]) as $key=>$val){
