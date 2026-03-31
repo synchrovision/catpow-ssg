@@ -7,7 +7,7 @@ class VSCodeSettings{
 		CUSTOM_HTML_DATA_FILE='.vscode/block-tags.json',
 		BLOCK_SNIPPETS_FILE='.vscode/block.code-snippets',
 		BLOCK_SCHEMA_FILE='/'.\APP_NAME.'/inc/schema/block.json',
-		BLOCK_SCHEMA_FILE_PATTERN="**/blocks/*/schema.json";
+		BLOCK_SCHEMA_FILE_PATTERN="**/blocks/**/schema.json";
 	public static function update(){
 		$last_mtime=0;
 		$snippets_file=self::getSnippetsFile();
