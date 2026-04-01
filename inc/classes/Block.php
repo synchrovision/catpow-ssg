@@ -33,7 +33,9 @@ class Block{
 	public function get_html(){
 		$page=Page::get_instance();
 		ob_start();
-		extract($this->props);
+		foreach($this->props as $key=>$val){
+			${str_replace('-','_',$key)}=$val;
+		}
 		if(!empty($page)){$page->use_block($this->block);}
 		$className=(empty($className)?'':$className.' ').'block-'.$this->block;
 		$children=is_array($this->children)?implode("\n",iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->children)),false)):$this->children;
