@@ -12,6 +12,7 @@
 		"clsx": "^2.1.1",
 		"esbuild-plugin-inline-import": "*",
 		"esbuild-plugin-svgr": "*",
+		"html-to-image": "^1.11.13",
 		"js-cookie": "*",
 		"react": "*",
 		"react-dom": "*",
