@@ -38,7 +38,8 @@ class Deps{
 			'bootstrap'=>[
 				'src'=>'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js',
 				'attr'=>'integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"'
-			]
+			],
+			'fabric'=>['src'=>'https://cdn.jsdelivr.net/npm/fabric@latest/dist/index.min.js']
 		],
 		'css'=>[
 			'materialicons'=>['src'=>'https://fonts.googleapis.com/icon?family=Material+Icons'],
