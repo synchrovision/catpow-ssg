@@ -77,7 +77,7 @@ class Deps{
 				return false;
 			}
 			if($src[0]==='/'){
-				if(!is_null($site->use_relative_path)){
+				if(!is_null($site->useRelativePath)){
 					$src=$page->path_to_root.substr($src,1);
 				}
 			}
