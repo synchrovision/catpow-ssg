@@ -68,20 +68,60 @@ let pathResolver = {
 							"export default window.React;\n" +
 							"export const version='18.0.0';\n" +
 							[
+								// Core Hooks
 								"useState",
 								"useEffect",
 								"useLayoutEffect",
+								"useInsertionEffect",
 								"useRef",
-								"forwardRef",
 								"useMemo",
 								"useCallback",
-								"createContext",
-								"useContext",
 								"useReducer",
+								"useContext",
+								"useId",
+								"useSyncExternalStore",
+								"useTransition",
+								"useDeferredValue",
+
+								// React 19 Hooks
+								"use",
+								"useOptimistic",
+								"useActionState",
+
+								// Component helpers
+								"forwardRef",
+								"memo",
+								"lazy",
+
+								// Suspense related
+								"Suspense",
+								"SuspenseList",
+
+								// Context
+								"createContext",
+
+								// Element helpers
 								"createElement",
 								"cloneElement",
 								"isValidElement",
+
+								// JSX runtime helpers
 								"Fragment",
+								"StrictMode",
+								"Profiler",
+
+								// Transition API
+								"startTransition",
+
+								// Concurrent helpers
+								"unstable_batchedUpdates",
+
+								// Cache (React 18+)
+								"cache",
+
+								// Debug
+								"useDebugValue",
+								"Children",
 							]
 								.map((h) => `export const ${h}=window.React.${h};`)
 								.join("\n"),
