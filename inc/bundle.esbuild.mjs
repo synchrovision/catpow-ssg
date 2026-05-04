@@ -156,6 +156,11 @@ const setttings = {
 	treeShaking: true,
 	minify: !debugMode,
 	plugins: [inlineCssImporter, scssImporter, pathResolver, svgr()],
+	loader: {
+		".glsl": "text",
+		".vert": "text",
+		".frag": "text",
+	},
 };
 if (useGlobalReact) {
 	Object.assign(setttings, {
