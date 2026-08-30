@@ -24,6 +24,7 @@ abstract class Pattern
     const TRAILING_SPACE_IN_OPENING_TAG = '/(<[^>]*?)\h+(\/?>)/miu';
     const SPACE_BEFORE_CLOSING_TAG = '/(>[^>\v]*?)\h+(<\/)/miu';
     const SPACE_AFTER_OPENING_TAG = '/(<\w+\b[^>]*>)\h+(\S)/miu';
+    const SPACE_AROUND_INLINE_MARKER_IN_TEXT = '/(([^>\s])\s+)?(ᐃinline:\d+:inlineᐃ)(\s+([^<\s]))?/miu';
     const TRAILING_LINE_SPACE = '/(\S*)\h*(\v)/miu';
     const MOVE_TO_LEFT = '/^\h+(<(%s)\b[^>]*?>\v[\s\S]*?(?:<\/\2>))/miu';
     const MOVE_TO_RIGHT = '/^(\h+)(<(%s)\b[^>]*?>\v[\s\S]*?)(<\/\3>)/miu';

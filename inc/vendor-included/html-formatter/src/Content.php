@@ -490,6 +490,7 @@ class Content
         $output = preg_replace(Pattern::SPACE_BEFORE_CLOSING_TAG, '\1\2', $output) ?? $output;
         $output = preg_replace(Pattern::SPACE_AFTER_OPENING_TAG, '\1\2', $output) ?? $output;
         $output = preg_replace(Pattern::TRAILING_LINE_SPACE, '\1\2', $output) ?? $output;
+        $output = preg_replace(Pattern::SPACE_AROUND_INLINE_MARKER_IN_TEXT, '\2\3\5', $output) ?? $output;
 
         $this->content = $output;
 
