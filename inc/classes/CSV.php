@@ -351,7 +351,7 @@ class CSV implements \Iterator,\ArrayAccess{
 			unset($this->data[$r]);$r--;
 		}
 	}
-	public function insert($data){
+	public function insert($data,$index=null){
 		$row=[];
 		if(is_array($data)){
 			foreach($this->data[0] as $i=>$key){$row[]=$data[$key]?:$data[$i]?:'';}
@@ -359,7 +359,12 @@ class CSV implements \Iterator,\ArrayAccess{
 		elseif(is_object($data)){
 			foreach($this->data[0] as $i=>$key){$row[]=$data->$key?:'';}
 		}
-		$this->data[]=$row;
+		if(isset($index)){
+			array_splice($this->data,$index,0,[$row]);
+		}
+		else{
+			$this->data[]=$row;
+		}
 		if(isset($this->file)){
 			$f=fopen($this->file,'a');
 			fputcsv($f,$row);
