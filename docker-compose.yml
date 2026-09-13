@@ -6,6 +6,7 @@ services:
     working_dir: /app
     volumes:
       - ../:/app
+      - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
     ports:
       - "8000:8000"
       - "8001:8001"
