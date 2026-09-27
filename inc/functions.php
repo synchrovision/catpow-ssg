@@ -96,8 +96,8 @@ function table($data,$props=null):string{
 				while(($data[$r+$s][$c]??'')==='^'){$data[$r+$s][$c]=null;$s++;}
 				$attr['rowspan']=$s;
 				if(!empty($attr['colspan'])){
-					for($rs=$attr['rowspan']-1;$rs<0;$rs--){
-						for($cs=$attr['colspan']-1;$cs<0;$cs--){
+					for($rs=$attr['rowspan']-1;$rs>0;$rs--){
+						for($cs=$attr['colspan']-1;$cs>0;$cs--){
 							$data[$r+$rs][$c+$cs]=null;
 						}
 					}
