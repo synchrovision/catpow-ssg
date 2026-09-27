@@ -4,13 +4,13 @@ namespace Spatie\Color;
 
 interface Color
 {
-    public static function fromString(string $string);
+    public static function fromString(string $string): static;
 
-    public function red();
+    public function red(): int|string;
 
-    public function green();
+    public function green(): int|string;
 
-    public function blue();
+    public function blue(): int|string;
 
     public function toCIELab(): CIELab;
 
@@ -25,6 +25,8 @@ interface Color
     public function toRgb(): Rgb;
 
     public function toRgba(?float $alpha = null): Rgba;
+
+    public function toArgb(?float $alpha = null): Argb;
 
     public function toXyz(): Xyz;
 

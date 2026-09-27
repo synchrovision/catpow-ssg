@@ -86,3 +86,6 @@ cd html-beautify
 composer install
 php demo/demo.php
 ```
+
+---
+Developed for PHP 8.2 | Compatible wth PHP 8.4

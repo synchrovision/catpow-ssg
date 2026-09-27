@@ -4,25 +4,18 @@ namespace Spatie\Color;
 
 class Hsla implements Color
 {
-    /** @var float */
-    protected $hue;
-    protected $saturation;
-    protected $lightness;
-    protected $alpha;
-
-    public function __construct(float $hue, float $saturation, float $lightness, float $alpha = 1.0)
-    {
+    public function __construct(
+        protected float $hue,
+        protected float $saturation,
+        protected float $lightness,
+        protected float $alpha = 1.0,
+    ) {
         Validate::hslValue($saturation, 'saturation');
         Validate::hslValue($lightness, 'lightness');
         Validate::alphaChannelValue($alpha);
-
-        $this->hue = $hue;
-        $this->saturation = $saturation;
-        $this->lightness = $lightness;
-        $this->alpha = $alpha;
     }
 
-    public static function fromString(string $string)
+    public static function fromString(string $string): static
     {
         Validate::hslaColorString($string);
 
@@ -72,11 +65,6 @@ class Hsla implements Color
         return $this->alpha;
     }
 
-    public function contrast(): self
-    {
-        return Contrast::make($this->toHex())->toHsla($this->alpha());
-    }
-
     public function toCIELab(): CIELab
     {
         return $this->toRgb()->toCIELab();
@@ -110,6 +98,11 @@ class Hsla implements Color
     public function toRgb(): Rgb
     {
         return new Rgb($this->red(), $this->green(), $this->blue());
+    }
+
+    public function toArgb(?float $alpha = null): Argb
+    {
+        return $this->toRgb()->toArgb($alpha ?? $this->alpha);
     }
 
     public function toRgba(?float $alpha = null): Rgba

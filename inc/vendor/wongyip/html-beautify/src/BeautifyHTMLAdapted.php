@@ -150,7 +150,7 @@ class BeautifyHTMLAdapted
      * @param Closure|null $cssBeautify
      * @param Closure|null $jsBeautify
      */
-    public function __construct(array $options = null, Closure $cssBeautify = null, Closure $jsBeautify = null)
+    public function __construct(?array $options = null, ?Closure $cssBeautify = null, ?Closure $jsBeautify = null)
     {
         // Apply defaults, so that only unrecognized option keys maybe updated.
         $this->options = static::$defaultOptions;
@@ -527,7 +527,7 @@ class BeautifyHTMLAdapted
             $tag_offset = 1;
         }
         else {
-            $tag_offset = $tagComplete[2] === '#' ? 3 : 2;
+            $tag_offset = ($tagComplete[2] ?? '') === '#' ? 3 : 2;
         }
         $tag_check = strtolower(substr($tagComplete, $tag_offset, max($tagIndex-$tag_offset, 0)));
 
@@ -645,7 +645,7 @@ class BeautifyHTMLAdapted
      * @param bool|null $force
      * @return void
      */
-    private function printNewLine(array &$arr, bool $force = null)
+    private function printNewLine(array &$arr, ?bool $force = null)
     {
         $this->lineCharCount = 0;
         if (!$arr || !count($arr)) {
@@ -731,7 +731,7 @@ class BeautifyHTMLAdapted
      * @param array|null $options
      * @return array|$this
      */
-    protected function options(array $options = null): array|static
+    protected function options(?array $options = null): array|static
     {
         if (is_null($options)) {
             return $this->options;
@@ -854,13 +854,8 @@ class BeautifyHTMLAdapted
                         else {
                             // simply indent the string otherwise
 
-                            $matches = array();
-                            preg_match('/^\s*/', $text, $matches);
-                            $white = isset($matches[0]) ? $matches[0] : null;
-
-                            $matches = array();
-                            preg_match('/[^\n\r]*$/', $white, $matches);
-                            $dummy = isset($matches[0]) ? $matches[0] : null;
+                            $white = preg_match('/^\s*/', $text, $matches) ? $matches[0] : null;
+                            $dummy = preg_match('/[^\n\r]*$/', $white, $matches) ? $matches[0] : null;
 
                             $_level = count(explode($this->indentString, $dummy)) - 1;
                             $reindent = $this->getFullIndent($script_indent_level - $_level);

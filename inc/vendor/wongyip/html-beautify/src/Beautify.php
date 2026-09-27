@@ -20,7 +20,7 @@ class Beautify extends BeautifyHTMLAdapted
      * @param Closure|null $jsBeautify
      * @return string
      */
-    public static function html(string $input, array $options = null, Closure $cssBeautify = null, Closure $jsBeautify = null): string
+    public static function html(string $input, ?array $options = null, ?Closure $cssBeautify = null, ?Closure $jsBeautify = null): string
     {
         return Beautify::init($options, $cssBeautify, $jsBeautify)->beautify($input);
     }
@@ -33,7 +33,7 @@ class Beautify extends BeautifyHTMLAdapted
      * @param Closure|null $jsBeautify
      * @return static
      */
-    public static function init(array $options = null, Closure $cssBeautify = null, Closure $jsBeautify = null): static
+    public static function init(?array $options = null, ?Closure $cssBeautify = null, ?Closure $jsBeautify = null): static
     {
         return new static($options, $cssBeautify, $jsBeautify);
     }
