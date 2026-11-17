@@ -2,8 +2,8 @@
 namespace Catpow;
 
 class CSV implements \Iterator,\ArrayAccess{
-	const CAST_NUMERIC=1,CAST_BOOL=2,FILL_COLUMN=4;
-	public $data=array(),$file,$current_index=1;
+	const CAST_NUMERIC=1,CAST_BOOL=2,FILL_COLUMN=4,SUCCESS=200,ERROR=403,NOT_FOUND=404;
+	public $data=array(),$file,$current_index=1,$status;
 	private $hash,$tree,$depth;
 	
 	public function rewind():void{
@@ -40,7 +40,7 @@ class CSV implements \Iterator,\ArrayAccess{
 	}
 	
 	public function __construct($csv,$flags=0){
-		if(empty($csv)){return;}
+		if(empty($csv)){$this->status=self::ERROR;return;}
 		$cast_numeric=$flags&self::CAST_NUMERIC;
 		$cast_bool=$flags&self::CAST_BOOL;
 		$fill_column=$flags&self::FILL_COLUMN;
@@ -52,6 +52,10 @@ class CSV implements \Iterator,\ArrayAccess{
 		else{
 			$this->file=$csv;
 			$csv=fopen($csv,'r');
+			if($csv===false){
+				$this->status=self::NOT_FOUND;
+				return;
+			}
 			if(empty($fill_column)){
 				while($row=fgetcsv($csv,escape:"\\")){
 					array_push($this->data,self::cast_values($row,$flags));
@@ -78,6 +82,7 @@ class CSV implements \Iterator,\ArrayAccess{
 				}
 			}
 		}
+		$this->status=self::SUCCESS;
 	}
 	private static function cast_values($values,$flags){
 		if($flags&(self::CAST_NUMERIC|self::CAST_BOOL)){
