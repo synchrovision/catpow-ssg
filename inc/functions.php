@@ -8,21 +8,27 @@ function _d($data):void{
 function picture($name,$alt,$className=null,$attr=null,$bp=null):string{
 	$page=Page::get_instance();
 	if(empty($bp)){$bp=['sp'=>-767,'tb'=>-1024,'lt'=>-1600,'fhd'=>-1920,'hd'=>-1280,'xga'=>-1024,'vga'=>-640];}
-	preg_match('/^(?P<name>.+)(?P<ext>\.\w+)$/',$name,$matches);
+	preg_match('/^(?P<name>.+)(?P<media>([_\-]pc)?)(?P<num>(_\d+)?)(?P<ext>\.\w+)$/',$name,$matches);
 	$rtn=sprintf('<picture%s>',HTML::get_attr_code(array_merge(['class'=>$className],(array)$attr)));
 	foreach($bp as $media=>$mq){
 		if(is_numeric($mq)){
-			$mq=($mq>0)?"min-width:{$mq}px":('max-width:'.abs($mq).'px');
+			$mq=($mq>0)?"(min-width:{$mq}px)":('(max-width:'.abs($mq).'px)');
+		}
+		foreach(['_dk','-dk'] as $mode){
+			if(
+				($file=$page->get_the_file($src=sprintf('%s_%s%s%s%s',$matches['name'],$media,$mode,$matches['num'],$matches['ext']))) || 
+				($file=$page->get_the_file($src=sprintf('%s-%s%s%s%s',$matches['name'],$media,$mode,$matches['num'],$matches['ext'])))
+			){
+				$webp=$page->generate_webp_for_image($src);
+				$rtn.=sprintf('<source media="%s and (prefers-color-scheme: dark)" srcset="%s"/>',$mq,$webp?$webp:$src);
+			}
 		}
 		if(
-			(preg_match('/([_\-])pc([_\-\.])/',$name,$m) && $file=$page->get_the_file($src=str_replace($m[1].'pc'.$m[2],$m[1].$media.$m[2],$name))) ||
-			($file=$page->get_the_file($src=sprintf('%s_%s%s',$matches['name'],$media,$matches['ext']))) || 
-			($file=$page->get_the_file($src=sprintf('%s-%s%s',$matches['name'],$media,$matches['ext'])))
+			($file=$page->get_the_file($src=sprintf('%s_%s%s%s',$matches['name'],$media,$matches['num'],$matches['ext']))) || 
+			($file=$page->get_the_file($src=sprintf('%s-%s%s%s',$matches['name'],$media,$matches['num'],$matches['ext'])))
 		){
-			if(!empty($webp=$page->generate_webp_for_image($src))){
-				$rtn.=sprintf('<source media="(%s)" srcset="%s" type="image/webp"/>',$mq,$webp);
-			}
-			$rtn.=sprintf('<source media="(%s)" srcset="%s"/>',$mq,$src,mime_content_type($file));
+			if(!empty($webp=$page->generate_webp_for_image($src))){$src=$webp;}
+			$rtn.=sprintf('<source media="%s" srcset="%s"/>',$mq,$src);
 			$has_alt_image=true;
 		}
 	}
@@ -35,23 +41,28 @@ function picture($name,$alt,$className=null,$attr=null,$bp=null):string{
 	else{
 		$mime=mime_content_type($file);
 		$size=getimagesize($file);
-		if($size){
-			if(empty($has_alt_image)){
-				foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
-					if(function_exists('imagewebp') && $size[0]>$u*4){
-						$src=sprintf('%s_%s.webp',$matches['name'],$s);
-						$dest_file=$page->get_file_path_for_uri($src);
-						if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
-							imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
-						}
-						$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s?%d" type="image/webp"/>',$u*2,$src,filemtime($file));
+		if($size && empty($has_alt_image)){
+			foreach(['s'=>200,'m'=>300,'l'=>400] as $s=>$u){
+				if(function_exists('imagewebp') && $size[0]>$u*4){
+					$src=sprintf('%s_%s.webp',$matches['name'],$s);
+					$dest_file=$page->get_file_path_for_uri($src);
+					if(!file_exists($dest_file) || filemtime($file)>filemtime($dest_file)){
+						imagewebp(imagescale($page->get_gd($name),$u*3),$dest_file);
 					}
+					$rtn.=sprintf('<source media="(max-width:%dpx)" srcset="%s?%d"/>',$u*2,$src,filemtime($file));
 				}
 			}
-			if(!empty($webp=$page->generate_webp_for_image($name))){
-				$rtn.=sprintf('<source srcset="%s" type="image/webp"/>',$webp);
-			}
-			$rtn.=sprintf('<img src="%s?%d" alt="%s" width="%d" height="%d"/>',$name,filemtime($file),$alt,$size[0],$size[1]);
+		}
+		if(
+			($file=$page->get_the_file($src=sprintf('%s%s_dk%s%s',$matches['name'],$matches['media'],$matches['num'],$matches['ext']))) || 
+			($file=$page->get_the_file($src=sprintf('%s%s-dk%s%s',$matches['name'],$matches['media'],$matches['num'],$matches['ext'])))
+		){
+			if(!empty($webp=$page->generate_webp_for_image($src))){$src=$webp;}
+			$rtn.=sprintf('<source media="(prefers-color-scheme: dark)" srcset="%s"/>',$src);
+		}
+		if($size){
+			$webp=$page->generate_webp_for_image($name);
+			$rtn.=sprintf('<img src="%s?%d" alt="%s" width="%d" height="%d"/>',$webp?$webp:$name,filemtime($file),$alt,$size[0],$size[1]);
 		}
 		else{
 			$rtn.=sprintf('<img src="%s?%d" alt="%s"/>',$name,filemtime($file),$alt);
