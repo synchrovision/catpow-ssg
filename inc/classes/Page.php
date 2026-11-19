@@ -105,6 +105,7 @@ class Page{
 		return false;
 	}
 	public function generate_webp_for_image($image){
+		if(substr($image,-5)==='.webp'){return $image;}
 		$im=$this->get_gd($image);
 		if(!function_exists('imagewebp') || empty($im)){return false;}
 		imagepalettetotruecolor($im);
